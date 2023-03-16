@@ -9,6 +9,7 @@
     "plugin:@typescript-eslint/recommended",
     "airbnb/hooks",
     "airbnb-typescript",
+    "plugin:react/jsx-runtime",
     "prettier"
   ],
   "overrides": [],
@@ -19,7 +20,7 @@
     },
     "ecmaVersion": 6,
     "sourceType": "module",
-    "project": ["./tsconfig.json"]
+    "project": ["./Mindspace_front/tsconfig.json"]
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
@@ -37,7 +38,6 @@
     "import/no-extraneous-dependencies": 0, // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용을 허용
     "no-shadow": 0,
     "react/prop-types": 0,
-    // "dot-notation": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

@@ -1,7 +1,8 @@
 {
+  "root": true,
   "env": {
     "browser": true,
-    "es2021": true
+    "es6": true
   },
   "extends": [
     "eslint:recommended",
@@ -10,19 +11,10 @@
     "airbnb/hooks",
     "airbnb-typescript",
     "plugin:react/jsx-runtime",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
-  "overrides": [],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "project": ["./Mindspace_front/tsconfig.json"]
-  },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "no-param-reassign": 0,
     "global-require": 0,

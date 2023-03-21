@@ -5,7 +5,8 @@
     "es6": true
   },
   "parserOptions": {
-    "project": ["tsconfig.json"]
+    "project": ["tsconfig.json"],
+    "tsconfigRootDir": "Mindspace_front"
   },
 
   "extends": [

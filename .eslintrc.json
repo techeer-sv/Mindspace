@@ -4,6 +4,11 @@
     "browser": true,
     "es6": true
   },
+  "parserOptions": {
+    "project": ["tsconfig.json"],
+    "tsconfigRootDir": "Mindspace_front"
+  },
+
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",

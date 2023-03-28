@@ -1,31 +1,39 @@
-.title {
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  top: 30%;
-  width: 90%;
-  padding: 1rem;
+  width: 100vw;
+  height: 100vh;
 }
+
 .subtitle {
-  text-align: center;
   display: flex;
   justify-content: center;
-  position: absolute;
-  top: 15%;
   width: 100%;
   color: #2dbbb3;
   font-weight: bold;
   font-size: 4.5rem;
+  margin: 1rem;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 1rem;
 }
 
 .btn {
-  position: absolute;
-  bottom: 15%;
-  left: 45%;
   width: 17rem;
   height: 5rem;
   font-size: 2rem;
   border-radius: 1rem;
   border: none;
+  margin: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ddddff;
+  }
 }

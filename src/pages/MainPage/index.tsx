@@ -3,9 +3,13 @@ import MindSpaceText from 'images/MindSpaceText.png';
 
 function MainPage() {
   return (
-    <div>
-      <p className={styles.subtitle}>Mind Maps for Developers</p>
-      <img className={styles.title} src={MindSpaceText} />
+    <div className={styles.header}>
+      <div className={styles.subtitle}>
+        <span>Mind Maps for Developers</span>
+      </div>
+      <div className={styles.title}>
+        <img src={MindSpaceText} />
+      </div>
       <button className={styles.btn}>EXPLORE</button>
     </div>
   );

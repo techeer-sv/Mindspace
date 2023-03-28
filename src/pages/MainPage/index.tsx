@@ -3,7 +3,7 @@ import MindSpaceText from 'images/MindSpaceText.png';
 
 function MainPage() {
   return (
-    <div className={styles.header}>
+    <div>
       <p className={styles.subtitle}>Mind Maps for Developers</p>
       <img className={styles.title} src={MindSpaceText} />
       <button className={styles.btn}>EXPLORE</button>

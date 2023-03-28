@@ -1,19 +1,10 @@
-.header {
-  background-image: url('./../../images/BackGround.png');
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  // background-repeat: no-repeat;
-}
-
 .title {
-  text-align: center;
+  align-items: center;
   display: flex;
   justify-content: center;
   position: absolute;
   top: 30%;
-  width: 100%;
+  width: 90%;
   padding: 1rem;
 }
 .subtitle {

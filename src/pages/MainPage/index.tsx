@@ -10,7 +10,7 @@ function MainPage() {
       <div className={styles.content__title}>
         <img src={MindSpaceText} />
       </div>
-      <button className={styles.content__button_wrapper}>EXPLORE</button>
+      <button className={styles.content__button}>EXPLORE</button>
     </div>
   );
 }

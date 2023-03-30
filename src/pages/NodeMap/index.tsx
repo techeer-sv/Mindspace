@@ -1,7 +1,8 @@
 import { ForceGraph2D } from 'react-force-graph';
+import { NodeObject, Node, Context } from 'utils/types';
 
 const NodeMap = () => {
-  const myData = {
+  const tempNodeData = {
     nodes: [
       {
         id: 'id1',
@@ -106,15 +107,79 @@ const NodeMap = () => {
     ],
   };
 
-  const handleClick = (node: any) => {
+  const handleClick = (node: NodeObject) => {
     console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
   };
 
-  const nodeRelSize = 3; // 노드 크기 상대값
-  const nodeVal = 3; // 노드 크기 절대값
+  const nodeRelSize = 3;
+  const nodeVal = 3;
 
-  const nodeCanvasObject = (node: any, ctx: any) => {
-    const nodeSize = nodeVal * nodeRelSize * (node.connect_count / 10 + 1);
+  const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
+    node.x = node.x || 0;
+    node.y = node.y || 0;
+
+    ctx.beginPath();
+    ctx.moveTo(node.x + nodeSize, node.y);
+    for (let i = 1; i < 5 * 2; i++) {
+      const angle = (i * Math.PI) / 5;
+      const radius = i % 2 === 0 ? nodeSize : nodeSize * 0.5;
+      ctx.lineTo(
+        node.x + radius * Math.cos(angle),
+        node.y + radius * Math.sin(angle),
+      );
+    }
+    ctx.closePath();
+    ctx.fill();
+  };
+
+  const drawCrescent = (ctx: Context, node: Node, nodeSize: number) => {
+    node.x = node.x || 0;
+    node.y = node.y || 0;
+
+    ctx.beginPath();
+    const crescentSize = nodeSize;
+    const crescentWidth = crescentSize * 1.1;
+    const startAngle = Math.PI / 2.3;
+    const endAngle = (3 * Math.PI) / 1.9;
+    const centerXOffset = crescentWidth / 4;
+
+    ctx.arc(
+      node.x + centerXOffset,
+      node.y,
+      crescentSize,
+      startAngle,
+      endAngle,
+      false,
+    );
+    ctx.arc(
+      node.x - centerXOffset,
+      node.y,
+      crescentWidth,
+      endAngle,
+      startAngle,
+      true,
+    );
+    ctx.closePath();
+    ctx.fill();
+  };
+
+  const drawCircle = (ctx: Context, node: Node, nodeSize: number) => {
+    node.x = node.x || 0;
+    node.y = node.y || 0;
+
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fill();
+  };
+
+  const nodeCanvasObject = (node: Node, ctx: Context) => {
+    node.connect_count = node.connect_count || 0;
+    node.x = node.x || 0;
+    node.y = node.y || 0;
+    node.name = node.name || '';
+
+    const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.1 + 1);
 
     if (node.isActive) {
       ctx.fillStyle = 'yellow';
@@ -122,52 +187,18 @@ const NodeMap = () => {
       ctx.fillStyle = 'white';
     }
 
-    if (node.connect_count <= 2) {
-      // Draw star shape for nodes with connect_count <= 2
-      ctx.beginPath();
-      ctx.moveTo(node.x + nodeSize, node.y);
-      for (let i = 1; i < 5 * 2; i++) {
-        const angle = (i * Math.PI) / 5;
-        const radius = i % 2 === 0 ? nodeSize : nodeSize * 0.5;
-        ctx.lineTo(
-          node.x + radius * Math.cos(angle),
-          node.y + radius * Math.sin(angle),
-        );
-      }
-      ctx.closePath();
-      ctx.fill();
-    } else if (node.connect_count >= 3 && node.connect_count < 5) {
-      ctx.beginPath();
-      const crescentSize = nodeSize;
-      const crescentWidth = crescentSize * 1.1;
-      const startAngle = Math.PI / 2.3;
-      const endAngle = (3 * Math.PI) / 1.9;
-      const centerXOffset = crescentWidth / 4;
-
-      ctx.arc(
-        node.x + centerXOffset,
-        node.y,
-        crescentSize,
-        startAngle,
-        endAngle,
-        false,
-      );
-      ctx.arc(
-        node.x - centerXOffset,
-        node.y,
-        crescentWidth,
-        endAngle,
-        startAngle,
-        true,
-      );
-      ctx.closePath();
-      ctx.fill();
-    } else if (node.connect_count >= 5) {
-      // Draw circle shape for nodes with connect_count >= 5
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI);
-      ctx.closePath();
-      ctx.fill();
+    switch (true) {
+      case node.connect_count <= 2:
+        drawStart(ctx, node, nodeSize);
+        break;
+      case node.connect_count >= 3 && node.connect_count < 5:
+        drawCrescent(ctx, node, nodeSize);
+        break;
+      case node.connect_count >= 5:
+        drawCircle(ctx, node, nodeSize);
+        break;
+      default:
+        break;
     }
 
     ctx.font = '5px Arial';
@@ -181,7 +212,7 @@ const NodeMap = () => {
       nodeVal={nodeVal}
       nodeCanvasObject={nodeCanvasObject}
       onNodeClick={handleClick}
-      graphData={myData}
+      graphData={tempNodeData}
       linkColor={() => 'white'}
     />
   );

@@ -1,0 +1,29 @@
+.header {
+  margin: 0rem 0rem 0rem 1rem;
+}
+
+.content {
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    font-size: xx-large;
+    color: white;
+    margin: 1rem;
+  }
+
+  &__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    height: 70%;
+    border-radius: 1rem;
+    border: none;
+    background-color: rgba(166, 166, 200, 0.5);
+  }
+}

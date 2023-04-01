@@ -1,5 +1,6 @@
 import styles from './MainPage.module.scss';
 import MindSpaceText from 'images/MindSpaceText.png';
+import { Link } from 'react-router-dom';
 
 function MainPage() {
   return (
@@ -10,7 +11,9 @@ function MainPage() {
       <div className={styles.content__title}>
         <img src={MindSpaceText} />
       </div>
-      <button className={styles.content__button}>EXPLORE</button>
+      <Link to="/map">
+        <button className={styles.content__button}>EXPLORE</button>
+      </Link>
     </div>
   );
 }

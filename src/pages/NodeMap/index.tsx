@@ -1,7 +1,10 @@
+import { useEffect, useRef } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 
 const NodeMap = () => {
+  // eslint-disable-next-line
+  const fgRef = useRef<any>();
   const tempNodeData = {
     nodes: [
       {
@@ -104,15 +107,19 @@ const NodeMap = () => {
         source: 'id3',
         target: 'id9',
       },
+      {
+        source: 'id10',
+        target: 'id11',
+      },
     ],
-  };
-
-  const handleClick = (node: NodeObject) => {
-    console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
   };
 
   const nodeRelSize = 3;
   const nodeVal = 3;
+
+  const handleClick = (node: NodeObject) => {
+    console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
+  };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
     node.x = node.x || 0;
@@ -206,8 +213,23 @@ const NodeMap = () => {
     ctx.fillStyle = 'white';
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
+      fgRef.current?.d3Force('link').distance(70);
+    }, 10);
+
+    setTimeout(() => {
+      if (fgRef.current) {
+        fgRef.current.zoomToFit(1000);
+      }
+    }, 300);
+  }, [tempNodeData.links]);
+
   return (
     <ForceGraph2D
+      ref={fgRef}
       nodeRelSize={nodeRelSize}
       nodeVal={nodeVal}
       nodeCanvasObject={nodeCanvasObject}

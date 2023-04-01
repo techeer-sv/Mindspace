@@ -118,6 +118,7 @@ const NodeMap = () => {
   const nodeVal = 3;
 
   const handleClick = (node: NodeObject) => {
+    fgRef.current?.centerAt(node.x, node.y, 1000);
     console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
   };
 
@@ -139,6 +140,14 @@ const NodeMap = () => {
     ctx.fill();
   };
 
+  /**
+   * 작성자 : 정태원
+   * 날짜 : 4/2
+   * 내용 :  "초승달" 모양에 대한 focus조절 이슈로 인해 주석처리 하였습니다.
+   * @param ctx
+   * @param node
+   * @param nodeSize
+   */
   const drawCrescent = (ctx: Context, node: Node, nodeSize: number) => {
     node.x = node.x || 0;
     node.y = node.y || 0;
@@ -186,7 +195,7 @@ const NodeMap = () => {
     node.y = node.y || 0;
     node.name = node.name || '';
 
-    const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.1 + 1);
+    const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.2 + 1);
 
     if (node.isActive) {
       ctx.fillStyle = 'yellow';
@@ -199,7 +208,7 @@ const NodeMap = () => {
         drawStart(ctx, node, nodeSize);
         break;
       case node.connect_count >= 3 && node.connect_count < 5:
-        drawCrescent(ctx, node, nodeSize);
+        drawStart(ctx, node, nodeSize);
         break;
       case node.connect_count >= 5:
         drawCircle(ctx, node, nodeSize);

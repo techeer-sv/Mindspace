@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function FormButton({ text, url }: FormBoxProps) {
   return (
-    <Link className={styles.wapper} to={url}>
+    <Link className={styles.button_wapper} to={url}>
       <button className={styles.button}>{text}</button>
     </Link>
   );

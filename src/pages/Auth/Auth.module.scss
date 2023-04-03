@@ -15,15 +15,34 @@
     margin: 1rem;
   }
 
-  &__box {
+  &__signup__box {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 70%;
-    height: 70%;
+    height: 75%;
+    border-radius: 1rem;
+    border: none;
+    padding: 1%;
+    background-color: rgba(166, 166, 200, 0.5);
+  }
+
+  &__login__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    height: 45%;
     border-radius: 1rem;
     border: none;
     background-color: rgba(166, 166, 200, 0.5);
   }
+}
+
+.button_wapper {
+  display: flex;
+  flex-direction: row;
+  margin: 1% 6.5% 2% auto;
 }

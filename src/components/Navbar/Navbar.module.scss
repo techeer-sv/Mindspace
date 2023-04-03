@@ -1,3 +1,5 @@
+@import '../../variables/colors.scss';
+
 .navbar {
   position: relative;
   display: flex;
@@ -5,9 +7,8 @@
   height: 60px;
   width: 100%;
   padding: 0.5rem 0rem;
-  background: none;
+  background: map-get($navbar, transparent);
   color: black;
-  box-shadow: 0 2px 2px 2px rgba(9, 9, 9, 0.23);
 
   &__title {
     margin-left: 1rem;
@@ -43,13 +44,15 @@
       display: block;
 
       ul {
+        z-index: 10;
         flex-direction: column;
         position: absolute;
         top: 60px;
         left: 0;
         width: 100%;
         height: calc(100vh - 60px);
-        background-color: rgba(255, 255, 255, 0.74);
+        background-color: map-get($navbar, mobileBackground);
+
         border-top: 1px solid black;
 
         li {
@@ -76,7 +79,7 @@
     width: 40px;
     padding: 0.5rem;
     border-radius: 50%;
-    background-color: #283c8b;
+    background-color: map-get($navbar, main);
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     position: absolute;
@@ -86,7 +89,7 @@
     display: none;
 
     &:hover {
-      background-color: #2642af;
+      background-color: map-get($navbar, hover);
     }
   }
 

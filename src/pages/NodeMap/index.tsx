@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
+import Navbar from 'components/Navbar';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -237,15 +238,18 @@ const NodeMap = () => {
   }, [tempNodeData.links]);
 
   return (
-    <ForceGraph2D
-      ref={fgRef}
-      nodeRelSize={nodeRelSize}
-      nodeVal={nodeVal}
-      nodeCanvasObject={nodeCanvasObject}
-      onNodeClick={handleClick}
-      graphData={tempNodeData}
-      linkColor={() => 'white'}
-    />
+    <div>
+      <Navbar />
+      <ForceGraph2D
+        ref={fgRef}
+        nodeRelSize={nodeRelSize}
+        nodeVal={nodeVal}
+        nodeCanvasObject={nodeCanvasObject}
+        onNodeClick={handleClick}
+        graphData={tempNodeData}
+        linkColor={() => 'white'}
+      />
+    </div>
   );
 };
 

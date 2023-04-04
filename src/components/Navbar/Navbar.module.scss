@@ -7,7 +7,7 @@
   height: 60px;
   width: 100%;
   padding: 0.5rem 0rem;
-  background: map-get($navbar, transparent);
+  border-bottom: none;
   color: black;
 
   &__title {

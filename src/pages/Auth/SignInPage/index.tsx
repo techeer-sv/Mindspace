@@ -3,7 +3,7 @@ import logo from 'images/logo.svg';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
 
-function LogInPage() {
+function SignInPage() {
   return (
     <>
       <img className={styles.header} src={logo} />
@@ -21,4 +21,4 @@ function LogInPage() {
     </>
   );
 }
-export default LogInPage;
+export default SignInPage;

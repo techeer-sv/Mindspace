@@ -17,3 +17,10 @@ export interface Node extends NodeObject {
 }
 
 export type Context = CanvasRenderingContext2D;
+
+// Auth
+export interface FormBoxProps {
+  placeholder?: string;
+  url?: string;
+  text?: string;
+}

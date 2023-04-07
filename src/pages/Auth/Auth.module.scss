@@ -1,0 +1,51 @@
+.header {
+  margin: 0rem 0rem 0rem 1rem;
+}
+
+.content {
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    font-size: xx-large;
+    color: white;
+    margin: 1rem;
+  }
+
+  &__signup__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    height: 75%;
+    max-width: 40rem;
+    border-radius: 1rem;
+    border: none;
+    padding: 1%;
+    background-color: rgba(166, 166, 200, 0.5);
+  }
+
+  &__signin__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    height: 45%;
+    max-width: 40rem;
+    border-radius: 1rem;
+    border: none;
+    padding: 1%;
+    background-color: rgba(166, 166, 200, 0.5);
+  }
+}
+
+.button_wapper {
+  display: flex;
+  flex-direction: row;
+  margin: 2% 13% 2% auto;
+}

@@ -15,7 +15,7 @@ function SignUpPage() {
           <FormBox placeholder="Password" />
           <FormBox placeholder="Password Check" />
           <div className={styles.button_wapper}>
-            <FormButton url="/login" text="SIGN UP" />
+            <FormButton url="/signin" text="SIGN UP" />
           </div>
         </div>
       </div>

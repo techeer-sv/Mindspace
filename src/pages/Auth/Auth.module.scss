@@ -22,23 +22,24 @@
     flex-direction: column;
     width: 70%;
     height: 75%;
-    max-width: 700px;
+    max-width: 40rem;
     border-radius: 1rem;
     border: none;
     padding: 1%;
     background-color: rgba(166, 166, 200, 0.5);
   }
 
-  &__login__box {
+  &__signin__box {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 70%;
     height: 45%;
-    max-width: 700px;
+    max-width: 40rem;
     border-radius: 1rem;
     border: none;
+    padding: 1%;
     background-color: rgba(166, 166, 200, 0.5);
   }
 }

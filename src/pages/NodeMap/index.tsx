@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
+import Modal from 'react-modal';
+import styles from './Modal.module.scss';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -118,9 +120,16 @@ const NodeMap = () => {
   const nodeRelSize = 3;
   const nodeVal = 3;
 
+  // modal
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [nodeName, setNodeName] = useState('');
+  Modal.setAppElement('#root');
+
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
     console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
+    setModalIsOpen(true);
+    setNodeName(node.name);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -249,6 +258,40 @@ const NodeMap = () => {
         graphData={tempNodeData}
         linkColor={() => 'white'}
       />
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(166, 166, 200, 0.2)',
+          },
+          content: {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: 'rgba(166, 166, 200, 0.6)',
+            borderRadius: '1rem',
+            border: 'none',
+            width: '28rem',
+            height: '15rem',
+          },
+        }}
+      >
+        <button
+          className={styles.header__button}
+          onClick={() => setModalIsOpen(false)}
+        >
+          <span className={styles.header__span}>x</span>
+        </button>
+        <div className={styles.content}>
+          <span className={styles.content__title}>{nodeName}</span>
+          <div>
+            <button className={styles.content__button}>작성</button>
+            <button className={styles.content__button}>조회</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

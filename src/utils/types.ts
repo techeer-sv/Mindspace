@@ -2,6 +2,7 @@
 
 export type NodeObject = object & {
   id?: string | number;
+  name?: string;
   x?: number;
   y?: number;
   vx?: number;

@@ -25,3 +25,13 @@ export interface FormBoxProps {
   url?: string;
   text?: string;
 }
+
+// modal
+export interface ModalProps {
+  isOpen: boolean;
+  onRequestClose: any;
+  onClick: any;
+  nodeName: string;
+  buttonName1?: string;
+  buttonName2?: string;
+}

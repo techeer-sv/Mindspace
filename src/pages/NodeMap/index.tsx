@@ -4,6 +4,7 @@ import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
 import Modal from 'react-modal';
 import NodeModal from 'pages/Auth/components/Modal';
+import WriteModal from './components/WriteModal';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -122,12 +123,13 @@ const NodeMap = () => {
 
   // modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
   const [nodeName, setNodeName] = useState('');
   Modal.setAppElement('#root');
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-    setModalIsOpen(true);
+    setWriteModalIsOpen(true);
     setNodeName(node.name);
   };
 
@@ -264,6 +266,10 @@ const NodeMap = () => {
         nodeName={nodeName}
         buttonName1="작성"
         buttonName2="조회"
+      />
+      <WriteModal
+        isOpen={writeModalIsOpen}
+        onRequestClose={() => setWriteModalIsOpen(false)}
       />
     </div>
   );

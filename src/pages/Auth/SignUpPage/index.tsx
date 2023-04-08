@@ -1,12 +1,12 @@
 import styles from './../Auth.module.scss';
-import logo from 'images/logo.svg';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
+import Navbar from 'components/Navbar';
 
 function SignUpPage() {
   return (
     <>
-      <img className={styles.header} src={logo} />
+      <Navbar />
       <div className={styles.content}>
         <div className={styles.content__signup__box}>
           <span className={styles.content__title}>Create Account</span>

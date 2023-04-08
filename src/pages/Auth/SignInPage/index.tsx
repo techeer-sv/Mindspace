@@ -1,12 +1,12 @@
 import styles from './../Auth.module.scss';
-import logo from 'images/logo.svg';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
+import Navbar from 'components/Navbar';
 
 function SignInPage() {
   return (
     <>
-      <img className={styles.header} src={logo} />
+      <Navbar />
       <div className={styles.content}>
         <div className={styles.content__signin__box}>
           <span className={styles.content__title}>SIGN IN</span>

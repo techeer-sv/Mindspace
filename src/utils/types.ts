@@ -2,6 +2,7 @@
 
 export type NodeObject = object & {
   id?: string | number;
+  name?: string;
   x?: number;
   y?: number;
   vx?: number;
@@ -23,4 +24,14 @@ export interface FormBoxProps {
   placeholder?: string;
   url?: string;
   text?: string;
+}
+
+// modal
+export interface ModalProps {
+  isOpen: boolean;
+  onRequestClose: any;
+  onClick: any;
+  nodeName: string;
+  buttonName1?: string;
+  buttonName2?: string;
 }

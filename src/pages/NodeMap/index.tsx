@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
+import Modal from 'react-modal';
+import NodeModal from 'pages/Auth/components/Modal';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -118,9 +120,15 @@ const NodeMap = () => {
   const nodeRelSize = 3;
   const nodeVal = 3;
 
+  // modal
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [nodeName, setNodeName] = useState('');
+  Modal.setAppElement('#root');
+
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-    console.log(node.id, '클릭 됨(향후 팝업창을 띄우기');
+    setModalIsOpen(true);
+    setNodeName(node.name);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -248,6 +256,14 @@ const NodeMap = () => {
         onNodeClick={handleClick}
         graphData={tempNodeData}
         linkColor={() => 'white'}
+      />
+      <NodeModal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        onClick={() => setModalIsOpen(false)}
+        nodeName={nodeName}
+        buttonName1="작성"
+        buttonName2="조회"
       />
     </div>
   );

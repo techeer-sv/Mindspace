@@ -5,7 +5,6 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import styles from './WriteModal.module.scss';
 
-// modal
 interface ModalProps {
   isOpen: boolean;
   onRequestClose: any;
@@ -18,6 +17,11 @@ const WriteModal = ({ isOpen, onRequestClose }: ModalProps) => {
   const editorRef = React.useRef<any>(null);
   const handleEditorChange = () => {
     setContent(editorRef.current.getInstance().getMarkdown());
+  };
+
+  const handleSubmit = () => {
+    console.log('제목: ', title);
+    console.log('내용: ', content);
   };
 
   return (
@@ -36,35 +40,41 @@ const WriteModal = ({ isOpen, onRequestClose }: ModalProps) => {
           background: 'rgba(166, 166, 200, 0.6)',
           borderRadius: '1rem',
           border: 'none',
-          width: '28rem',
-          height: '35rem',
+          width: '80vw',
+          height: '80vh',
         },
       }}
     >
-      <button className={styles.header__button} onClick={onRequestClose}>
-        <span className={styles.header__span}>x</span>
-      </button>
+      <div className={styles.header}>
+        <button className={styles.header__button} onClick={onRequestClose}>
+          <span className={styles.header__span}>x</span>
+        </button>
+        <button className={styles.header__button} onClick={handleSubmit}>
+          등록
+        </button>
+      </div>
       <div className={styles.content}>
         <div className={styles.content__title}>
           <input
             type="text"
-            placeholder="제목을 입력하세요"
+            placeholder="제목을 입력해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className={styles.content__editor}>
-          <Editor
-            onChange={handleEditorChange}
-            previewStyle="vertical"
-            height="300px"
-            initialEditType="wysiwyg"
-            ref={editorRef}
-          />
-        </div>
-        <div className={styles.content__preview}>
-          <h3>미리보기</h3>
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
+          <div
+            className={`${styles.content__editor} ${styles.editor__content}`}
+          >
+            <Editor
+              onChange={handleEditorChange}
+              previewStyle="tab"
+              height="100%"
+              initialEditType="markdown"
+              ref={editorRef}
+              usageStatistics={false}
+            />
+          </div>
         </div>
       </div>
     </Modal>

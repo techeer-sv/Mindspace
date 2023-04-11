@@ -34,6 +34,10 @@ export interface ModalProps {
   nodeName: string;
   buttonName1?: string;
   buttonName2?: string;
+  button2Click: any;
+  listOpen: boolean;
+  onListClick: any;
+  onListRequestClose: any;
 }
 
 export interface WriteModalProps {

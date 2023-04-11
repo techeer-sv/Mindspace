@@ -137,6 +137,12 @@ const NodeMap = () => {
     setModalIsOpen(true);
   };
 
+  const [listModalIsOpen, setListModalIsOpen] = useState(false);
+  const handleClickLIst = () => {
+    setListModalIsOpen(true);
+    setModalIsOpen(false);
+  };
+
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
     node.x = node.x || 0;
     node.y = node.y || 0;

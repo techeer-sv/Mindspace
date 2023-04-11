@@ -26,6 +26,10 @@ function NodeModal({
   buttonName2,
   selectedNodeInfo,
   updateNodeInfo,
+  button2Click,
+  listOpen,
+  onListClick,
+  onListRequestClose,
 }: ModalProps) {
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
 
@@ -75,6 +79,36 @@ function NodeModal({
         updateNodeInfo={updateNodeInfo}
         onRequestClose={() => setWriteModalIsOpen(false)}
       />
+    </>
+      </Modal>
+      {/* 글 목록 리스트 모달 */}
+      <Modal
+        isOpen={listOpen}
+        onRequestClose={onListRequestClose}
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(166, 166, 200, 0.2)',
+          },
+          content: {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: 'rgba(166, 166, 200, 0.6)',
+            borderRadius: '1rem',
+            border: 'none',
+            width: '50rem',
+            height: '40rem',
+          },
+        }}
+      >
+        <button className={styles.header__button} onClick={onListClick}>
+          <span className={styles.header__span}>x</span>
+        </button>
+        <div className={styles.content}>
+          <span className={styles.content__title}>test</span>
+        </div>
+      </Modal>
     </>
   );
 }

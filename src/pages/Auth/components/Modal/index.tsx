@@ -4,6 +4,8 @@ import Modal from 'react-modal';
 // import { ModalProps, Node } from 'utils/types';
 import { Node } from 'utils/types';
 import WriteModal from 'pages/NodeMap/components/WriteModal';
+import { ModalProps } from 'utils/types';
+import Post from '../Post';
 
 // modal
 export interface ModalProps {
@@ -98,15 +100,25 @@ function NodeModal({
             borderRadius: '1rem',
             border: 'none',
             width: '50rem',
-            height: '40rem',
+            height: '38rem',
           },
         }}
       >
         <button className={styles.header__button} onClick={onListClick}>
           <span className={styles.header__span}>x</span>
         </button>
-        <div className={styles.content}>
-          <span className={styles.content__title}>test</span>
+        <div className={styles.modal__content}>
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
+          <Post title="React Study" date="2022-04-11" time="19:50" />
         </div>
       </Modal>
     </>

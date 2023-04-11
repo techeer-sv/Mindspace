@@ -46,3 +46,10 @@ export interface WriteModalProps {
   nodeInfo: Node;
   updateNodeInfo: (id: number | string, isActive: boolean) => void;
 }
+
+// Post
+export interface PostProps {
+  title: string;
+  date: string;
+  time: string;
+}

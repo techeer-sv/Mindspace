@@ -1,18 +1,40 @@
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   &__button {
     border: none;
     background-color: transparent;
-    margin-left: 0.1rem;
     cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    transition: all 0.3s ease-in-out;
+    color: white;
+
+    &:hover {
+      background-color: #333;
+      color: white;
+    }
   }
 
   &__span {
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+  &__left > button {
+    margin-left: 0.5rem;
   }
 }
 
 .content {
+  padding: 0 1rem 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;

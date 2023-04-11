@@ -49,15 +49,20 @@ const WriteModal = ({ isOpen, onRequestClose }: ModalProps) => {
         <button className={styles.header__button} onClick={onRequestClose}>
           <span className={styles.header__span}>x</span>
         </button>
-        <button className={styles.header__button} onClick={handleSubmit}>
-          등록
-        </button>
+        <div className={styles.header__left}>
+          <button className={styles.header__button} onClick={handleSubmit}>
+            삭제
+          </button>
+          <button className={styles.header__button} onClick={handleSubmit}>
+            글쓰기
+          </button>
+        </div>
       </div>
       <div className={styles.content}>
         <div className={styles.content__title}>
           <input
             type="text"
-            placeholder="제목을 입력해주세요"
+            placeholder="[JPA] 제목을 입력해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />

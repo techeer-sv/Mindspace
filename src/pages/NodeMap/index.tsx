@@ -125,12 +125,15 @@ const NodeMap = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
   const [nodeName, setNodeName] = useState('');
+  const [selectedNode, setSelectedNode] = useState(null);
   Modal.setAppElement('#root');
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-    setWriteModalIsOpen(true);
+
     setNodeName(node.name);
+    setSelectedNode(node);
+    setWriteModalIsOpen(true);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -268,6 +271,7 @@ const NodeMap = () => {
         buttonName2="조회"
       />
       <WriteModal
+        nodeInfo={selectedNode}
         isOpen={writeModalIsOpen}
         onRequestClose={() => setWriteModalIsOpen(false)}
       />

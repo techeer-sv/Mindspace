@@ -12,67 +12,67 @@ const NodeMap = () => {
   const tempNodeData = {
     nodes: [
       {
-        id: 'id1',
+        id: 1,
         name: 'name1',
         connect_count: 2,
         isActive: true,
       },
       {
-        id: 'id2',
+        id: 2,
         name: 'name2',
         connect_count: 5,
         isActive: true,
       },
       {
-        id: 'id3',
+        id: 3,
         name: 'name3',
         connect_count: 3,
         isActive: true,
       },
       {
-        id: 'id4',
+        id: 4,
         name: 'name4',
         connect_count: 1,
         isActive: false,
       },
       {
-        id: 'id5',
+        id: 5,
         name: 'name5',
         connect_count: 1,
         isActive: false,
       },
       {
-        id: 'id6',
+        id: 6,
         name: 'name6',
         connect_count: 1,
         isActive: true,
       },
       {
-        id: 'id7',
+        id: 7,
         name: 'name6',
         connect_count: 1,
         isActive: true,
       },
       {
-        id: 'id8',
+        id: 8,
         name: 'name6',
         connect_count: 1,
         isActive: false,
       },
       {
-        id: 'id9',
+        id: 9,
         name: 'name6',
         connect_count: 1,
         isActive: false,
       },
       {
-        id: 'id10',
+        id: 10,
         name: 'name1',
         connect_count: 2,
         isActive: true,
       },
       {
-        id: 'id11',
+        id: 11,
         name: 'name1',
         connect_count: 2,
         isActive: true,
@@ -80,43 +80,45 @@ const NodeMap = () => {
     ],
     links: [
       {
-        source: 'id1',
-        target: 'id2',
+        source: 1,
+        target: 2,
       },
       {
-        source: 'id1',
-        target: 'id3',
+        source: 1,
+        target: 3,
       },
       {
-        source: 'id2',
-        target: 'id4',
+        source: 2,
+        target: 4,
       },
       {
-        source: 'id2',
-        target: 'id5',
+        source: 2,
+        target: 5,
       },
       {
-        source: 'id2',
-        target: 'id6',
+        source: 2,
+        target: 6,
       },
       {
-        source: 'id2',
-        target: 'id7',
+        source: 2,
+        target: 7,
       },
       {
-        source: 'id3',
-        target: 'id8',
+        source: 3,
+        target: 8,
       },
       {
-        source: 'id3',
-        target: 'id9',
+        source: 3,
+        target: 9,
       },
       {
-        source: 'id10',
-        target: 'id11',
+        source: 10,
+        target: 11,
       },
     ],
   };
+
+  const [nodeData, setNodeData] = useState(tempNodeData);
 
   const nodeRelSize = 3;
   const nodeVal = 3;
@@ -237,6 +239,17 @@ const NodeMap = () => {
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
 
+  const handleNodeInfoUpdate = (id: number, isActive: boolean) => {
+    const updatedNodeData = {
+      nodes: nodeData.nodes.map((node) =>
+        node.id === id ? { ...node, isActive: isActive } : node,
+      ),
+      links: nodeData.links,
+    };
+    console.log(updatedNodeData);
+    setNodeData(updatedNodeData);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
@@ -248,7 +261,9 @@ const NodeMap = () => {
         fgRef.current.zoomToFit(1000);
       }
     }, 300);
-  }, [tempNodeData.links]);
+  }, [nodeData.links]);
+
+  console.log(nodeData);
 
   return (
     <div>
@@ -259,22 +274,27 @@ const NodeMap = () => {
         nodeVal={nodeVal}
         nodeCanvasObject={nodeCanvasObject}
         onNodeClick={handleClick}
-        graphData={tempNodeData}
+        graphData={nodeData}
         linkColor={() => 'white'}
       />
-      <NodeModal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        onClick={() => setModalIsOpen(false)}
-        nodeName={nodeName}
-        buttonName1="작성"
-        buttonName2="조회"
-      />
-      <WriteModal
-        nodeInfo={selectedNode}
-        isOpen={writeModalIsOpen}
-        onRequestClose={() => setWriteModalIsOpen(false)}
-      />
+      {selectedNode && (
+        <>
+          <NodeModal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            onClick={() => setModalIsOpen(false)}
+            nodeName={nodeName}
+            buttonName1="작성"
+            buttonName2="조회"
+          />
+          <WriteModal
+            nodeInfo={selectedNode}
+            isOpen={writeModalIsOpen}
+            updateNodeInfo={handleNodeInfoUpdate}
+            onRequestClose={() => setWriteModalIsOpen(false)}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -11,28 +11,20 @@ interface ModalProps {
   isOpen: boolean;
   onRequestClose: any;
   nodeInfo: Node;
+  updateNodeInfo: any;
 }
 
-// case1 : 아무런글이 없을떄 -> 글쓰기 버튼만 있어야함
-// case1이 아닌 경우에는 api호출을 통해 작성된 글 내용을 불러와야한다.
-
-// case2 : 작성된 글이 있을때 -> 삭제버튼 , 수정버튼이 있어야함
-// case3 : 수정버튼을 눌렀을때 -> 취소 , 수정완료 버튼이 있어야함
-
-// props로는 해당 게시글 id, 제목에 대한 데이터가 필요하다. + isActive
-// 음.. 근데 isActive보다는 가져온 데이터가 있냐 없냐로 판단하는게 나을까?
-// 만약에 글을 작성하고 창을 닫으면 활성화시켜야함
-// 즉 어처피 노드상태값을 업데이트할필요가 있다.
-// Props로 상태업데이트 하는 함수 보내기
-// -> 삭제하면 false, 작성하면 true로 바꿀것
-
-// isEditor변수도 필요할듯..? 해당 변수를 통해 게시글을 작성했는지 아닌지 파악해야하기때문
-
-const WriteModal = ({ isOpen, onRequestClose, nodeInfo }: ModalProps) => {
+const WriteModal = ({
+  isOpen,
+  onRequestClose,
+  nodeInfo,
+  updateNodeInfo,
+}: ModalProps) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [editedTitle, setEditedTitle] = useState(title);
-  const [editedContent, setEditedContent] = useState(content);
+  const [isActive, setIsActive] = useState(nodeInfo.isActive);
+  const [initTitle, setInitTitle] = useState(title);
+  const [initEditedContent, setInitEditedContent] = useState(content);
 
   const [isEditing, setIsEditing] = useState(true);
   const editorRef = React.useRef<any>(null);
@@ -42,34 +34,57 @@ const WriteModal = ({ isOpen, onRequestClose, nodeInfo }: ModalProps) => {
   };
 
   const handleFirstWrite = () => {
+    console.log('first');
     // 처음 글쓰기 api 요청
+    setIsEditing(false);
+    setIsActive(true);
+    updateNodeInfo(nodeInfo?.id, true);
+
     console.log('제목: ', title);
     console.log('내용: ', content);
-    setIsEditing(false);
   };
 
   const handleSubmit = () => {
     // 글수정 api요청
     console.log('제목: ', title);
     console.log('내용: ', content);
+
+    setInitTitle(title);
+    setInitEditedContent(content);
     setIsEditing(false);
   };
 
   const handleDelete = () => {
     // 글 삭제 api요청
     console.log('삭제');
+    updateNodeInfo(nodeInfo?.id, false);
+    setIsActive(false);
+
     // + isActive 요소 false처리
     onRequestClose();
   };
 
+  const handleCancel = () => {
+    setIsEditing(false);
+    setContent(initEditedContent);
+    setTitle(initTitle);
+  };
+
   useEffect(() => {
+    setIsActive(nodeInfo.isActive);
+
     if (nodeInfo?.isActive) {
       // 특정 id에 대한 api호출
 
       setTitle('Vite란 무엇인가?');
       setContent('Vite란 ~~~');
+
+      setInitTitle('Vite란 무엇인가?');
+      setInitEditedContent('Vite란 ~~~');
+
       setIsEditing(false);
     } else {
+      console.log('??');
       setTitle('');
       setContent('');
       setIsEditing(true);
@@ -97,7 +112,7 @@ const WriteModal = ({ isOpen, onRequestClose, nodeInfo }: ModalProps) => {
         },
       }}
     >
-      {nodeInfo?.isActive ? (
+      {isActive ? (
         <>
           <div className={styles.header}>
             <button className={styles.header__button} onClick={onRequestClose}>
@@ -108,7 +123,7 @@ const WriteModal = ({ isOpen, onRequestClose, nodeInfo }: ModalProps) => {
                 <>
                   <button
                     className={styles.header__button}
-                    onClick={() => setIsEditing(false)}
+                    onClick={handleCancel}
                   >
                     취소
                   </button>

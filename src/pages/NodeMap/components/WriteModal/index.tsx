@@ -5,21 +5,14 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
-import { Node } from 'utils/types';
-
-interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: any;
-  nodeInfo: Node;
-  updateNodeInfo: any;
-}
+import { WriteModalProps } from 'utils/types';
 
 const WriteModal = ({
   isOpen,
   onRequestClose,
   nodeInfo,
   updateNodeInfo,
-}: ModalProps) => {
+}: WriteModalProps) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isActive, setIsActive] = useState(nodeInfo.isActive);
@@ -27,7 +20,7 @@ const WriteModal = ({
   const [initEditedContent, setInitEditedContent] = useState(content);
 
   const [isEditing, setIsEditing] = useState(true);
-  const editorRef = React.useRef<any>(null);
+  const editorRef = React.useRef(null);
 
   const handleEditorChange = () => {
     setContent(editorRef.current.getInstance().getMarkdown());

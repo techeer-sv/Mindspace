@@ -243,14 +243,13 @@ const NodeMap = () => {
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
 
-  const handleNodeInfoUpdate = (id: number, isActive: boolean) => {
+  const handleNodeInfoUpdate = (id: number | string, isActive: boolean) => {
     const updatedNodeData = {
       nodes: nodeData.nodes.map((node) =>
         node.id === id ? { ...node, isActive: isActive } : node,
       ),
       links: nodeData.links,
     };
-    console.log(updatedNodeData);
     setNodeData(updatedNodeData);
   };
 

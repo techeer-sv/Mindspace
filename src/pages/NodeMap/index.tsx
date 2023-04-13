@@ -206,6 +206,10 @@ const NodeMap = () => {
   };
 
   const nodeCanvasObject = (node: Node, ctx: Context) => {
+    if (selectedNode === node) {
+      node.fx = node.x;
+      node.fy = node.y;
+    }
     node.connect_count = node.connect_count || 0;
     node.x = node.x || 0;
     node.y = node.y || 0;
@@ -263,8 +267,6 @@ const NodeMap = () => {
     }, 300);
   }, [nodeData.links]);
 
-  console.log(nodeData);
-
   return (
     <div>
       <Navbar />
@@ -276,6 +278,7 @@ const NodeMap = () => {
         onNodeClick={handleClick}
         graphData={nodeData}
         linkColor={() => 'white'}
+        enableNodeDrag={false}
       />
       {selectedNode && (
         <>

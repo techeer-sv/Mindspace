@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import { Node } from 'utils/types';
 import WriteModal from 'pages/NodeMap/components/WriteModal';
 import { ModalProps } from 'utils/types';
-import Post from '../Post';
+import PostTable from '../PostTable';
 
 // modal
 export interface ModalProps {
@@ -107,19 +107,7 @@ function NodeModal({
         <button className={styles.header__button} onClick={onListClick}>
           <span className={styles.header__span}>x</span>
         </button>
-        <div className={styles.modal__content}>
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-          <Post title="React Study" date="2022-04-11" time="19:50" />
-        </div>
+        <PostTable />
       </Modal>
     </>
   );

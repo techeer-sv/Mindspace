@@ -50,6 +50,8 @@
     "@types/react-modal": "^3.13.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "ag-grid-community": "^29.2.0",
+    "ag-grid-react": "^29.2.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",

@@ -125,7 +125,6 @@ const NodeMap = () => {
 
   // modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
   const [nodeName, setNodeName] = useState('');
   const [selectedNode, setSelectedNode] = useState(null);
   Modal.setAppElement('#root');
@@ -135,7 +134,7 @@ const NodeMap = () => {
 
     setNodeName(node.name);
     setSelectedNode(node);
-    setWriteModalIsOpen(true);
+    setModalIsOpen(true);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -288,12 +287,8 @@ const NodeMap = () => {
             nodeName={nodeName}
             buttonName1="작성"
             buttonName2="조회"
-          />
-          <WriteModal
-            nodeInfo={selectedNode}
-            isOpen={writeModalIsOpen}
+            selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
-            onRequestClose={() => setWriteModalIsOpen(false)}
           />
         </>
       )}

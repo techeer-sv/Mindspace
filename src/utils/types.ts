@@ -26,20 +26,7 @@ export interface FormBoxProps {
   text?: string;
 }
 
-// modal
-export interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: any;
-  onClick: any;
-  nodeName: string;
-  buttonName1?: string;
-  buttonName2?: string;
-  button2Click: any;
-  listOpen: boolean;
-  onListClick: any;
-  onListRequestClose: any;
-}
-
+// WirteModal
 export interface WriteModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -47,9 +34,8 @@ export interface WriteModalProps {
   updateNodeInfo: (id: number | string, isActive: boolean) => void;
 }
 
-// Post
-export interface PostProps {
-  title: string;
-  date: string;
-  time: string;
+// ListModal
+export interface ListModalProps {
+  listModalOpen: boolean;
+  onListRequestClose: () => void;
 }

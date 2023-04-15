@@ -3,7 +3,7 @@ import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
 import Modal from 'react-modal';
-import NodeModal from 'pages/Auth/components/Modal';
+import NodeModal from 'pages/NodeMap/components/Modal';
 import WriteModal from './components/WriteModal';
 
 const NodeMap = () => {
@@ -289,10 +289,10 @@ const NodeMap = () => {
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            onClick={() => setModalIsOpen(false)}
             nodeName={nodeName}
-            buttonName1="작성"
-            buttonName2="조회"
+            listModalOpen={listModalIsOpen}
+            clickListModal={handleClickLIst}
+            onListRequestClose={() => setListModalIsOpen(false)}
             selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />

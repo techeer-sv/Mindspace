@@ -35,3 +35,10 @@ export interface ModalProps {
   buttonName1?: string;
   buttonName2?: string;
 }
+
+export interface WriteModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  nodeInfo: Node;
+  updateNodeInfo: (id: number | string, isActive: boolean) => void;
+}

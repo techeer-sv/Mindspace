@@ -3,8 +3,7 @@ import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
 import Modal from 'react-modal';
-import NodeModal from 'pages/Auth/components/Modal';
-import WriteModal from './components/WriteModal';
+import NodeModal from 'pages/NodeMap/components/Modal';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -125,14 +124,11 @@ const NodeMap = () => {
 
   // modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [nodeName, setNodeName] = useState('');
   const [selectedNode, setSelectedNode] = useState(null);
   Modal.setAppElement('#root');
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-
-    setNodeName(node.name);
     setSelectedNode(node);
     setModalIsOpen(true);
   };
@@ -283,10 +279,7 @@ const NodeMap = () => {
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            onClick={() => setModalIsOpen(false)}
-            nodeName={nodeName}
-            buttonName1="작성"
-            buttonName2="조회"
+            // nodeName={nodeName}
             selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />

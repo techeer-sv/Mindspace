@@ -1,29 +1,13 @@
 import { useState } from 'react';
 import styles from './Modal.module.scss';
 import Modal from 'react-modal';
-// import { ModalProps, Node } from 'utils/types';
-import { Node } from 'utils/types';
 import WriteModal from 'pages/NodeMap/components/WriteModal';
-
-// modal
-export interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  onClick: () => void;
-  nodeName: string;
-  buttonName1?: string;
-  buttonName2?: string;
-  selectedNodeInfo: Node;
-  updateNodeInfo: (id: number | string, isActive: boolean) => void;
-}
+import { ModalProps } from 'utils/types';
+import ListModal from '../ListModal';
 
 function NodeModal({
   isOpen,
   onRequestClose,
-  onClick,
-  nodeName,
-  buttonName1,
-  buttonName2,
   selectedNodeInfo,
   updateNodeInfo,
 }: ModalProps) {
@@ -31,7 +15,13 @@ function NodeModal({
 
   const openWriteModal = () => {
     setWriteModalIsOpen(true);
-    onClick();
+    onRequestClose();
+  };
+
+  const [listModalIsOpen, setListModalIsOpen] = useState(false);
+  const handleClickLIst = () => {
+    setListModalIsOpen(true);
+    onRequestClose();
   };
 
   return (
@@ -56,16 +46,21 @@ function NodeModal({
           },
         }}
       >
-        <button className={styles.header__button} onClick={onClick}>
+        <button className={styles.header__button} onClick={onRequestClose}>
           <span className={styles.header__span}>x</span>
         </button>
         <div className={styles.content}>
-          <span className={styles.content__title}>{nodeName}</span>
+          <span className={styles.content__title}>{selectedNodeInfo.name}</span>
           <div>
             <button onClick={openWriteModal} className={styles.content__button}>
-              {buttonName1}
+              작성
             </button>
-            <button className={styles.content__button}>{buttonName2}</button>
+            <button
+              onClick={handleClickLIst}
+              className={styles.content__button}
+            >
+              조회
+            </button>
           </div>
         </div>
       </Modal>
@@ -74,6 +69,11 @@ function NodeModal({
         isOpen={writeModalIsOpen}
         updateNodeInfo={updateNodeInfo}
         onRequestClose={() => setWriteModalIsOpen(false)}
+      />
+      {/* 글 목록 리스트 모달 */}
+      <ListModal
+        listModalOpen={listModalIsOpen}
+        onListRequestClose={() => setListModalIsOpen(false)}
       />
     </>
   );

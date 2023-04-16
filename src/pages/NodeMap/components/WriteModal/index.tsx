@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import Modal from 'react-modal';
+import { getNodeData } from 'api/Node';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -67,14 +68,17 @@ const WriteModal = ({
     setIsActive(nodeInfo.isActive);
 
     if (nodeInfo?.isActive) {
-      // 특정 id에 대한 api호출
+      const fetchData = async () => {
+        const data = await getNodeData();
+        console.log(data);
 
-      setTitle('Vite란 무엇인가?');
-      setContent('Vite란 ~~~');
+        setTitle(data.title);
+        setContent(data.content);
+        setInitTitle(data.title);
+        setInitEditedContent(data.content);
+      };
 
-      setInitTitle('Vite란 무엇인가?');
-      setInitEditedContent('Vite란 ~~~');
-
+      fetchData();
       setIsEditing(false);
     } else {
       console.log('??');
@@ -82,6 +86,17 @@ const WriteModal = ({
       setContent('');
       setIsEditing(true);
     }
+  }, [isOpen, nodeInfo]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getNodeData();
+      console.log(data);
+
+      setTitle(data.title);
+      setContent(data.content);
+    };
+    fetchData();
   }, [isOpen, nodeInfo]);
 
   return (

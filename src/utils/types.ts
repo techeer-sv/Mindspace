@@ -26,6 +26,14 @@ export interface FormBoxProps {
   text?: string;
 }
 
+// Modal
+export interface ModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  selectedNodeInfo: Node;
+  updateNodeInfo: (id: number | string, isActive: boolean) => void;
+}
+
 // WirteModal
 export interface WriteModalProps {
   isOpen: boolean;

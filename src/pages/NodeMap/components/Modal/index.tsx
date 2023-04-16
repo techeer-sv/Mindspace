@@ -1,38 +1,26 @@
 import { useState } from 'react';
 import styles from './Modal.module.scss';
 import Modal from 'react-modal';
-import { Node } from 'utils/types';
 import WriteModal from 'pages/NodeMap/components/WriteModal';
-import {} from 'utils/types';
-import PostTable from '../PostTable';
+import { ModalProps } from 'utils/types';
 import ListModal from '../ListModal';
-
-// modal
-export interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  nodeName: string;
-  selectedNodeInfo: Node;
-  updateNodeInfo: (id: number | string, isActive: boolean) => void;
-  clickListModal: () => void;
-  listModalOpen: boolean;
-  onListRequestClose: () => void;
-}
 
 function NodeModal({
   isOpen,
   onRequestClose,
-  nodeName,
   selectedNodeInfo,
   updateNodeInfo,
-  clickListModal,
-  listModalOpen,
-  onListRequestClose,
 }: ModalProps) {
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
 
   const openWriteModal = () => {
     setWriteModalIsOpen(true);
+    onRequestClose();
+  };
+
+  const [listModalIsOpen, setListModalIsOpen] = useState(false);
+  const handleClickLIst = () => {
+    setListModalIsOpen(true);
     onRequestClose();
   };
 
@@ -62,12 +50,15 @@ function NodeModal({
           <span className={styles.header__span}>x</span>
         </button>
         <div className={styles.content}>
-          <span className={styles.content__title}>{nodeName}</span>
+          <span className={styles.content__title}>{selectedNodeInfo.name}</span>
           <div>
             <button onClick={openWriteModal} className={styles.content__button}>
               작성
             </button>
-            <button onClick={clickListModal} className={styles.content__button}>
+            <button
+              onClick={handleClickLIst}
+              className={styles.content__button}
+            >
               조회
             </button>
           </div>
@@ -81,8 +72,8 @@ function NodeModal({
       />
       {/* 글 목록 리스트 모달 */}
       <ListModal
-        listModalOpen={listModalOpen}
-        onListRequestClose={onListRequestClose}
+        listModalOpen={listModalIsOpen}
+        onListRequestClose={() => setListModalIsOpen(false)}
       />
     </>
   );

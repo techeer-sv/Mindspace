@@ -4,7 +4,6 @@ import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
 import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
-import WriteModal from './components/WriteModal';
 
 const NodeMap = () => {
   // eslint-disable-next-line
@@ -125,22 +124,13 @@ const NodeMap = () => {
 
   // modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [nodeName, setNodeName] = useState('');
   const [selectedNode, setSelectedNode] = useState(null);
   Modal.setAppElement('#root');
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-
-    setNodeName(node.name);
     setSelectedNode(node);
     setModalIsOpen(true);
-  };
-
-  const [listModalIsOpen, setListModalIsOpen] = useState(false);
-  const handleClickLIst = () => {
-    setListModalIsOpen(true);
-    setModalIsOpen(false);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -289,10 +279,7 @@ const NodeMap = () => {
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            nodeName={nodeName}
-            listModalOpen={listModalIsOpen}
-            clickListModal={handleClickLIst}
-            onListRequestClose={() => setListModalIsOpen(false)}
+            // nodeName={nodeName}
             selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />

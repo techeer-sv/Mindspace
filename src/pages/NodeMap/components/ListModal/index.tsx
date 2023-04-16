@@ -1,4 +1,4 @@
-import PostTable from 'pages/NodeMap/components/PostTable';
+import PostTable from '../PostTable';
 import Modal from 'react-modal';
 import styles from '../Modal/Modal.module.scss';
 import { ListModalProps } from 'utils/types';

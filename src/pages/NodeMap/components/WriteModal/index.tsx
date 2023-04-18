@@ -136,7 +136,7 @@ const WriteModal = ({
                     className={styles.header__button}
                     onClick={() => setIsEditing(true)}
                   >
-                    글 수정
+                    수정
                   </button>
                 </>
               )}
@@ -186,7 +186,7 @@ const WriteModal = ({
                 className={styles.header__button}
                 onClick={handleFirstWrite}
               >
-                글 작성
+                작성
               </button>
             </div>
           </div>

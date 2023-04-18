@@ -53,13 +53,13 @@ function NodeModal({
           <span className={styles.content__title}>{selectedNodeInfo.name}</span>
           <div>
             <button onClick={openWriteModal} className={styles.content__button}>
-              작성
+              {selectedNodeInfo.isActive ? '조회' : '작성'}
             </button>
             <button
               onClick={handleClickLIst}
               className={styles.content__button}
             >
-              조회
+              목록 조회
             </button>
           </div>
         </div>

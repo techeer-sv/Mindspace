@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import Modal from 'react-modal';
-import { getNodeData } from 'api/Node';
+import { createPost, getPost, updatePost, deletePost } from 'api/Node';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -23,38 +23,34 @@ const WriteModal = ({
   const [isEditing, setIsEditing] = useState(true);
   const editorRef = React.useRef(null);
 
+  const initialize = () => {
+    setTitle('');
+    setContent('');
+    setIsEditing(true);
+  };
+
   const handleEditorChange = () => {
     setContent(editorRef.current.getInstance().getMarkdown());
   };
 
-  const handleFirstWrite = () => {
-    console.log('first');
-    // 처음 글쓰기 api 요청
+  const handleFirstWrite = async () => {
+    await createPost(nodeInfo.id as number, title, content);
     setIsEditing(false);
     setIsActive(true);
     updateNodeInfo(nodeInfo?.id, true);
-
-    console.log('제목: ', title);
-    console.log('내용: ', content);
   };
 
-  const handleSubmit = () => {
-    // 글수정 api요청
-    console.log('제목: ', title);
-    console.log('내용: ', content);
-
+  const handleSubmit = async () => {
+    await updatePost(nodeInfo.id as number, title, content);
     setInitTitle(title);
     setInitEditedContent(content);
     setIsEditing(false);
   };
 
-  const handleDelete = () => {
-    // 글 삭제 api요청
-    console.log('삭제');
+  const handleDelete = async () => {
+    await deletePost(nodeInfo.id as number);
     updateNodeInfo(nodeInfo?.id, false);
     setIsActive(false);
-
-    // + isActive 요소 false처리
     onRequestClose();
   };
 
@@ -67,9 +63,9 @@ const WriteModal = ({
   useEffect(() => {
     setIsActive(nodeInfo.isActive);
 
-    if (nodeInfo?.isActive) {
+    if (isOpen && nodeInfo?.isActive) {
       const fetchData = async () => {
-        const data = await getNodeData();
+        const data = await getPost(nodeInfo.id as number);
         console.log(data);
 
         setTitle(data.title);
@@ -81,22 +77,8 @@ const WriteModal = ({
       fetchData();
       setIsEditing(false);
     } else {
-      console.log('??');
-      setTitle('');
-      setContent('');
-      setIsEditing(true);
+      initialize();
     }
-  }, [isOpen, nodeInfo]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getNodeData();
-      console.log(data);
-
-      setTitle(data.title);
-      setContent(data.content);
-    };
-    fetchData();
   }, [isOpen, nodeInfo]);
 
   return (

@@ -1,0 +1,59 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "name": "name1",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "name2",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "name3",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "name4",
+      "isActive": false
+    },
+    {
+      "id": 5,
+      "name": "name5",
+      "isActive": false
+    },
+    {
+      "id": 6,
+      "name": "name6",
+      "isActive": true
+    },
+    {
+      "id": 7,
+      "name": "name6",
+      "isActive": true
+    },
+    {
+      "id": 8,
+      "name": "name6",
+      "isActive": false
+    },
+    {
+      "id": 9,
+      "name": "name6",
+      "isActive": false
+    },
+    {
+      "id": 10,
+      "name": "name1",
+      "isActive": true
+    },
+    {
+      "id": 11,
+      "name": "name1",
+      "isActive": true
+    }
+  ]
+}

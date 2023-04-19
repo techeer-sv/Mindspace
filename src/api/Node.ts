@@ -1,38 +1,66 @@
 import axios from 'axios';
+import { NodeObject } from 'utils/types';
 
-interface NodeData {
-  id: number;
-  title: string;
-  content: string;
-}
-
-export const getPost = async (id: number): Promise<NodeData> => {
-  console.log('id:', id, '값에 대한 글 정보 api 요청');
+export const getNodeList = async (): Promise<NodeObject> => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
-  const res = await axios.get('../dummy/postData.json');
-  const data = res.data;
+  const res = await axios.get('../dummy/nodeList.json');
+  const nodeData = res.data;
 
-  return data;
-};
+  const dummyLink = [
+    {
+      source: 1,
+      target: 2,
+    },
+    {
+      source: 1,
+      target: 3,
+    },
+    {
+      source: 2,
+      target: 4,
+    },
+    {
+      source: 2,
+      target: 5,
+    },
+    {
+      source: 2,
+      target: 6,
+    },
+    {
+      source: 2,
+      target: 7,
+    },
+    {
+      source: 3,
+      target: 8,
+    },
+    {
+      source: 3,
+      target: 9,
+    },
+    {
+      source: 10,
+      target: 11,
+    },
+  ];
 
-export const deletePost = async (id: number): Promise<void> => {
-  console.log('id:', id, '글쓰기 삭제 api 요청');
-};
+  const nodeList = {
+    nodes: nodeData.nodes.map((node: any) => {
+      const connectCount = dummyLink.reduce((acc, link) => {
+        if (link.source === node.id || link.target === node.id) {
+          acc += 1;
+        }
+        return acc;
+      }, 0);
 
-export const createPost = async (
-  id: number,
-  title: string,
-  content: string,
-): Promise<void> => {
-  console.log('id:', id, '글쓰기 더미 api 요청');
-  console.log('title : ', title, '\n content:', content);
-};
+      return {
+        ...node,
+        connect_count: connectCount,
+      };
+    }),
+    links: dummyLink,
+  };
 
-export const updatePost = async (
-  id: number,
-  title: string,
-  content: string,
-): Promise<void> => {
-  console.log('id:', id, '글수정 api 요청');
-  console.log('title : ', title, '\n content:', content);
+  return nodeList;
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import Modal from 'react-modal';
-import { createPost, getPost, updatePost, deletePost } from 'api/Node';
+import { createPost, getPost, updatePost, deletePost } from 'api/Post';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';

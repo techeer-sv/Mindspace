@@ -4,120 +4,13 @@ import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
 import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
+import { getNodeList } from 'api/Node';
 
 const NodeMap = () => {
   // eslint-disable-next-line
   const fgRef = useRef<any>();
-  const tempNodeData = {
-    nodes: [
-      {
-        id: 1,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-      {
-        id: 2,
-        name: 'name2',
-        connect_count: 5,
-        isActive: true,
-      },
-      {
-        id: 3,
-        name: 'name3',
-        connect_count: 3,
-        isActive: true,
-      },
-      {
-        id: 4,
-        name: 'name4',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 5,
-        name: 'name5',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 6,
-        name: 'name6',
-        connect_count: 1,
-        isActive: true,
-      },
-      {
-        id: 7,
-        name: 'name6',
-        connect_count: 1,
-        isActive: true,
-      },
-      {
-        id: 8,
-        name: 'name6',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 9,
-        name: 'name6',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 10,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-      {
-        id: 11,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-    ],
-    links: [
-      {
-        source: 1,
-        target: 2,
-      },
-      {
-        source: 1,
-        target: 3,
-      },
-      {
-        source: 2,
-        target: 4,
-      },
-      {
-        source: 2,
-        target: 5,
-      },
-      {
-        source: 2,
-        target: 6,
-      },
-      {
-        source: 2,
-        target: 7,
-      },
-      {
-        source: 3,
-        target: 8,
-      },
-      {
-        source: 3,
-        target: 9,
-      },
-      {
-        source: 10,
-        target: 11,
-      },
-    ],
-  };
 
-  const [nodeData, setNodeData] = useState(tempNodeData);
+  const [nodeData, setNodeData] = useState(null);
 
   const nodeRelSize = 3;
   const nodeVal = 3;
@@ -240,7 +133,7 @@ const NodeMap = () => {
 
   const handleNodeInfoUpdate = (id: number | string, isActive: boolean) => {
     const updatedNodeData = {
-      nodes: nodeData.nodes.map((node) =>
+      nodes: nodeData.nodes.map((node: Node) =>
         node.id === id ? { ...node, isActive: isActive } : node,
       ),
       links: nodeData.links,
@@ -259,21 +152,31 @@ const NodeMap = () => {
         fgRef.current.zoomToFit(1000);
       }
     }, 300);
-  }, [nodeData.links]);
+  }, [nodeData?.links]);
+
+  useEffect(() => {
+    const fetchNodeList = async () => {
+      setNodeData(await getNodeList());
+    };
+    fetchNodeList();
+  }, []);
 
   return (
     <div>
       <Navbar />
-      <ForceGraph2D
-        ref={fgRef}
-        nodeRelSize={nodeRelSize}
-        nodeVal={nodeVal}
-        nodeCanvasObject={nodeCanvasObject}
-        onNodeClick={handleClick}
-        graphData={nodeData}
-        linkColor={() => 'white'}
-        enableNodeDrag={false}
-      />
+      {nodeData ? (
+        <ForceGraph2D
+          ref={fgRef}
+          nodeRelSize={nodeRelSize}
+          nodeVal={nodeVal}
+          nodeCanvasObject={nodeCanvasObject}
+          onNodeClick={handleClick}
+          graphData={nodeData}
+          linkColor={() => 'white'}
+          enableNodeDrag={false}
+        />
+      ) : null}
+
       {selectedNode && (
         <>
           <NodeModal

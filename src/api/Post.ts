@@ -35,3 +35,14 @@ export const updatePost = async (
   console.log('id:', id, '글수정 api 요청');
   console.log('title : ', title, '\n content:', content);
 };
+
+interface PostListData {
+  data: Array<[]>;
+}
+
+export const getPostListData = async (): Promise<PostListData> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
+  const res = await axios.get('../dummy/getPostInfo.json');
+  const data = res.data;
+  return data;
+};

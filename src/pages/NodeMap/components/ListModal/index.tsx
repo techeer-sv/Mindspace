@@ -1,9 +1,35 @@
+import { useState, useEffect } from 'react';
 import PostTable from '../PostTable';
 import Modal from 'react-modal';
-import styles from '../Modal/Modal.module.scss';
+import styles from './ListModal.module.scss';
 import { ListModalProps } from 'utils/types';
+import { getPostData } from 'api/PostData';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
+  const [isSelectedTable, setIsSelectedTable] = useState(null);
+
+  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getPostData();
+      setName(res.name);
+      setTitle(res.title);
+      setContent(res.title);
+      setDate(res.date);
+      setTime(res.time);
+    };
+    fetchData();
+  }, [isSelectedTable]);
+
+  const handleSelecteBoard = (id: number) => {
+    setIsSelectedTable(id);
+  };
+
   return (
     <Modal
       isOpen={listModalOpen}
@@ -25,10 +51,32 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
         },
       }}
     >
-      <button className={styles.header__button} onClick={onListRequestClose}>
-        <span className={styles.header__span}>x</span>
-      </button>
-      <PostTable />
+      {!isSelectedTable ? (
+        <>
+          <button
+            className={styles.header__button}
+            onClick={onListRequestClose}
+          >
+            <span className={styles.header__span}>x</span>
+          </button>
+          <PostTable OnClickedId={handleSelecteBoard} />
+        </>
+      ) : (
+        <>
+          <button
+            className={styles.header__button}
+            onClick={() => {
+              setIsSelectedTable(null);
+            }}
+          >
+            <span className={styles.post__button}>Back</span>
+          </button>
+          <div className={styles.post__text__wapper}>
+            <span className={styles.post__title}>{title}</span>
+            <span className={styles.post__content}>{content}</span>
+          </div>
+        </>
+      )}
     </Modal>
   );
 }

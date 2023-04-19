@@ -71,9 +71,25 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           >
             <span className={styles.post__button}>Back</span>
           </button>
-          <div className={styles.post__text__wapper}>
-            <span className={styles.post__title}>{title}</span>
-            <span className={styles.post__content}>{content}</span>
+          <div className={styles.post__content}>
+            <div className={styles.post__content__wapper}>
+              <div className={styles.post__header__wapper}>
+                <div className={styles.post__text__wapper}>
+                  <span className={styles.post__title}>{title}</span>
+                  <div className={styles.post__nickname}>
+                    <span>{name}</span>
+                  </div>
+                </div>
+                <div className={styles.post__dateTime}>
+                  <span className={styles.post__date}>{date}</span>
+                  <span>{time}</span>
+                </div>
+              </div>
+              <div>
+                <hr />
+              </div>
+              <span className={styles.post__content__span}>{content}</span>
+            </div>
           </div>
         </>
       )}

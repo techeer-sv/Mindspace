@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
+import Loading from 'components/Loading';
 import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
 import { getNodeList } from 'api/Node';
@@ -175,14 +176,15 @@ const NodeMap = () => {
           linkColor={() => 'white'}
           enableNodeDrag={false}
         />
-      ) : null}
+      ) : (
+        <Loading />
+      )}
 
       {selectedNode && (
         <>
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            // nodeName={nodeName}
             selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />

@@ -51,14 +51,14 @@ interface PostData {
 
 export const getPostListData = async (): Promise<PostListData> => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
-  const res = await axios.get('../dummy/getPostInfo.json');
+  const res = await axios.get('../dummy/postList.json');
   const data = res.data;
   return data;
 };
 
 export const getPostData = async (): Promise<PostData> => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
-  const res = await axios.get('../dummy/getNodeInfo.json');
+  const res = await axios.get('../dummy/post.json');
   const data = res.data;
 
   return data;

@@ -37,23 +37,3 @@
     cursor: pointer;
   }
 }
-
-.modal__content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 85%;
-  margin-top: 1rem;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #4e517a;
-    border-radius: 10px;
-  }
-}

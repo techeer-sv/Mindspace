@@ -2,123 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { NodeObject, Node, Context } from 'utils/types';
 import Navbar from 'components/Navbar';
+import Loading from 'components/Loading';
 import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
+import { getNodeList } from 'api/Node';
 
 const NodeMap = () => {
   // eslint-disable-next-line
+
+  const [initialLoad, setInitialLoad] = useState(true);
   const fgRef = useRef<any>();
-  const tempNodeData = {
-    nodes: [
-      {
-        id: 1,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-      {
-        id: 2,
-        name: 'name2',
-        connect_count: 5,
-        isActive: true,
-      },
-      {
-        id: 3,
-        name: 'name3',
-        connect_count: 3,
-        isActive: true,
-      },
-      {
-        id: 4,
-        name: 'name4',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 5,
-        name: 'name5',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 6,
-        name: 'name6',
-        connect_count: 1,
-        isActive: true,
-      },
-      {
-        id: 7,
-        name: 'name6',
-        connect_count: 1,
-        isActive: true,
-      },
-      {
-        id: 8,
-        name: 'name6',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 9,
-        name: 'name6',
-        connect_count: 1,
-        isActive: false,
-      },
-      {
-        id: 10,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-      {
-        id: 11,
-        name: 'name1',
-        connect_count: 2,
-        isActive: true,
-      },
-    ],
-    links: [
-      {
-        source: 1,
-        target: 2,
-      },
-      {
-        source: 1,
-        target: 3,
-      },
-      {
-        source: 2,
-        target: 4,
-      },
-      {
-        source: 2,
-        target: 5,
-      },
-      {
-        source: 2,
-        target: 6,
-      },
-      {
-        source: 2,
-        target: 7,
-      },
-      {
-        source: 3,
-        target: 8,
-      },
-      {
-        source: 3,
-        target: 9,
-      },
-      {
-        source: 10,
-        target: 11,
-      },
-    ],
-  };
-
-  const [nodeData, setNodeData] = useState(tempNodeData);
-
+  const [nodeData, setNodeData] = useState(null);
   const nodeRelSize = 3;
   const nodeVal = 3;
 
@@ -201,10 +95,6 @@ const NodeMap = () => {
   };
 
   const nodeCanvasObject = (node: Node, ctx: Context) => {
-    if (selectedNode === node) {
-      node.fx = node.x;
-      node.fy = node.y;
-    }
     node.connect_count = node.connect_count || 0;
     node.x = node.x || 0;
     node.y = node.y || 0;
@@ -240,7 +130,7 @@ const NodeMap = () => {
 
   const handleNodeInfoUpdate = (id: number | string, isActive: boolean) => {
     const updatedNodeData = {
-      nodes: nodeData.nodes.map((node) =>
+      nodes: nodeData.nodes.map((node: Node) =>
         node.id === id ? { ...node, isActive: isActive } : node,
       ),
       links: nodeData.links,
@@ -249,37 +139,56 @@ const NodeMap = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
-      fgRef.current?.d3Force('link').distance(70);
-    }, 10);
+    if (initialLoad && nodeData) {
+      setTimeout(() => {
+        fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
+        fgRef.current?.d3Force('link').distance(70);
+      }, 10);
 
-    setTimeout(() => {
-      if (fgRef.current) {
-        fgRef.current.zoomToFit(1000);
-      }
-    }, 300);
-  }, [nodeData.links]);
+      setTimeout(() => {
+        if (fgRef.current) {
+          fgRef.current.zoomToFit(1000);
+          nodeData.nodes.forEach((node: Node) => {
+            node.fx = node.x;
+            node.fy = node.y;
+          });
+        }
+        setInitialLoad(false);
+      }, 300);
+    }
+  }, [nodeData, initialLoad]);
+
+  useEffect(() => {
+    const fetchNodeList = async () => {
+      setNodeData(await getNodeList());
+      setInitialLoad(true);
+    };
+    fetchNodeList();
+  }, []);
 
   return (
     <div>
       <Navbar />
-      <ForceGraph2D
-        ref={fgRef}
-        nodeRelSize={nodeRelSize}
-        nodeVal={nodeVal}
-        nodeCanvasObject={nodeCanvasObject}
-        onNodeClick={handleClick}
-        graphData={nodeData}
-        linkColor={() => 'white'}
-        enableNodeDrag={false}
-      />
+      {nodeData ? (
+        <ForceGraph2D
+          ref={fgRef}
+          nodeRelSize={nodeRelSize}
+          nodeVal={nodeVal}
+          nodeCanvasObject={nodeCanvasObject}
+          onNodeClick={handleClick}
+          graphData={nodeData}
+          linkColor={() => 'white'}
+          enableNodeDrag={false}
+        />
+      ) : (
+        <Loading />
+      )}
+
       {selectedNode && (
         <>
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            // nodeName={nodeName}
             selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />

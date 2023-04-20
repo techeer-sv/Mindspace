@@ -3,7 +3,7 @@ import PostTable from '../PostTable';
 import Modal from 'react-modal';
 import styles from './ListModal.module.scss';
 import { ListModalProps } from 'utils/types';
-import { getPostData } from 'api/PostData';
+import { getPostData } from 'api/Post';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
@@ -19,7 +19,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
       const res = await getPostData();
       setName(res.name);
       setTitle(res.title);
-      setContent(res.title);
+      setContent(res.content);
       setDate(res.date);
       setTime(res.time);
     };

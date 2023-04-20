@@ -40,9 +40,26 @@ interface PostListData {
   data: Array<[]>;
 }
 
+interface PostData {
+  id: number;
+  name: string;
+  title: string;
+  content: string;
+  date: string;
+  time: string;
+}
+
 export const getPostListData = async (): Promise<PostListData> => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
   const res = await axios.get('../dummy/getPostInfo.json');
   const data = res.data;
+  return data;
+};
+
+export const getPostData = async (): Promise<PostData> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
+  const res = await axios.get('../dummy/getNodeInfo.json');
+  const data = res.data;
+
   return data;
 };

@@ -60,6 +60,12 @@
     font-size: 1.7rem;
   }
 
+  &__viewer {
+    border-top: 1px #ebedf2 solid;
+    padding: 5px 0 0 10px;
+    background: white;
+  }
+
   &__dateTime {
     margin: 2.5% 0 0 auto;
     height: 1rem;

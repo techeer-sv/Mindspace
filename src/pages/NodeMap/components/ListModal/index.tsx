@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import styles from './ListModal.module.scss';
 import { ListModalProps } from 'utils/types';
 import { getPostData } from 'api/Post';
+import { Viewer } from '@toast-ui/react-editor';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
@@ -85,10 +86,10 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   <span>{time}</span>
                 </div>
               </div>
-              <div>
-                <hr />
+              <div></div>
+              <div className={styles.post__viewer}>
+                <Viewer initialValue={content} usageStatistics={false} />
               </div>
-              <span className={styles.post__content__span}>{content}</span>
             </div>
           </div>
         </>

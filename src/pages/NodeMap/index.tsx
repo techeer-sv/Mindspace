@@ -9,10 +9,10 @@ import { getNodeList } from 'api/Node';
 
 const NodeMap = () => {
   // eslint-disable-next-line
+
+  const [initialLoad, setInitialLoad] = useState(true);
   const fgRef = useRef<any>();
-
   const [nodeData, setNodeData] = useState(null);
-
   const nodeRelSize = 3;
   const nodeVal = 3;
 
@@ -95,10 +95,6 @@ const NodeMap = () => {
   };
 
   const nodeCanvasObject = (node: Node, ctx: Context) => {
-    if (selectedNode === node) {
-      node.fx = node.x;
-      node.fy = node.y;
-    }
     node.connect_count = node.connect_count || 0;
     node.x = node.x || 0;
     node.y = node.y || 0;
@@ -143,21 +139,29 @@ const NodeMap = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
-      fgRef.current?.d3Force('link').distance(70);
-    }, 10);
+    if (initialLoad && nodeData) {
+      setTimeout(() => {
+        fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
+        fgRef.current?.d3Force('link').distance(70);
+      }, 10);
 
-    setTimeout(() => {
-      if (fgRef.current) {
-        fgRef.current.zoomToFit(1000);
-      }
-    }, 300);
-  }, [nodeData?.links]);
+      setTimeout(() => {
+        if (fgRef.current) {
+          fgRef.current.zoomToFit(1000);
+          nodeData.nodes.forEach((node: Node) => {
+            node.fx = node.x;
+            node.fy = node.y;
+          });
+        }
+        setInitialLoad(false);
+      }, 300);
+    }
+  }, [nodeData, initialLoad]);
 
   useEffect(() => {
     const fetchNodeList = async () => {
       setNodeData(await getNodeList());
+      setInitialLoad(true);
     };
     fetchNodeList();
   }, []);

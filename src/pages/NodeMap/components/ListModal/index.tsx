@@ -86,7 +86,6 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   <span>{time}</span>
                 </div>
               </div>
-              <div></div>
               <div className={styles.post__viewer}>
                 <Viewer initialValue={content} usageStatistics={false} />
               </div>

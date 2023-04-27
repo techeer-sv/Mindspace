@@ -20,22 +20,18 @@ export const getNodeList = async (): Promise<NodeObject> => {
     },
     {
       source: 1,
-      target: 3,
-    },
-    {
-      source: 2,
       target: 4,
     },
     {
-      source: 2,
+      source: 1,
       target: 5,
     },
     {
-      source: 2,
+      source: 3,
       target: 6,
     },
     {
-      source: 2,
+      source: 3,
       target: 7,
     },
     {
@@ -47,8 +43,92 @@ export const getNodeList = async (): Promise<NodeObject> => {
       target: 9,
     },
     {
-      source: 10,
+      source: 3,
+      target: 10,
+    },
+    {
+      source: 3,
       target: 11,
+    },
+    {
+      source: 7,
+      target: 12,
+    },
+    {
+      source: 7,
+      target: 13,
+    },
+    {
+      source: 7,
+      target: 14,
+    },
+    {
+      source: 7,
+      target: 15,
+    },
+    {
+      source: 12,
+      target: 16,
+    },
+    {
+      source: 12,
+      target: 17,
+    },
+    {
+      source: 18,
+      target: 19,
+    },
+    {
+      source: 5,
+      target: 20,
+    },
+    {
+      source: 21,
+      target: 22,
+    },
+    {
+      source: 21,
+      target: 25,
+    },
+    {
+      source: 21,
+      target: 26,
+    },
+    {
+      source: 22,
+      target: 23,
+    },
+    {
+      source: 22,
+      target: 24,
+    },
+    {
+      source: 27,
+      target: 19,
+    },
+    {
+      source: 27,
+      target: 28,
+    },
+    {
+      source: 27,
+      target: 29,
+    },
+    {
+      source: 27,
+      target: 30,
+    },
+    {
+      source: 27,
+      target: 31,
+    },
+    {
+      source: 27,
+      target: 32,
+    },
+    {
+      source: 27,
+      target: 33,
     },
   ];
 

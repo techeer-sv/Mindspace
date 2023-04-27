@@ -8,7 +8,7 @@ interface PostData {
 
 export const getPost = async (id: number): Promise<PostData> => {
   console.log('id:', id, '값에 대한 글 정보 api 요청');
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
+
   const res = await axios.get('../dummy/postData.json');
   const data = res.data;
   return data;
@@ -50,14 +50,12 @@ interface PostData {
 }
 
 export const getPostListData = async (): Promise<PostListData> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
   const res = await axios.get('../dummy/postList.json');
   const data = res.data;
   return data;
 };
 
 export const getPostData = async (): Promise<PostData> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // Loading 테스트
   const res = await axios.get('../dummy/post.json');
   const data = res.data;
 

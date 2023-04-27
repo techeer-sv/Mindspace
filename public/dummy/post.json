@@ -1,8 +1,8 @@
 {
   "id": 1,
   "name": "코린이",
-  "title": "JPA에 대해 알아봐요",
-  "content": "이런저런 내용에 대해 학습했어요!",
-  "date": "2023-04-19",
+  "title": "ES6란",
+  "content": "# ES6의 문법\n\n## 1. let과 const\n\nES6에서는 `let`과 `const`라는 블록 스코프 변수를 도입했습니다. `let`은 재할당 가능한 변수를 선언할 때 사용하며, `const`는 상수를 선언할 때 사용합니다.\n\n## 2. 화살표 함수\n\n화살표 함수는 기존의 함수 선언 방식보다 간결하고 가독성이 좋아져서 많이 사용됩니다. 화살표 함수는 항상 익명 함수로 선언됩니다.\n\n```javascript\n// 기존 함수 선언 방식\nfunction sum(a, b) {\n  return a + b;\n}\n\n// 화살표 함수\nconst sum = (a, b) => a + b;\n``` \n\n## 3. 디스트럭처링 할당\n\nES6에서는 배열이나 객체의 속성을 추출하여 변수에 할당할 수 있는 디스트럭처링 할당이라는 문법을 도입했습니다.\n\n```javascript\n// 배열 디스트럭처링 할당\nconst arr = [1, 2, 3];\nconst [a, b, c] = arr;\n\n// 객체 디스트럭처링 할당\nconst obj = { name: 'John', age: 30 };\nconst { name, age } = obj;\n``` \n\n## 4. 클래스\n\nES6에서는 클래스(class) 문법을 도입하여 기존의 프로토타입 기반 객체지향 방식보다 좀 더 직관적이고 간결한 문법으로 객체를 생성할 수 있습니다.\n\n```javascript\nclass Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n\n  sayHello() {\n    console.log(`Hello, my name is ${this.name}.`);\n  }\n}\n\nconst john = new Person('John', 30);\njohn.sayHello();\n``` \n\n## 5. 모듈\n\nES6에서는 모듈(module) 문법을 도입하여 파일 간의 코드 공유와 재사용성을 높였습니다.\n\n```javascript\n// export 예시\nexport const sum = (a, b) => a + b;\n\n// import 예시\nimport { sum } from './math.js';\n```",
+  "date": "2023-04-17",
   "time": "21:00"
 }

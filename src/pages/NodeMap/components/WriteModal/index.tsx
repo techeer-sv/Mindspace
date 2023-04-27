@@ -19,8 +19,8 @@ const WriteModal = ({
   const [isActive, setIsActive] = useState(nodeInfo.isActive);
   const [initTitle, setInitTitle] = useState(title);
   const [initEditedContent, setInitEditedContent] = useState(content);
-
   const [isEditing, setIsEditing] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const editorRef = React.useRef(null);
 
   const initialize = () => {
@@ -61,17 +61,19 @@ const WriteModal = ({
   };
 
   useEffect(() => {
+    setIsLoading(true);
     setIsActive(nodeInfo.isActive);
 
     if (isOpen && nodeInfo?.isActive) {
       const fetchData = async () => {
         const data = await getPost(nodeInfo.id as number);
-        console.log(data);
 
         setTitle(data.title);
         setContent(data.content);
         setInitTitle(data.title);
         setInitEditedContent(data.content);
+
+        setIsLoading(false);
       };
 
       fetchData();
@@ -82,144 +84,157 @@ const WriteModal = ({
   }, [isOpen, nodeInfo]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={{
-        overlay: {
-          backgroundColor: 'rgba(166, 166, 200, 0.2)',
-        },
-        content: {
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'rgba(166, 166, 200, 0.6)',
-          borderRadius: '1rem',
-          border: 'none',
-          width: '80vw',
-          height: '80vh',
-        },
-      }}
-    >
-      {isActive ? (
-        <>
-          <div className={styles.header}>
-            <button className={styles.header__button} onClick={onRequestClose}>
-              <span className={styles.header__span}>x</span>
-            </button>
-            <div className={styles.header__left}>
-              {isEditing ? (
-                <>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleCancel}
-                  >
-                    취소
-                  </button>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleSubmit}
-                  >
-                    완료
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleDelete}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    className={styles.header__button}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    수정
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.content__title}>
-              <input
-                disabled={!isEditing}
-                type="text"
-                placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className={styles.content__editor}>
-              <div
-                className={`${styles.content__editor} ${styles.editor__content}`}
-              >
-                {isEditing ? (
-                  <Editor
-                    initialValue={content}
-                    onChange={handleEditorChange}
-                    previewStyle="tab"
-                    height="100%"
-                    initialEditType="markdown"
-                    usageStatistics={false}
-                    ref={editorRef}
+    !isLoading && (
+      <>
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={onRequestClose}
+          style={{
+            overlay: {
+              backgroundColor: 'rgba(166, 166, 200, 0.2)',
+            },
+            content: {
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'rgba(166, 166, 200, 0.6)',
+              borderRadius: '1rem',
+              border: 'none',
+              width: '80vw',
+              height: '80vh',
+            },
+          }}
+        >
+          {isActive ? (
+            <>
+              <div className={styles.header}>
+                <button
+                  className={styles.header__button}
+                  onClick={onRequestClose}
+                >
+                  <span className={styles.header__span}>x</span>
+                </button>
+                <div className={styles.header__left}>
+                  {isEditing ? (
+                    <>
+                      <button
+                        className={styles.header__button}
+                        onClick={handleCancel}
+                      >
+                        취소
+                      </button>
+                      <button
+                        className={styles.header__button}
+                        onClick={handleSubmit}
+                      >
+                        완료
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className={styles.header__button}
+                        onClick={handleDelete}
+                      >
+                        삭제
+                      </button>
+                      <button
+                        className={styles.header__button}
+                        onClick={() => setIsEditing(true)}
+                      >
+                        수정
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className={styles.content}>
+                <div className={styles.content__title}>
+                  <input
+                    disabled={!isEditing}
+                    type="text"
+                    placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
-                ) : (
-                  <div className={styles.content__viewer}>
-                    <Viewer initialValue={content} usageStatistics={false} />
+                </div>
+                <div className={styles.content__editor}>
+                  <div
+                    className={`${styles.content__editor} ${styles.editor__content}`}
+                  >
+                    {isEditing ? (
+                      <Editor
+                        initialValue={content}
+                        onChange={handleEditorChange}
+                        previewStyle="tab"
+                        height="100%"
+                        initialEditType="markdown"
+                        usageStatistics={false}
+                        ref={editorRef}
+                      />
+                    ) : (
+                      <div className={styles.content__viewer}>
+                        <Viewer
+                          initialValue={content}
+                          usageStatistics={false}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.header}>
-            <button className={styles.header__button} onClick={onRequestClose}>
-              <span className={styles.header__span}>x</span>
-            </button>
-            <div className={styles.header__left}>
-              <button
-                className={styles.header__button}
-                onClick={handleFirstWrite}
-              >
-                작성
-              </button>
-            </div>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.content__title}>
-              <input
-                disabled={!isEditing}
-                type="text"
-                placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className={styles.content__editor}>
-              <div
-                className={`${styles.content__editor} ${styles.editor__content}`}
-              >
-                <Editor
-                  initialValue={content}
-                  onChange={handleEditorChange}
-                  previewStyle="tab"
-                  height="100%"
-                  initialEditType="markdown"
-                  usageStatistics={false}
-                  ref={editorRef}
-                />
-                )
+            </>
+          ) : (
+            <>
+              <div className={styles.header}>
+                <button
+                  className={styles.header__button}
+                  onClick={onRequestClose}
+                >
+                  <span className={styles.header__span}>x</span>
+                </button>
+                <div className={styles.header__left}>
+                  <button
+                    className={styles.header__button}
+                    onClick={handleFirstWrite}
+                  >
+                    작성
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        </>
-      )}
-    </Modal>
+              <div className={styles.content}>
+                <div className={styles.content__title}>
+                  <input
+                    disabled={!isEditing}
+                    type="text"
+                    placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+                <div className={styles.content__editor}>
+                  <div
+                    className={`${styles.content__editor} ${styles.editor__content}`}
+                  >
+                    <Editor
+                      initialValue={content}
+                      onChange={handleEditorChange}
+                      previewStyle="tab"
+                      height="100%"
+                      initialEditType="markdown"
+                      usageStatistics={false}
+                      ref={editorRef}
+                    />
+                    )
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </Modal>
+      </>
+    )
   );
 };
 

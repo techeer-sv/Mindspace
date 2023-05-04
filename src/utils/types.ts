@@ -1,5 +1,4 @@
 // NodeMap
-
 export type NodeObject = object & {
   id?: string | number;
   name?: string;
@@ -21,6 +20,7 @@ export type Context = CanvasRenderingContext2D;
 
 // Auth
 export interface FormBoxProps {
+  type?: string;
   placeholder?: string;
   url?: string;
   text?: string;

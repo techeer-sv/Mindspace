@@ -10,10 +10,10 @@ function SignUpPage() {
       <div className={styles.content}>
         <div className={styles.content__signup__box}>
           <span className={styles.content__title}>Create Account</span>
-          <FormBox placeholder="Email" />
-          <FormBox placeholder="Nickname" />
-          <FormBox placeholder="Password" />
-          <FormBox placeholder="Password Check" />
+          <FormBox type="text" placeholder="Email" />
+          <FormBox type="text" placeholder="Nickname" />
+          <FormBox type="password" placeholder="Password" />
+          <FormBox type="password" placeholder="Password Check" />
           <div className={styles.button_wapper}>
             <FormButton url="/signin" text="SIGN UP" />
           </div>

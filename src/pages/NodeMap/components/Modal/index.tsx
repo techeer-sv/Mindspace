@@ -41,8 +41,9 @@ function NodeModal({
             background: 'rgba(166, 166, 200, 0.6)',
             borderRadius: '1rem',
             border: 'none',
-            width: '28rem',
-            height: '15rem',
+            width: '50%',
+            maxWidth: '40rem',
+            height: '20rem',
           },
         }}
       >

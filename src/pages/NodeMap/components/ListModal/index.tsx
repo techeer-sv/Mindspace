@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import PostTable from '../PostTable';
-import Modal from 'react-modal';
 import styles from './ListModal.module.scss';
 import { ListModalProps } from 'utils/types';
 import { getPostData } from 'api/Post';
 import { Viewer } from '@toast-ui/react-editor';
+import ResizableModal from 'components/ResizebleModal';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
@@ -32,26 +32,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   };
 
   return (
-    <Modal
-      isOpen={listModalOpen}
-      onRequestClose={onListRequestClose}
-      style={{
-        overlay: {
-          backgroundColor: 'rgba(166, 166, 200, 0.2)',
-        },
-        content: {
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'rgba(166, 166, 200, 0.6)',
-          borderRadius: '1rem',
-          border: 'none',
-          width: '50rem',
-          height: '38rem',
-        },
-      }}
-    >
+    <ResizableModal isOpen={listModalOpen} onRequestClose={onListRequestClose}>
       {!isSelectedTable ? (
         <>
           <button
@@ -93,7 +74,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           </div>
         </>
       )}
-    </Modal>
+    </ResizableModal>
   );
 }
 

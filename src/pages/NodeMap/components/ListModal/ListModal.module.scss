@@ -60,6 +60,7 @@
   }
 
   &__viewer {
+    overflow-y: auto;
     border-top: 1px #ebedf2 solid;
     padding: 5px 0 0 10px;
     background: white;

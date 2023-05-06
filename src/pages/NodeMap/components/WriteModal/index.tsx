@@ -7,6 +7,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
 import { WriteModalProps } from 'utils/types';
+import ResizableModal from 'components/ResizebleModal';
 
 const WriteModal = ({
   isOpen,
@@ -128,30 +129,8 @@ const WriteModal = ({
   }, [isOpen, nodeInfo]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={{
-        overlay: {
-          backgroundColor: 'rgba(166, 166, 200, 0.2)',
-        },
-        content: {
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'rgba(166, 166, 200, 0.6)',
-          borderRadius: '1rem',
-          border: 'none',
-          width: `${modalWidth}px`,
-          height: `${modalHeight}px`,
-          padding: '1rem', // 패딩 추가
-        },
-      }}
-    >
+    <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div style={{ position: 'relative', height: '100%' }}>
-        {/* 기존 모달 내용 */}
-
         {isActive ? (
           <>
             <div className={styles.header}>
@@ -279,10 +258,8 @@ const WriteModal = ({
             </div>
           </>
         )}
-
-        <div className={styles.resizer} onMouseDown={handleMouseDown}></div>
       </div>
-    </Modal>
+    </ResizableModal>
   );
 };
 

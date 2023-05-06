@@ -1,27 +1,3 @@
-.resizer {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background-color: transparent;
-  cursor: nwse-resize;
-  z-index: 1;
-}
-
-.resizer::before {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  right: 2px;
-  bottom: 2px;
-  border-left: 10px solid transparent;
-  border-top: 10px solid transparent;
-  border-right: 10px solid #999;
-  border-bottom: 10px solid #999;
-}
-
 .header {
   display: flex;
   align-items: center;

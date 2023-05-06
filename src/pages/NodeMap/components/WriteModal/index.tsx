@@ -23,6 +23,40 @@ const WriteModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const editorRef = React.useRef(null);
 
+  const [modalWidth, setModalWidth] = useState(800);
+  const [modalHeight, setModalHeight] = useState(600);
+  const [isResizing, setIsResizing] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: any) => {
+    setIsResizing(true);
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: any) => {
+      if (isResizing) {
+        setModalWidth((prevWidth) => prevWidth + (e.clientX - mousePosition.x));
+        setModalHeight(
+          (prevHeight) => prevHeight + (e.clientY - mousePosition.y),
+        );
+        setMousePosition({ x: e.clientX, y: e.clientY });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, mousePosition]);
+
   const initialize = () => {
     setTitle('');
     setContent('');
@@ -38,6 +72,7 @@ const WriteModal = ({
     setIsEditing(false);
     setIsActive(true);
     updateNodeInfo(nodeInfo?.id, true);
+    setIsLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -99,66 +134,128 @@ const WriteModal = ({
           background: 'rgba(166, 166, 200, 0.6)',
           borderRadius: '1rem',
           border: 'none',
-          width: '80vw',
-          height: '80vh',
+          width: `${modalWidth}px`,
+          height: `${modalHeight}px`,
+          padding: '1rem', // 패딩 추가
         },
       }}
     >
-      {isActive ? (
-        <>
-          <div className={styles.header}>
-            <button className={styles.header__button} onClick={onRequestClose}>
-              <span className={styles.header__span}>x</span>
-            </button>
-            <div className={styles.header__left}>
-              {isEditing ? (
-                <>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleCancel}
-                  >
-                    취소
-                  </button>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleSubmit}
-                  >
-                    완료
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className={styles.header__button}
-                    onClick={handleDelete}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    className={styles.header__button}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    수정
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.content__title}>
-              <input
-                disabled={!isEditing}
-                type="text"
-                placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className={styles.content__editor}>
-              <div
-                className={`${styles.content__editor} ${styles.editor__content}`}
+      <div style={{ position: 'relative', height: '100%' }}>
+        {/* 기존 모달 내용 */}
+
+        {isActive ? (
+          <>
+            <div className={styles.header}>
+              <button
+                className={styles.header__button}
+                onClick={onRequestClose}
               >
+                <span className={styles.header__span}>x</span>
+              </button>
+              <div className={styles.header__left}>
                 {isEditing ? (
+                  <>
+                    <button
+                      className={styles.header__button}
+                      onClick={handleCancel}
+                    >
+                      취소
+                    </button>
+                    <button
+                      className={styles.header__button}
+                      onClick={handleSubmit}
+                    >
+                      완료
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className={styles.header__button}
+                      onClick={handleDelete}
+                    >
+                      삭제
+                    </button>
+                    <button
+                      className={styles.header__button}
+                      onClick={() => setIsEditing(true)}
+                    >
+                      수정
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.content__title}>
+                <input
+                  disabled={!isEditing}
+                  type="text"
+                  placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+              <div className={styles.content__editor}>
+                <div
+                  className={`${styles.content__editor} ${styles.editor__content}`}
+                >
+                  {isEditing ? (
+                    <Editor
+                      initialValue={content}
+                      onChange={handleEditorChange}
+                      previewStyle="tab"
+                      height="100%"
+                      initialEditType="markdown"
+                      usageStatistics={false}
+                      ref={editorRef}
+                    />
+                  ) : (
+                    !isLoading && (
+                      <div className={styles.content__viewer}>
+                        <Viewer
+                          initialValue={content}
+                          usageStatistics={false}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.header}>
+              <button
+                className={styles.header__button}
+                onClick={onRequestClose}
+              >
+                <span className={styles.header__span}>x</span>
+              </button>
+              <div className={styles.header__left}>
+                <button
+                  className={styles.header__button}
+                  onClick={handleFirstWrite}
+                >
+                  작성
+                </button>
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.content__title}>
+                <input
+                  disabled={!isEditing}
+                  type="text"
+                  placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+              <div className={styles.content__editor}>
+                <div
+                  className={`${styles.content__editor} ${styles.editor__content}`}
+                >
                   <Editor
                     initialValue={content}
                     onChange={handleEditorChange}
@@ -168,61 +265,14 @@ const WriteModal = ({
                     usageStatistics={false}
                     ref={editorRef}
                   />
-                ) : (
-                  !isLoading && (
-                    <div className={styles.content__viewer}>
-                      <Viewer initialValue={content} usageStatistics={false} />
-                    </div>
-                  )
-                )}
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.header}>
-            <button className={styles.header__button} onClick={onRequestClose}>
-              <span className={styles.header__span}>x</span>
-            </button>
-            <div className={styles.header__left}>
-              <button
-                className={styles.header__button}
-                onClick={handleFirstWrite}
-              >
-                작성
-              </button>
-            </div>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.content__title}>
-              <input
-                disabled={!isEditing}
-                type="text"
-                placeholder={`[${nodeInfo?.name}] 제목을 입력해주세요`}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className={styles.content__editor}>
-              <div
-                className={`${styles.content__editor} ${styles.editor__content}`}
-              >
-                <Editor
-                  initialValue={content}
-                  onChange={handleEditorChange}
-                  previewStyle="tab"
-                  height="100%"
-                  initialEditType="markdown"
-                  usageStatistics={false}
-                  ref={editorRef}
-                />
-                )
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+
+        <div className={styles.resizer} onMouseDown={handleMouseDown}></div>
+      </div>
     </Modal>
   );
 };

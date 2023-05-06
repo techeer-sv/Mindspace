@@ -23,23 +23,32 @@ const WriteModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const editorRef = React.useRef(null);
 
-  const [modalWidth, setModalWidth] = useState(800);
-  const [modalHeight, setModalHeight] = useState(600);
+  const [minWidth] = useState(600);
+  const [minHeight] = useState(600);
+  const [maxWidth] = useState(window.innerWidth - 30);
+  const [maxHeight] = useState(window.innerHeight - 30);
+
+  const [modalWidth, setModalWidth] = useState(minWidth);
+  const [modalHeight, setModalHeight] = useState(minHeight);
   const [isResizing, setIsResizing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsResizing(true);
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
   useEffect(() => {
-    const handleMouseMove = (e: any) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (isResizing) {
-        setModalWidth((prevWidth) => prevWidth + (e.clientX - mousePosition.x));
-        setModalHeight(
-          (prevHeight) => prevHeight + (e.clientY - mousePosition.y),
-        );
+        setModalWidth((prevWidth) => {
+          const newWidth = prevWidth + (e.clientX - mousePosition.x);
+          return Math.min(Math.max(newWidth, minWidth), maxWidth);
+        });
+        setModalHeight((prevHeight) => {
+          const newHeight = prevHeight + (e.clientY - mousePosition.y);
+          return Math.min(Math.max(newHeight, minHeight), maxHeight);
+        });
         setMousePosition({ x: e.clientX, y: e.clientY });
       }
     };
@@ -55,7 +64,7 @@ const WriteModal = ({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isResizing, mousePosition]);
+  }, [isResizing, mousePosition, minWidth, minHeight, maxWidth, maxHeight]);
 
   const initialize = () => {
     setTitle('');

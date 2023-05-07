@@ -1,5 +1,4 @@
 // NodeMap
-
 export type NodeObject = object & {
   id?: string | number;
   name?: string;
@@ -46,4 +45,11 @@ export interface WriteModalProps {
 export interface ListModalProps {
   listModalOpen: boolean;
   onListRequestClose: () => void;
+}
+
+//ResizebleModal
+export interface ResizableModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  children: React.ReactNode;
 }

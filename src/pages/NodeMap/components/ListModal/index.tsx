@@ -54,27 +54,27 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
             <span className={styles.post__button}>Back</span>
           </button>
           <div className={styles.post__content}>
-            <div className={styles.post__content__wapper}>
-              <div className={styles.post__content__wapper__header}>
-                <div className={styles.post__content__wapper__header__text}>
+            <div className={styles.post__content__wrapper}>
+              <div className={styles.post__content__wrapper__header}>
+                <div className={styles.post__content__wrapper__header__text}>
                   <span
                     className={
-                      styles.post__content__wapper__header__text__title
+                      styles.post__content__wrapper__header__text__title
                     }
                   >
                     {title}
                   </span>
                   <div
                     className={
-                      styles.post__content__wapper__header__text__nickname
+                      styles.post__content__wrapper__header__text__nickname
                     }
                   >
                     <span>{name}</span>
                   </div>
                 </div>
-                <div className={styles.post__content__wapper__dateTime}>
+                <div className={styles.post__content__wrapper__dateTime}>
                   <span
-                    className={styles.post__content__wapper__dateTime__date}
+                    className={styles.post__content__wrapper__dateTime__date}
                   >
                     {date}
                   </span>

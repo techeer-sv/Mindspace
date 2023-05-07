@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styles from './ResizebleModal.module.scss';
-
-type ResizableModalProps = {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  children: React.ReactNode;
-};
+import { ResizableModalProps } from 'utils/types';
 
 const ResizableModal = ({
   isOpen,

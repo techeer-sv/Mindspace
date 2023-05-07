@@ -1,9 +1,15 @@
 import { FormBoxProps } from 'utils/types';
 import styles from './FormBox.module.scss';
 
-function FormBox({ placeholder, type }: FormBoxProps) {
+function FormBox({ placeholder, type, value, onChange }: FormBoxProps) {
   return (
-    <input type={type} className={styles.form_box} placeholder={placeholder} />
+    <input
+      type={type}
+      value={value}
+      className={styles.form_box}
+      placeholder={placeholder}
+      onChange={onChange}
+    />
   );
 }
 

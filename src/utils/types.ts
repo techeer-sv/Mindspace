@@ -21,7 +21,9 @@ export type Context = CanvasRenderingContext2D;
 // Auth
 export interface FormBoxProps {
   type?: string;
+  value?: string;
   placeholder?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   url?: string;
   text?: string;
 }

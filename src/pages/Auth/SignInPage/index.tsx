@@ -10,8 +10,8 @@ function SignInPage() {
       <div className={styles.content}>
         <div className={styles.content__signin__box}>
           <span className={styles.content__title}>SIGN IN</span>
-          <FormBox placeholder="Email" />
-          <FormBox placeholder="Password" />
+          <FormBox type="text" placeholder="Email" />
+          <FormBox type="password" placeholder="Password" />
           <div className={styles.button_wapper}>
             <FormButton url="/" text="SIGN IN" />
             <FormButton url="/signup" text="SIGN UP" />

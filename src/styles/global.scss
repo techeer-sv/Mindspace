@@ -46,6 +46,10 @@ input {
   font-family: 'KCC-Chassam', sans-serif;
 }
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+}
+
 p {
   font-family: 'KCC-Chassam', sans-serif;
 }

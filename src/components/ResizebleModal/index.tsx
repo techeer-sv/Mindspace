@@ -13,7 +13,7 @@ const ResizableModal = ({
   onRequestClose,
   children,
 }: ResizableModalProps) => {
-  const minWidth = 600;
+  const minWidth = 800;
   const minHeight = 600;
   const maxWidth = window.innerWidth - 30;
   const maxHeight = window.innerHeight - 30;

@@ -143,7 +143,7 @@ const NodeMap = () => {
       setTimeout(() => {
         fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
         fgRef.current?.d3Force('link').distance(70);
-      }, 10);
+      }, 100);
 
       setTimeout(() => {
         if (fgRef.current) {
@@ -154,7 +154,7 @@ const NodeMap = () => {
           });
         }
         setInitialLoad(false);
-      }, 300);
+      }, 500);
     }
   }, [nodeData, initialLoad]);
 

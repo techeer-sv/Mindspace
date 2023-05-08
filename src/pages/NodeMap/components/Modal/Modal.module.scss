@@ -9,6 +9,7 @@
   &__span {
     color: white;
     font-size: 2rem;
+    z-index: 900;
   }
 }
 
@@ -23,6 +24,8 @@
     font-size: 5rem;
     color: white;
     margin: 1rem;
+    white-space: normal;
+    text-align: center;
   }
 
   &__button {

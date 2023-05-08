@@ -7,6 +7,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
 import { WriteModalProps } from 'utils/types';
+import ResizableModal from 'components/ResizebleModal';
 
 const WriteModal = ({
   isOpen,
@@ -38,6 +39,7 @@ const WriteModal = ({
     setIsEditing(false);
     setIsActive(true);
     updateNodeInfo(nodeInfo?.id, true);
+    setIsLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -84,26 +86,7 @@ const WriteModal = ({
   }, [isOpen, nodeInfo]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={{
-        overlay: {
-          backgroundColor: 'rgba(166, 166, 200, 0.2)',
-        },
-        content: {
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'rgba(166, 166, 200, 0.6)',
-          borderRadius: '1rem',
-          border: 'none',
-          width: '80vw',
-          height: '80vh',
-        },
-      }}
-    >
+    <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
       {isActive ? (
         <>
           <div className={styles.header}>
@@ -217,13 +200,12 @@ const WriteModal = ({
                   usageStatistics={false}
                   ref={editorRef}
                 />
-                )
               </div>
             </div>
           </div>
         </>
       )}
-    </Modal>
+    </ResizableModal>
   );
 };
 

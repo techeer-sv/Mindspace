@@ -49,3 +49,10 @@ export interface ListModalProps {
   listModalOpen: boolean;
   onListRequestClose: () => void;
 }
+
+//ResizebleModal
+export interface ResizableModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  children: React.ReactNode;
+}

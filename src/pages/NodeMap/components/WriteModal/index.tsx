@@ -7,7 +7,7 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
 import { WriteModalProps } from 'utils/types';
 import ResizableModal from 'components/ResizebleModal';
-import { nodeAtom } from 'recoil/state';
+import { nodeAtom } from 'recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 
 const WriteModal = ({

@@ -6,10 +6,11 @@ import Loading from 'components/Loading';
 import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
 import { getNodeList } from 'api/Node';
+import { useRecoilState } from 'recoil';
+import { nodeAtom } from 'recoil/state';
 
 const NodeMap = () => {
   // eslint-disable-next-line
-
   const [initialLoad, setInitialLoad] = useState(true);
   const fgRef = useRef<any>();
   const [nodeData, setNodeData] = useState(null);
@@ -18,13 +19,15 @@ const NodeMap = () => {
 
   // modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedNode, setSelectedNode] = useState(null);
   Modal.setAppElement('#root');
+
+  // recoil
+  const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-    setSelectedNode(node);
     setModalIsOpen(true);
+    setNodeInfo({ id: node.id, isActive: node.isActive, name: node.name });
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -184,12 +187,11 @@ const NodeMap = () => {
         <Loading />
       )}
 
-      {selectedNode && (
+      {nodeInfo && (
         <>
           <NodeModal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
-            selectedNodeInfo={selectedNode}
             updateNodeInfo={handleNodeInfoUpdate}
           />
         </>

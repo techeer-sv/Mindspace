@@ -4,13 +4,10 @@ import Modal from 'react-modal';
 import WriteModal from 'pages/NodeMap/components/WriteModal';
 import { ModalProps } from 'utils/types';
 import ListModal from '../ListModal';
+import { useRecoilValue } from 'recoil';
+import { nodeAtom } from 'recoil/state';
 
-function NodeModal({
-  isOpen,
-  onRequestClose,
-  selectedNodeInfo,
-  updateNodeInfo,
-}: ModalProps) {
+function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);
 
   const openWriteModal = () => {
@@ -23,6 +20,8 @@ function NodeModal({
     setListModalIsOpen(true);
     onRequestClose();
   };
+
+  const selectedNodeInfo = useRecoilValue(nodeAtom);
 
   return (
     <>
@@ -66,7 +65,6 @@ function NodeModal({
         </div>
       </Modal>
       <WriteModal
-        nodeInfo={selectedNodeInfo}
         isOpen={writeModalIsOpen}
         updateNodeInfo={updateNodeInfo}
         onRequestClose={() => setWriteModalIsOpen(false)}

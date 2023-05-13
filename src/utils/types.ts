@@ -4,6 +4,7 @@ export type NodeObject = object & {
   name?: string;
   x?: number;
   y?: number;
+  isActive?: boolean;
   vx?: number;
   vy?: number;
   fx?: number;
@@ -32,7 +33,6 @@ export interface FormBoxProps {
 export interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  selectedNodeInfo: Node;
   updateNodeInfo: (id: number | string, isActive: boolean) => void;
 }
 
@@ -40,7 +40,6 @@ export interface ModalProps {
 export interface WriteModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  nodeInfo: Node;
   updateNodeInfo: (id: number | string, isActive: boolean) => void;
 }
 

@@ -8,13 +8,15 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
 import { WriteModalProps } from 'utils/types';
 import ResizableModal from 'components/ResizebleModal';
+import { nodeAtom } from 'recoil/state';
+import { useRecoilValue } from 'recoil';
 
 const WriteModal = ({
   isOpen,
   onRequestClose,
-  nodeInfo,
   updateNodeInfo,
 }: WriteModalProps) => {
+  const nodeInfo = useRecoilValue(nodeAtom);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isActive, setIsActive] = useState(nodeInfo.isActive);

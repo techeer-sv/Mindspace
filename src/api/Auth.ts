@@ -1,4 +1,4 @@
-import axios from 'utils/axios';
+import axios from 'utils/baseAxios';
 
 /**
  * //TODO
@@ -11,7 +11,7 @@ export const createUser = async (
   password: string,
 ) => {
   await axios.post('user/signup', {
-    userName: userName,
+    nickname: userName,
     email: email,
     password: password,
   });

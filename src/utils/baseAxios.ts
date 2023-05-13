@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-const BASEURL = `localhost:8080/api/v1/`;
-//TODO 향후 BASEURL부분은 env파일로 분리할 것
+// FIXME 백엔드 CORS에러 수정 시 http://localhost:8080추가 및 json의 proxy 지우기
 
-const instance = axios.create({
+const BASEURL = '/api/v1/';
+// TODO 향후 BASEURL부분은 env파일로 분리할 것
+
+const baseAxios = axios.create({
   baseURL: BASEURL,
 });
 
-instance.interceptors.request.use(
+baseAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
@@ -21,4 +23,4 @@ instance.interceptors.request.use(
   },
 );
 
-export default axios;
+export default baseAxios;

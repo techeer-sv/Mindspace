@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MindSpaceText from 'images/MindSpaceText.png';
+
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from 'recoil/state/authAtom';
+
 import styles from './Navbar.module.scss';
 
 const Navbar = () => {
+  const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
+
+  const logout = () => {
+    alert('로그아웃 되었습니다');
+    setLoggedIn(false);
+    localStorage.clear();
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,12 +54,31 @@ const Navbar = () => {
         }
       >
         <ul>
-          <li>
-            <Link to="/signin">SignIn</Link>
-          </li>
-          <li>
-            <Link to="/signup">SignUp</Link>
-          </li>
+          {isLoggedIn ? (
+            <>
+              <li>
+                <span>{'testEmail'}</span>
+              </li>
+              <li>
+                <span
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  logout
+                </span>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/signin">SignIn</Link>
+              </li>
+              <li>
+                <Link to="/signup">SignUp</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

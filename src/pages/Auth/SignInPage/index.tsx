@@ -6,12 +6,16 @@ import Navbar from 'components/Navbar';
 import { getAccessToken } from 'api/Auth';
 import styles from './../Auth.module.scss';
 
+import { useSetRecoilState } from 'recoil';
+import { isLoggedInAtom } from 'recoil/state/authAtom';
+
 function SignInPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const setLoggedIn = useSetRecoilState(isLoggedInAtom);
 
   const checkIsValid = () => {
     if (email === '') {
@@ -33,6 +37,7 @@ function SignInPage() {
       try {
         const accessToken = await getAccessToken(email, password);
         localStorage.setItem('accessToken', accessToken);
+        setLoggedIn(true);
         navigate('/');
       } catch (error) {
         setErrorMessage('에러가 발생하였습니다 (임시문구)');

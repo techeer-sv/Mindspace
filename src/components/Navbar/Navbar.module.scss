@@ -32,7 +32,13 @@
       list-style-type: none;
       margin-right: 3rem;
 
-      & a {
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      color: white;
+
+      & a,
+      span {
         text-decoration: none;
         display: block;
         width: 100%;
@@ -61,6 +67,12 @@
         }
 
         li a {
+          color: black;
+          width: 100%;
+          padding: 1.5rem 0;
+        }
+
+        li span {
           color: black;
           width: 100%;
           padding: 1.5rem 0;

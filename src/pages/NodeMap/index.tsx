@@ -23,15 +23,11 @@ const NodeMap = () => {
 
   // recoil
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
-  const nodeSelected: NodeObject = { id: 0, isActive: false, name: '' };
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
     setModalIsOpen(true);
-    nodeSelected.id = node.id;
-    nodeSelected.isActive = node.isActive;
-    nodeSelected.name = node.name;
-    setNodeInfo(nodeSelected);
+    setNodeInfo({ id: node.id, isActive: node.isActive, name: node.name });
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {

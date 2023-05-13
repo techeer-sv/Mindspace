@@ -1,9 +1,12 @@
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import App from './App';
 import 'styles/reset.scss';
 import 'styles/global.scss';
+import { RecoilRoot } from 'recoil';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+ReactDOM.render(
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>,
+  document.getElementById('root'),
 );
-root.render(<App />);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MindSpaceText from 'images/MindSpaceText.png';
 
 import { useRecoilState } from 'recoil';
@@ -8,11 +8,13 @@ import { isLoggedInAtom } from 'recoil/state/authAtom';
 import styles from './Navbar.module.scss';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const logout = () => {
     alert('로그아웃 되었습니다');
+    navigate('/');
     setLoggedIn(false);
     localStorage.clear();
   };

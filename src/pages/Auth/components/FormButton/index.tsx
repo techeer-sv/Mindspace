@@ -1,12 +1,13 @@
-import { FormBoxProps } from 'utils/types';
+import { FormButtonProps } from 'utils/types';
 import styles from './FormButton.module.scss';
-import { Link } from 'react-router-dom';
 
-function FormButton({ text, url }: FormBoxProps) {
+function FormButton({ text, clickAction }: FormButtonProps) {
   return (
-    <Link className={styles.button_wapper} to={url}>
-      <button className={styles.button}>{text}</button>
-    </Link>
+    <div className={styles.button_wapper}>
+      <button onClick={clickAction} className={styles.button}>
+        {text}
+      </button>
+    </div>
   );
 }
 

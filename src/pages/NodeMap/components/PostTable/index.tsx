@@ -4,6 +4,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { CellClickedEvent } from 'ag-grid-community';
 import { useEffect, useState } from 'react';
 import { getPostListData } from 'api/Post';
+import { useRecoilValue } from 'recoil';
+import { ModalWidthAtom, ModalHeightAtom } from 'recoil/state/resizeAtom';
 
 interface PostTableProps {
   OnClickedId: (id: number) => void;
@@ -29,10 +31,17 @@ function PostTable({ OnClickedId }: PostTableProps) {
     OnClickedId(params.data.id);
   };
 
+  const modalWidth = useRecoilValue(ModalWidthAtom);
+  const modalHeight = useRecoilValue(ModalHeightAtom);
+
   return (
     <div
       className="ag-theme-alpine"
-      style={{ width: 750, height: 550, margin: 'auto auto' }}
+      style={{
+        width: modalWidth,
+        height: modalHeight - 70,
+        margin: 'auto auto',
+      }}
     >
       <AgGridReact
         rowData={rowData}

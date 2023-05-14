@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styles from './ResizebleModal.module.scss';
 import { ResizableModalProps } from 'utils/types';
+import { useRecoilState } from 'recoil';
+import { ModalWidthAtom, ModalHeightAtom } from 'recoil/state/resizeAtom';
 
 const ResizableModal = ({
   isOpen,
   onRequestClose,
   children,
 }: ResizableModalProps) => {
-  const minWidth = 800;
-  const minHeight = 600;
-  const maxWidth = window.innerWidth - 30;
-  const maxHeight = window.innerHeight - 30;
+  const minWidth = window.innerWidth * 0.5;
+  const minHeight = window.innerHeight * 0.6;
 
-  const [modalWidth, setModalWidth] = useState(minWidth);
-  const [modalHeight, setModalHeight] = useState(minHeight);
+  const maxWidth = window.innerWidth - 50;
+  const maxHeight = window.innerHeight - 76 * 2;
+
   const [isResizing, setIsResizing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -22,6 +23,9 @@ const ResizableModal = ({
     setIsResizing(true);
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
+
+  const [modalWidth, setModalWidth] = useRecoilState(ModalWidthAtom);
+  const [modalHeight, setModalHeight] = useRecoilState(ModalHeightAtom);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -49,7 +53,16 @@ const ResizableModal = ({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isResizing, mousePosition, minWidth, minHeight, maxWidth, maxHeight]);
+  }, [
+    isResizing,
+    mousePosition,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    setModalWidth,
+    setModalHeight,
+  ]);
 
   return (
     <Modal

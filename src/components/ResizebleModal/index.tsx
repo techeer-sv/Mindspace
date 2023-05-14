@@ -3,11 +3,7 @@ import Modal from 'react-modal';
 import styles from './ResizebleModal.module.scss';
 import { ResizableModalProps } from 'utils/types';
 import { useRecoilState } from 'recoil';
-import {
-  ModalWidthAtom,
-  ModalHeightAtom,
-  mousePositionAtom,
-} from 'recoil/state/resizeAtom';
+import { ModalWidthAtom, ModalHeightAtom } from 'recoil/state/resizeAtom';
 
 const ResizableModal = ({
   isOpen,
@@ -16,17 +12,15 @@ const ResizableModal = ({
 }: ResizableModalProps) => {
   const minWidth = 800;
   const minHeight = 600;
-  const maxWidth = window.innerWidth - 30;
-  const maxHeight = window.innerHeight - 30;
+
+  const maxWidth = window.innerWidth - 50;
+  const maxHeight = window.innerWidth - 440;
 
   const [isResizing, setIsResizing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  // const [mousePosition, setMousePosition] = useRecoilState(ModalWidthAtom);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsResizing(true);
-    console.log(typeof e.clientX);
-
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 

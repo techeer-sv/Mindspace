@@ -29,6 +29,11 @@ export interface FormBoxProps {
   text?: string;
 }
 
+export interface FormButtonProps {
+  clickAction?: () => void;
+  text?: string;
+}
+
 // Modal
 export interface ModalProps {
   isOpen: boolean;

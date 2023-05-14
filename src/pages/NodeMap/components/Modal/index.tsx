@@ -5,7 +5,7 @@ import WriteModal from 'pages/NodeMap/components/WriteModal';
 import { ModalProps } from 'utils/types';
 import ListModal from '../ListModal';
 import { useRecoilValue } from 'recoil';
-import { nodeAtom } from 'recoil/state';
+import { nodeAtom } from 'recoil/state/nodeAtom';
 
 function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);

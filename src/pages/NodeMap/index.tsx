@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import NodeModal from 'pages/NodeMap/components/Modal';
 import { getNodeList } from 'api/Node';
 import { useRecoilState } from 'recoil';
-import { nodeAtom } from 'recoil/state';
+import { nodeAtom } from 'recoil/state/nodeAtom';
 
 const NodeMap = () => {
   // eslint-disable-next-line

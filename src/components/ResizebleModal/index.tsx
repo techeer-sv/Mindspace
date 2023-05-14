@@ -10,11 +10,11 @@ const ResizableModal = ({
   onRequestClose,
   children,
 }: ResizableModalProps) => {
-  const minWidth = 800;
-  const minHeight = 600;
+  const minWidth = window.innerWidth * 0.5;
+  const minHeight = window.innerHeight * 0.6;
 
   const maxWidth = window.innerWidth - 50;
-  const maxHeight = window.innerWidth - 440;
+  const maxHeight = window.innerHeight - 76 * 2;
 
   const [isResizing, setIsResizing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

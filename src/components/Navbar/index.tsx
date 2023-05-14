@@ -58,7 +58,13 @@ const Navbar = () => {
         <ul>
           {isLoggedIn ? (
             <>
-              <li>
+              <li
+                className={
+                  isNavExpanded
+                    ? `${styles['navbar__menu--expanded__text']}`
+                    : styles.navbar__menu__text
+                }
+              >
                 <span>{'testEmail'}</span>
               </li>
               <li>

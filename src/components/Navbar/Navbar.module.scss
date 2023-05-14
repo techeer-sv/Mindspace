@@ -28,17 +28,23 @@
       padding: 0;
     }
 
+    &__text {
+      span {
+        cursor: default !important;
+      }
+    }
+
     li {
       list-style-type: none;
       margin-right: 3rem;
-
       text-decoration: none;
       display: block;
       width: 100%;
       color: white;
 
-      & a,
-      span {
+      & > a,
+      & > span {
+        cursor: pointer;
         text-decoration: none;
         display: block;
         width: 100%;
@@ -48,6 +54,10 @@
 
     &--expanded {
       display: block;
+
+      &__text {
+        display: none !important;
+      }
 
       ul {
         z-index: 10;

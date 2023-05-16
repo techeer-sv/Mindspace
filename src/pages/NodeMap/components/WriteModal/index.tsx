@@ -36,7 +36,11 @@ const WriteModal = ({
   };
 
   const handleFirstWrite = async () => {
-    await createPost(nodeInfo.id as number, title, content);
+    try {
+      await createPost(nodeInfo.id as number, nodeInfo.name, title, content);
+    } catch (error) {
+      console.log(error);
+    }
     setIsEditing(false);
     setIsActive(true);
     updateNodeInfo(nodeInfo?.id, true);

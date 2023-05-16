@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/baseAxios';
 
 interface PostData {
   id: number;
@@ -20,10 +20,17 @@ export const deletePost = async (id: number): Promise<void> => {
 
 export const createPost = async (
   id: number,
+  name: string,
   title: string,
   content: string,
 ): Promise<void> => {
-  console.log('id:', id, '글쓰기 더미 api 요청');
+  await axios.post('boards', {
+    id: id,
+    boardname: name,
+    title: title,
+    content: content,
+  });
+  console.log('id:', id, '글쓰기 api 요청 완료');
   console.log('title : ', title, '\n content:', content);
 };
 

@@ -6,19 +6,23 @@ import MindSpaceText from '@/images/MindSpaceText.png';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
+import { useQuery } from 'react-query';
+import { useQueryClient } from 'react-query';
+
 import styles from './Navbar.module.scss';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  const [nickname, setNickname] = useState(null);
+  const queryClient = useQueryClient();
 
   const logout = () => {
     alert('로그아웃 되었습니다');
     navigate('/');
     setLoggedIn(false);
     localStorage.clear();
+    queryClient.invalidateQueries('userNickname');
   };
 
   useEffect(() => {
@@ -31,16 +35,10 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isLoggedIn) {
-        const userNickname = await getUserNickname();
-        setNickname(userNickname);
-      }
-    };
-
-    fetchData();
-  }, [isLoggedIn]);
+  const { data: userNickname } = useQuery(['userNickname'], getUserNickname, {
+    enabled: isLoggedIn,
+    staleTime: 1000 * 60 * 5,
+  });
 
   return (
     <nav className={styles.navbar}>
@@ -78,7 +76,7 @@ const Navbar = () => {
                     : styles.navbar__menu__text
                 }
               >
-                <span>{nickname}</span>
+                <span>{userNickname}</span>
               </li>
               <li>
                 <span

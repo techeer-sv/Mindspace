@@ -18,11 +18,11 @@ const Navbar = () => {
   const queryClient = useQueryClient();
 
   const logout = () => {
+    setLoggedIn(false);
     alert('로그아웃 되었습니다');
     navigate('/');
-    setLoggedIn(false);
     localStorage.clear();
-    queryClient.invalidateQueries('userNickname');
+    // queryClient.invalidateQueries('userNickname');
   };
 
   useEffect(() => {
@@ -34,6 +34,12 @@ const Navbar = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      queryClient.invalidateQueries('userNickname');
+    }
+  }, [isLoggedIn, queryClient]);
 
   const { data: userNickname } = useQuery(['userNickname'], getUserNickname, {
     enabled: isLoggedIn,

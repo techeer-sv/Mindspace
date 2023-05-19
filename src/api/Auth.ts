@@ -5,11 +5,17 @@ import axios from '@/utils/baseAxios';
  * React-query를 사용해 컴포넌트에서 직접 api를 호출하지 않도록 수정해야합니다.
  */
 
-export const createUser = async (
-  userName: string,
-  email: string,
-  password: string,
-) => {
+interface CreateUserParams {
+  userName: string;
+  email: string;
+  password: string;
+}
+
+export const createUser = async ({
+  userName,
+  email,
+  password,
+}: CreateUserParams) => {
   await axios.post('user/signup', {
     nickname: userName,
     email: email,
@@ -17,7 +23,15 @@ export const createUser = async (
   });
 };
 
-export const getAccessToken = async (email: string, password: string) => {
+interface GetAccessTokenParams {
+  email: string;
+  password: string;
+}
+
+export const getAccessToken = async ({
+  email,
+  password,
+}: GetAccessTokenParams) => {
   const response = await axios.post('user/login', {
     email: email,
     password: password,
@@ -27,6 +41,7 @@ export const getAccessToken = async (email: string, password: string) => {
    * //FIXME
    * data.id값으로 받아오는 응답값을 향후 백엔드 업데이트에 맞춰 accessToken값으로 수정해야합니다.
    */
+
   const accessToken = response.data.id;
   return accessToken;
 };

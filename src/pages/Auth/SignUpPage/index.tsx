@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { createUser } from '@/api/Auth';
 
+import { useMutation } from 'react-query';
+
 function SignUpPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
@@ -14,6 +16,16 @@ function SignUpPage() {
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
 
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const signupMutation = useMutation(createUser, {
+    onSuccess: () => {
+      navigate('/signin');
+    },
+    onError: (error) => {
+      setErrorMessage('에러가 발생하였습니다 (임시문구)');
+      console.log(error);
+    },
+  });
 
   const checkIsValid = () => {
     if (email === '') {
@@ -44,14 +56,9 @@ function SignUpPage() {
     return true;
   };
 
-  const submitForm = async () => {
+  const submitForm = () => {
     if (checkIsValid()) {
-      try {
-        await createUser(userName, email, password);
-        navigate('/signin');
-      } catch (error) {
-        setErrorMessage('에러가 발생하였습니다 (임시문구)');
-      }
+      signupMutation.mutate({ userName, email, password });
     }
   };
 

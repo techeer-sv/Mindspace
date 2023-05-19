@@ -30,3 +30,8 @@ export const getAccessToken = async (email: string, password: string) => {
   const accessToken = response.data.id;
   return accessToken;
 };
+
+export const getUserNickname = async () => {
+  const response = await axios.get('user/nickname');
+  return response.data.nickname;
+};

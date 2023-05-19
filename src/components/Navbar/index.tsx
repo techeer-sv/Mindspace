@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getUserNickname } from 'api/Auth';
 import MindSpaceText from '@/images/MindSpaceText.png';
 
 import { useRecoilState } from 'recoil';
@@ -11,6 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const [nickname, setNickname] = useState(null);
 
   const logout = () => {
     alert('로그아웃 되었습니다');
@@ -28,6 +30,17 @@ const Navbar = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isLoggedIn) {
+        const userNickname = await getUserNickname();
+        setNickname(userNickname);
+      }
+    };
+
+    fetchData();
+  }, [isLoggedIn]);
 
   return (
     <nav className={styles.navbar}>
@@ -65,7 +78,7 @@ const Navbar = () => {
                     : styles.navbar__menu__text
                 }
               >
-                <span>{'testEmail'}</span>
+                <span>{nickname}</span>
               </li>
               <li>
                 <span

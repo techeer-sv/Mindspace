@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useQueryClient, useQuery } from 'react-query';
-import { getUserNickname } from 'api/Auth';
+import { useQueryClient, useQuery, useMutation } from 'react-query';
+import { getUserNickname, createUser, getAccessToken } from 'api/Auth';
 import { KEY } from 'utils/constants';
 
 export const useUserNicknameQuery = (isLoggedIn: boolean) => {
@@ -18,4 +18,35 @@ export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
       queryClient.invalidateQueries(KEY.USER_NICKNAME);
     }
   }, [isLoggedIn, queryClient]);
+};
+
+export const useSignUpMutation = (
+  successAction: () => void,
+  errorAction: (message: string) => void,
+) => {
+  return useMutation(createUser, {
+    onSuccess: () => {
+      successAction();
+    },
+    onError: (error) => {
+      errorAction('에러가 발생하였습니다 (임시문구)');
+      console.log(error);
+    },
+  });
+};
+
+export const useSignInMutation = (
+  successAction: (token: string) => void,
+  errorAction: (message: string) => void,
+) => {
+  return useMutation(getAccessToken, {
+    onSuccess: (accessToken) => {
+      console.log(accessToken);
+      successAction(accessToken);
+    },
+    onError: (error) => {
+      errorAction('에러가 발생하였습니다 (임시문구)');
+      console.log(error);
+    },
+  });
 };

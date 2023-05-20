@@ -4,9 +4,7 @@ import FormButton from '../components/FormButton';
 import Navbar from '@/components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { createUser } from '@/api/Auth';
-
-import { useMutation } from 'react-query';
+import { useSignUpMutation } from 'hooks/queries/user';
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -17,15 +15,9 @@ function SignUpPage() {
 
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const signupMutation = useMutation(createUser, {
-    onSuccess: () => {
-      navigate('/signin');
-    },
-    onError: (error) => {
-      setErrorMessage('에러가 발생하였습니다 (임시문구)');
-      console.log(error);
-    },
-  });
+  const { mutate: signupMutation } = useSignUpMutation(() => {
+    navigate('/signin');
+  }, setErrorMessage);
 
   const checkIsValid = () => {
     if (email === '') {
@@ -58,7 +50,7 @@ function SignUpPage() {
 
   const submitForm = () => {
     if (checkIsValid()) {
-      signupMutation.mutate({ userName, email, password });
+      signupMutation({ userName, email, password });
     }
   };
 

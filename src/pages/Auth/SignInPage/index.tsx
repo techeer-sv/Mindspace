@@ -9,7 +9,7 @@ import styles from './../Auth.module.scss';
 import { useSetRecoilState } from 'recoil';
 import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
-import { useMutation } from 'react-query';
+import { useSignInMutation } from 'hooks/queries/user';
 
 function SignInPage() {
   const navigate = useNavigate();
@@ -19,16 +19,16 @@ function SignInPage() {
 
   const setLoggedIn = useSetRecoilState(isLoggedInAtom);
 
-  const loginMutation = useMutation(getAccessToken, {
-    onSuccess: (accessToken) => {
-      localStorage.setItem('accessToken', accessToken);
-      setLoggedIn(true);
-      navigate('/');
-    },
-    onError: (error: Error) => {
-      setErrorMessage('에러가 발생하였습니다 (임시문구)');
-    },
-  });
+  const handleLoginSuccess = (token: string) => {
+    localStorage.setItem('accessToken', token);
+    setLoggedIn(true);
+    navigate('/');
+  };
+
+  const { mutate: loginMutation } = useSignInMutation(
+    handleLoginSuccess,
+    setErrorMessage,
+  );
 
   const checkIsValid = () => {
     if (email === '') {
@@ -47,7 +47,7 @@ function SignInPage() {
 
   const submitForm = () => {
     if (checkIsValid()) {
-      loginMutation.mutate({ email, password });
+      loginMutation({ email, password });
     }
   };
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { QueryClient, useQuery } from 'react-query';
+import { useQueryClient, useQuery } from 'react-query';
 import { getUserNickname } from 'api/Auth';
 import { KEY } from 'utils/constants';
 
@@ -10,10 +10,9 @@ export const useUserNicknameQuery = (isLoggedIn: boolean) => {
   });
 };
 
-export const useInvalidateNicknameQuery = (
-  isLoggedIn: boolean,
-  queryClient: QueryClient,
-) => {
+export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (!isLoggedIn) {
       queryClient.invalidateQueries(KEY.USER_NICKNAME);

@@ -5,17 +5,15 @@ import styles from './Navbar.module.scss';
 
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from 'recoil/state/authAtom';
-import { useQueryClient } from 'react-query';
 import {
   useUserNicknameQuery,
-  useInvalidateNicknameQuery,
+  useClearUserNicknameCache,
 } from 'hooks/queries/user';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  const queryClient = useQueryClient();
 
   const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
 
@@ -36,7 +34,7 @@ const Navbar = () => {
     };
   }, []);
 
-  useInvalidateNicknameQuery(isLoggedIn, queryClient);
+  useClearUserNicknameCache(isLoggedIn);
 
   return (
     <nav className={styles.navbar}>

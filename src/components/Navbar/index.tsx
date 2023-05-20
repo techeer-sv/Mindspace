@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUserNickname } from 'api/Auth';
-import MindSpaceText from '@/images/MindSpaceText.png';
+import MindSpaceText from 'images/MindSpaceText.png';
+import styles from './Navbar.module.scss';
 
 import { useRecoilState } from 'recoil';
-import { isLoggedInAtom } from '@/recoil/state/authAtom';
-
-import { useQuery } from 'react-query';
+import { isLoggedInAtom } from 'recoil/state/authAtom';
 import { useQueryClient } from 'react-query';
-
-import styles from './Navbar.module.scss';
+import {
+  useUserNicknameQuery,
+  useInvalidateNicknameQuery,
+} from 'hooks/queries/user';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const queryClient = useQueryClient();
+
+  const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
 
   const logout = () => {
     setLoggedIn(false);
@@ -34,16 +36,7 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      queryClient.invalidateQueries('userNickname');
-    }
-  }, [isLoggedIn, queryClient]);
-
-  const { data: userNickname } = useQuery(['userNickname'], getUserNickname, {
-    enabled: isLoggedIn,
-    staleTime: 1000 * 60 * 5,
-  });
+  useInvalidateNicknameQuery(isLoggedIn, queryClient);
 
   return (
     <nav className={styles.navbar}>

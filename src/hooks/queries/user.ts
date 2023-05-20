@@ -20,6 +20,7 @@ export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
   }, [isLoggedIn, queryClient]);
 };
 
+// TODO 로그인, 회원가입에 대한 에러처리 필요
 export const useSignUpMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
@@ -41,7 +42,6 @@ export const useSignInMutation = (
 ) => {
   return useMutation(getAccessToken, {
     onSuccess: (accessToken) => {
-      console.log(accessToken);
       successAction(accessToken);
     },
     onError: (error) => {

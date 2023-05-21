@@ -1,9 +1,6 @@
 import axios from 'axios';
 
-// FIXME 백엔드 CORS에러 수정 시 http://localhost:8080추가 및 json의 proxy 지우기
-
-const BASEURL = '/api/v1/';
-// TODO 향후 BASEURL부분은 env파일로 분리할 것
+const BASEURL = `${process.env.REACT_APP_HOST}`;
 
 const baseAxios = axios.create({
   baseURL: BASEURL,

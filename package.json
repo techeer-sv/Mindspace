@@ -69,6 +69,5 @@
     "react-modal": "^3.16.1",
     "sass": "^1.60.0",
     "sass-loader": "^13.2.0"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

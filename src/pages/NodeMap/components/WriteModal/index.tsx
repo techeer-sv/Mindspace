@@ -23,6 +23,7 @@ const WriteModal = ({
   const [initEditedContent, setInitEditedContent] = useState(content);
   const [isEditing, setIsEditing] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [boardId, setBoardId] = useState(0);
   const editorRef = React.useRef(null);
 
   const initialize = () => {
@@ -37,7 +38,7 @@ const WriteModal = ({
 
   const handleFirstWrite = async () => {
     try {
-      await createPost(nodeInfo.id as number, nodeInfo.name, title, content);
+      await createPost(nodeInfo.id as number, title, content);
     } catch (error) {
       console.log(error);
     }
@@ -48,14 +49,22 @@ const WriteModal = ({
   };
 
   const handleSubmit = async () => {
-    await updatePost(nodeInfo.id as number, title, content);
+    try {
+      await updatePost(boardId, title, content);
+    } catch (error) {
+      console.log(error);
+    }
     setInitTitle(title);
     setInitEditedContent(content);
     setIsEditing(false);
   };
 
   const handleDelete = async () => {
-    await deletePost(nodeInfo.id as number);
+    try {
+      await deletePost(boardId);
+    } catch (error) {
+      console.log(error);
+    }
     updateNodeInfo(nodeInfo?.id, false);
     setIsActive(false);
     onRequestClose();
@@ -73,14 +82,17 @@ const WriteModal = ({
 
     if (isOpen && nodeInfo?.isActive) {
       const fetchData = async () => {
-        const data = await getPost(nodeInfo.id as number);
-
-        setTitle(data.title);
-        setContent(data.content);
-        setInitTitle(data.title);
-        setInitEditedContent(data.content);
-
-        setIsLoading(false);
+        try {
+          const data = await getPost(boardId);
+          setTitle(data.title);
+          setContent(data.content);
+          setInitTitle(data.title);
+          setInitEditedContent(data.content);
+          setBoardId(data.id);
+          setIsLoading(false);
+        } catch (error) {
+          console.log(error);
+        }
       };
 
       fetchData();
@@ -88,7 +100,7 @@ const WriteModal = ({
     } else {
       initialize();
     }
-  }, [isOpen, nodeInfo]);
+  }, [boardId, isOpen, nodeInfo]);
 
   return (
     <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>

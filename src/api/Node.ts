@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NodeObject, Node } from 'utils/types';
+import { NodeObject, Node } from '@/utils/types';
 
 /**
  * 작성자 : 태원

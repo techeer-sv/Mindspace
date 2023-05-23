@@ -1,8 +1,8 @@
 import styles from './MainPage.module.scss';
-import MindSpaceText from 'images/MindSpaceText.png';
+import MindSpaceText from '@/images/MindSpaceText.png';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
 function MainPage() {
   const navigate = useNavigate();

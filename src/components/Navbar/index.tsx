@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MindSpaceText from 'images/MindSpaceText.png';
+import MindSpaceText from '@/images/MindSpaceText.png';
 
 import { useRecoilState } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
 import styles from './Navbar.module.scss';
 

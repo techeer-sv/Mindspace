@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
-import { createPost, getPost, updatePost, deletePost } from 'api/Post';
+import { createPost, getPost, updatePost, deletePost } from '@/api/Post';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
-import { WriteModalProps } from 'utils/types';
-import ResizableModal from 'components/ResizebleModal';
-import { nodeAtom } from 'recoil/state/nodeAtom';
+import { WriteModalProps } from '@/utils/types';
+import ResizableModal from '@/components/ResizebleModal';
+import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 
 const WriteModal = ({

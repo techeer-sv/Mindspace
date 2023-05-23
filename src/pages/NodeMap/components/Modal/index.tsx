@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import styles from './Modal.module.scss';
 import Modal from 'react-modal';
-import WriteModal from 'pages/NodeMap/components/WriteModal';
-import { ModalProps } from 'utils/types';
+import WriteModal from '@/pages/NodeMap/components/WriteModal';
+import { ModalProps } from '@/utils/types';
 import ListModal from '../ListModal';
 import { useRecoilValue } from 'recoil';
-import { nodeAtom } from 'recoil/state/nodeAtom';
+import { nodeAtom } from '@/recoil/state/nodeAtom';
 
 function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
   const [writeModalIsOpen, setWriteModalIsOpen] = useState(false);

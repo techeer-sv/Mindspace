@@ -1,10 +1,10 @@
 import styles from './../Auth.module.scss';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
-import Navbar from 'components/Navbar';
+import Navbar from '@/components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { createUser } from 'api/Auth';
+import { createUser } from '@/api/Auth';
 
 function SignUpPage() {
   const navigate = useNavigate();

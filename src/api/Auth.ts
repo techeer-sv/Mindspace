@@ -1,4 +1,4 @@
-import axios from 'utils/baseAxios';
+import axios from '@/utils/baseAxios';
 
 /**
  * //TODO

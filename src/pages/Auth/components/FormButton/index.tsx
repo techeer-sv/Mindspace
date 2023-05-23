@@ -1,4 +1,4 @@
-import { FormButtonProps } from 'utils/types';
+import { FormButtonProps } from '@/utils/types';
 import styles from './FormButton.module.scss';
 
 function FormButton({ text, clickAction }: FormButtonProps) {

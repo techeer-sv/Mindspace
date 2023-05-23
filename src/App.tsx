@@ -3,7 +3,7 @@ import MainPage from './pages/MainPage';
 import NodeMap from './pages/NodeMap';
 import SignInPage from './pages/Auth/SignInPage/index';
 import SignUpPage from './pages/Auth/SignUpPage/index';
-import AuthRoute from 'components/AuthRoute';
+import AuthRoute from '@/components/AuthRoute';
 
 function App() {
   return (

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
-import { NodeObject, Node, Context } from 'utils/types';
-import Navbar from 'components/Navbar';
-import Loading from 'components/Loading';
+import { NodeObject, Node, Context } from '@/utils/types';
+import Navbar from '@/components/Navbar';
+import Loading from '@/components/Loading';
 import Modal from 'react-modal';
-import NodeModal from 'pages/NodeMap/components/Modal';
-import { getNodeList } from 'api/Node';
+import NodeModal from '@/pages/NodeMap/components/Modal';
+import { getNodeList } from '@/api/Node';
 import { useRecoilState } from 'recoil';
-import { nodeAtom } from 'recoil/state/nodeAtom';
+import { nodeAtom } from '@/recoil/state/nodeAtom';
 
 const NodeMap = () => {
   // eslint-disable-next-line

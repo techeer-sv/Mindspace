@@ -1,4 +1,4 @@
-import { FormBoxProps } from 'utils/types';
+import { FormBoxProps } from '@/utils/types';
 import styles from './FormBox.module.scss';
 
 function FormBox({ placeholder, type, value, onChange }: FormBoxProps) {

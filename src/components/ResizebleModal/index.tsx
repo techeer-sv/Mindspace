@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styles from './ResizebleModal.module.scss';
-import { ResizableModalProps } from 'utils/types';
+import { ResizableModalProps } from '@/utils/types';
 import { useRecoilState } from 'recoil';
-import { ModalWidthAtom, ModalHeightAtom } from 'recoil/state/resizeAtom';
+import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
 
 const ResizableModal = ({
   isOpen,

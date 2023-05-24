@@ -3,9 +3,9 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { CellClickedEvent } from 'ag-grid-community';
 import { useEffect, useState } from 'react';
-import { getPostListData } from 'api/Post';
+import { getPostListData } from '@/api/Post';
 import { useRecoilValue } from 'recoil';
-import { ModalWidthAtom, ModalHeightAtom } from 'recoil/state/resizeAtom';
+import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
 
 interface PostTableProps {
   OnClickedId: (id: number) => void;

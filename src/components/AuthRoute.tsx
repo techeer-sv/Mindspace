@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
 interface AuthRouteProps {
   needLogin: boolean;

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import PostTable from '../PostTable';
 import styles from './ListModal.module.scss';
-import { ListModalProps } from 'utils/types';
-import { getPostData } from 'api/Post';
+import { ListModalProps } from '@/utils/types';
+import { getPostData } from '@/api/Post';
 import { Viewer } from '@toast-ui/react-editor';
-import ResizableModal from 'components/ResizebleModal';
+import ResizableModal from '@/components/ResizebleModal';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);

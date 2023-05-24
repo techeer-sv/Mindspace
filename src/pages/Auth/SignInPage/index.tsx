@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
-import Navbar from 'components/Navbar';
-import { getAccessToken } from 'api/Auth';
+import Navbar from '@/components/Navbar';
+import { getAccessToken } from '@/api/Auth';
 import styles from './../Auth.module.scss';
 
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
 
 function SignInPage() {
   const navigate = useNavigate();

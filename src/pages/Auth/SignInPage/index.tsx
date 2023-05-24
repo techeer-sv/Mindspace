@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
-import Navbar from 'components/Navbar';
+import Navbar from '@/components/Navbar';
 import styles from './../Auth.module.scss';
 
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
-import { useSignInMutation } from 'hooks/queries/user';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
+import { useSignInMutation } from '@/hooks/queries/user';
 
 function SignInPage() {
   const navigate = useNavigate();

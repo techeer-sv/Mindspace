@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MindSpaceText from 'images/MindSpaceText.png';
+import MindSpaceText from '@/images/MindSpaceText.png';
 import styles from './Navbar.module.scss';
 
 import { useRecoilState } from 'recoil';
-import { isLoggedInAtom } from 'recoil/state/authAtom';
+import { isLoggedInAtom } from '@/recoil/state/authAtom';
 import {
   useUserNicknameQuery,
   useClearUserNicknameCache,
-} from 'hooks/queries/user';
+} from '@/hooks/queries/user';
 
 const Navbar = () => {
   const navigate = useNavigate();

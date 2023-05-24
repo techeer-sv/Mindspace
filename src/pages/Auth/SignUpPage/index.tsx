@@ -4,7 +4,7 @@ import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
 import Navbar from '@/components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { useSignUpMutation } from 'hooks/queries/user';
+import { useSignUpMutation } from '@/hooks/queries/user';
 
 function SignUpPage() {
   const navigate = useNavigate();

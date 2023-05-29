@@ -29,7 +29,8 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "aws s3 sync ./dist/ s3://mindspace-front --profile=master"
   },
   "eslintConfig": {
     "extends": [

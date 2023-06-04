@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const VERSION = 'api/v1/';
-const BASEURL = `${import.meta.env.VITE_API_URL}${VERSION}`;
+const BASEURL = `${process.env.VITE_API_URL}${VERSION}`;
 
 const baseAxios = axios.create({
   baseURL: BASEURL,

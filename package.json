@@ -72,6 +72,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jest-environment-jsdom": "^29.5.0",
     "jest-transform-stub": "^2.0.0",
+    "msw": "^1.2.1",
     "prettier": "^2.8.4",
     "react-modal": "^3.16.1",
     "sass": "^1.60.0",

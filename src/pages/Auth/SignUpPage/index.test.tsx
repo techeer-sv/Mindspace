@@ -6,14 +6,30 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { RecoilRoot } from 'recoil';
 
+const navigateMock = jest.fn();
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+  useNavigate: () => navigateMock,
 }));
 
 const server = setupServer(
-  rest.post('/user/signup', (req, res, ctx) => {
-    return res(ctx.json({ message: '회원가입 성공' }));
+  rest.post('undefinedapi/v1/user/signup', (req, res, ctx) => {
+    const { email, nickname } = req.body as {
+      email: string;
+      nickname: string;
+      password: string;
+    };
+
+    if (nickname === 'duplicateNickname') {
+      return res(ctx.status(400), ctx.json({ error: 'U002' }));
+    }
+
+    if (email === 'duplicateEmail@test.com') {
+      return res(ctx.status(400), ctx.json({ error: 'U001' }));
+    }
+
+    return res(ctx.status(200), ctx.json({ message: '회원가입 성공' }));
   }),
 );
 
@@ -22,7 +38,13 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('<SignUpPage />', () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
 
   beforeEach(() => {
     render(
@@ -36,14 +58,14 @@ describe('<SignUpPage />', () => {
     );
   });
 
-  it('초기 상태: 컴포넌트가 처음 렌더링될 때 각 필드가 비어있는지 확인', () => {
+  test('컴포넌트가 처음 렌더링될 때 각 필드가 비어있는지 확인', () => {
     expect(screen.getByPlaceholderText('Email')).toHaveValue('');
     expect(screen.getByPlaceholderText('Nickname')).toHaveValue('');
     expect(screen.getByPlaceholderText('Password')).toHaveValue('');
     expect(screen.getByPlaceholderText('Password Check')).toHaveValue('');
   });
 
-  it('입력값 변경: 각 필드에 입력값을 제공하면 상태가 제대로 변경되는지 확인', () => {
+  test('각 필드에 입력값을 제공하면 상태가 제대로 변경되는지 확인', () => {
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@test.com' },
     });
@@ -67,7 +89,7 @@ describe('<SignUpPage />', () => {
     );
   });
 
-  it('유효성 검사: 각 필드가 비어 있거나 비밀번호가 일치하지 않는 경우 에러 메시지가 표시되는지 확인', async () => {
+  test('각 필드가 비어 있거나 비밀번호가 일치하지 않는 경우 에러 메시지가 표시되는지 확인', async () => {
     fireEvent.click(screen.getByText('SIGN UP'));
     expect(screen.getByText('이메일을 입력해 주세요')).toBeInTheDocument();
 
@@ -100,12 +122,12 @@ describe('<SignUpPage />', () => {
     ).toBeInTheDocument();
   });
 
-  it('회원가입 요청: 모든 필드가 유효할 경우 createUser 함수가 호출되는지 확인', async () => {
+  test('중복된 닉네임에 대한 에러 메세지 출력 확인', async () => {
+    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+      target: { value: 'duplicateNickname' },
+    });
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@test.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
-      target: { value: 'testNickname' },
     });
     fireEvent.change(screen.getByPlaceholderText('Password'), {
       target: { value: 'testPassword' },
@@ -115,8 +137,52 @@ describe('<SignUpPage />', () => {
     });
     fireEvent.click(screen.getByText('SIGN UP'));
 
-    await waitFor(() =>
-      expect(screen.queryByText('에러가 발생하였습니다 (임시문구)')).toBeNull(),
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByText('이미 사용중인 닉네임 입니다'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('중복된 이메일에 대한 에러 메세지 출력 확인', async () => {
+    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+      target: { value: 'testNickname' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'duplicateEmail@test.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
+      target: { value: 'testPassword' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password Check'), {
+      target: { value: 'testPassword' },
+    });
+    fireEvent.click(screen.getByText('SIGN UP'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('이미 사용중인 이메일 입니다'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('회원가입 정상 처리에 대한 페이지 이동 확인', async () => {
+    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+      target: { value: 'testNickname' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'test@test.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
+      target: { value: 'testPassword' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password Check'), {
+      target: { value: 'testPassword' },
+    });
+    fireEvent.click(screen.getByText('SIGN UP'));
+
+    await waitFor(() => {
+      expect(navigateMock).toHaveBeenCalledWith('/signin');
+    });
   });
 });

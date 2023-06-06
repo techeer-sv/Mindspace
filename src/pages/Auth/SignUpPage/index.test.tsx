@@ -14,11 +14,10 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const server = setupServer(
-  rest.post('undefinedapi/v1/user/signup', (req, res, ctx) => {
+  rest.post('http://test/api/v1/user/signup', (req, res, ctx) => {
     const { email, nickname } = req.body as {
       email: string;
       nickname: string;
-      password: string;
     };
 
     if (nickname === 'duplicateNickname') {

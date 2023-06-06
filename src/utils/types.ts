@@ -60,3 +60,10 @@ export interface ResizableModalProps {
   onRequestClose: () => void;
   children: React.ReactNode;
 }
+
+// ErrorResponse
+export interface ErrorResponse {
+  error: string;
+  message: string;
+  status: number;
+}

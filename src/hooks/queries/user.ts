@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useQueryClient, useQuery, useMutation } from 'react-query';
 import { getUserNickname, createUser, getAccessToken } from '@/api/Auth';
 import { KEY } from '@/utils/constants';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from 'util/types';
 
 export const useUserNicknameQuery = (isLoggedIn: boolean) => {
   return useQuery([KEY.USER_NICKNAME], getUserNickname, {
@@ -20,7 +22,6 @@ export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
   }, [isLoggedIn, queryClient]);
 };
 
-// TODO 로그인, 회원가입에 대한 에러처리 필요
 export const useSignUpMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
@@ -29,9 +30,14 @@ export const useSignUpMutation = (
     onSuccess: () => {
       successAction();
     },
-    onError: (error) => {
-      errorAction('에러가 발생하였습니다 (임시문구)');
-      console.log(error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      if (error?.response.data?.error === 'U001') {
+        errorAction('이미 사용중인 이메일 입니다');
+      } else if (error?.response?.data?.error === 'U002') {
+        errorAction('이미 사용중인 닉네임 입니다');
+      } else {
+        errorAction('기타 에러가 발생하였습니다.');
+      }
     },
   });
 };

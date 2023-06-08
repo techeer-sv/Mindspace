@@ -50,9 +50,14 @@ export const useSignInMutation = (
     onSuccess: (accessToken) => {
       successAction(accessToken);
     },
-    onError: (error) => {
-      errorAction('에러가 발생하였습니다 (임시문구)');
-      console.log(error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      if (error?.response.data?.errorCode === 'U001') {
+        errorAction('존재하지 않는 계정입니다');
+      } else if (error?.response?.data?.errorCode === 'U002') {
+        errorAction('비밀번호를 다시 확인해주세요');
+      } else {
+        errorAction('기타 에러가 발생하였습니다.');
+      }
     },
   });
 };

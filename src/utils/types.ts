@@ -63,7 +63,6 @@ export interface ResizableModalProps {
 
 // ErrorResponse
 export interface ErrorResponse {
-  error: string;
-  message: string;
-  status: number;
+  errorCode: string;
+  errorMessage: string;
 }

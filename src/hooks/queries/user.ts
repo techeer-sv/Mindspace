@@ -31,9 +31,9 @@ export const useSignUpMutation = (
       successAction();
     },
     onError: (error: AxiosError<ErrorResponse>) => {
-      if (error?.response.data?.error === 'U001') {
+      if (error?.response.data?.errorCode === 'U004') {
         errorAction('이미 사용중인 이메일 입니다');
-      } else if (error?.response?.data?.error === 'U002') {
+      } else if (error?.response?.data?.errorCode === 'U003') {
         errorAction('이미 사용중인 닉네임 입니다');
       } else {
         errorAction('기타 에러가 발생하였습니다.');

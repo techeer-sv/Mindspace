@@ -21,11 +21,11 @@ const server = setupServer(
     };
 
     if (nickname === 'duplicateNickname') {
-      return res(ctx.status(400), ctx.json({ error: 'U002' }));
+      return res(ctx.status(400), ctx.json({ errorCode: 'U003' }));
     }
 
     if (email === 'duplicateEmail@test.com') {
-      return res(ctx.status(400), ctx.json({ error: 'U001' }));
+      return res(ctx.status(400), ctx.json({ errorCode: 'U004' }));
     }
 
     return res(ctx.status(200), ctx.json({ message: '회원가입 성공' }));

@@ -122,7 +122,7 @@ describe('<SignInPage />', () => {
     });
   });
 
-  test('로그인이 정상적으로 수행되었을 때 메인페이지 이동 확인', async () => {
+  test('로그인이 정상적으로 수행되었을때 메인페이지 이동과 토큰 저장 기능 확인', async () => {
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@test.com' },
     });
@@ -134,6 +134,9 @@ describe('<SignInPage />', () => {
     await waitFor(() => {
       expect(navigateMock).toHaveBeenCalledWith('/');
     });
+
+    const storedData = localStorage.getItem('accessToken');
+    expect(storedData).toBe('accessToken');
   });
 
   test('회원가입 버튼을 눌렀을때 회원가입 페이지로 정상적으로 이동하는지 테스트', async () => {

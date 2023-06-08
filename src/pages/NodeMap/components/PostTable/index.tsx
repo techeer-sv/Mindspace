@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getPostListData } from '@/api/Post';
 import { useRecoilValue } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
+import { nodeAtom } from '@/recoil/state/nodeAtom';
 
 interface PostTableProps {
   OnClickedId: (id: number) => void;
@@ -13,18 +14,20 @@ interface PostTableProps {
 
 function PostTable({ OnClickedId }: PostTableProps) {
   const [rowData, setRowData] = useState([]);
+  const selectedNodeInfo = useRecoilValue(nodeAtom);
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getPostListData();
-      setRowData(res.data);
+      const res = await getPostListData(selectedNodeInfo.id);
+      setRowData(Object.values(res));
     };
     fetchData();
-  }, []);
+  }, [selectedNodeInfo.id]);
 
   const [columnDefs] = useState([
     { field: 'title' },
-    { field: 'name' },
-    { field: 'date' },
+    { field: 'userNickname' },
+    { field: 'updatedAt' },
   ]);
 
   const onRowDataClicked = (params: CellClickedEvent) => {

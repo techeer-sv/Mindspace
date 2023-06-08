@@ -1,5 +1,4 @@
-import makeAxios from 'utils/baseAxios';
-import axios from 'axios';
+import axios from '@/utils/baseAxios';
 
 interface PostData {
   id: number;
@@ -7,15 +6,27 @@ interface PostData {
   content: string;
 }
 
+interface UserPostdata {
+  id: number;
+  title: string;
+  content: string;
+  updatedAt: string;
+  userNickname: string;
+}
+
 export const getPost = async (id: number): Promise<PostData> => {
-  const res = await makeAxios.get(`boards/${id}`);
+  const res = await axios.get('boards', {
+    params: {
+      node_id: id,
+    },
+  });
   const data = res.data;
   console.log('id:', id, '값에 대한 글 정보 api 요청');
   return data;
 };
 
 export const deletePost = async (id: number): Promise<void> => {
-  await makeAxios.delete(`boards/${id}`);
+  await axios.delete(`boards/${id}`);
   console.log('id:', id, '글쓰기 삭제 api 요청');
 };
 
@@ -24,11 +35,18 @@ export const createPost = async (
   title: string,
   content: string,
 ): Promise<void> => {
-  await makeAxios.post('boards', {
-    nodeId: id,
-    title: title,
-    content: content,
-  });
+  await axios.post(
+    'boards',
+    {
+      title: title,
+      content: content,
+    },
+    {
+      params: {
+        node_id: id,
+      },
+    },
+  );
   console.log('id:', id, '글쓰기 api 요청');
   console.log('title : ', title, '\n content:', content);
 };
@@ -38,7 +56,7 @@ export const updatePost = async (
   title: string,
   content: string,
 ): Promise<void> => {
-  await makeAxios.put(`boards/${id}`, {
+  await axios.put(`boards/${id}`, {
     nodeId: id,
     title: title,
     content: content,
@@ -60,15 +78,22 @@ interface ViewPostData {
   time: string;
 }
 
-export const getPostListData = async (): Promise<PostListData> => {
-  const res = await axios.get('../dummy/postList.json');
+export const getPostListData = async (id: number): Promise<any> => {
+  const res = await axios.get('boards/all', {
+    params: {
+      node_id: id,
+    },
+  });
   const data = res.data;
   return data;
 };
 
-export const getPostData = async (): Promise<ViewPostData> => {
-  const res = await axios.get('../dummy/post.json');
+export const getPostData = async (id: number): Promise<UserPostdata> => {
+  const res = await axios.get(`boards/${id}`, {
+    params: {
+      node_id: id,
+    },
+  });
   const data = res.data;
-
   return data;
 };

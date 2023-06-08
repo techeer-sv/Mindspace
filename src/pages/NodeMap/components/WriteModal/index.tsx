@@ -39,35 +39,35 @@ const WriteModal = ({
   const handleFirstWrite = async () => {
     try {
       await createPost(nodeInfo.id as number, title, content);
+      setIsEditing(false);
+      setIsActive(true);
+      updateNodeInfo(nodeInfo?.id, true);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
-    setIsEditing(false);
-    setIsActive(true);
-    updateNodeInfo(nodeInfo?.id, true);
-    setIsLoading(false);
   };
 
   const handleSubmit = async () => {
     try {
       await updatePost(boardId, title, content);
+      setInitTitle(title);
+      setInitEditedContent(content);
+      setIsEditing(false);
     } catch (error) {
       console.log(error);
     }
-    setInitTitle(title);
-    setInitEditedContent(content);
-    setIsEditing(false);
   };
 
   const handleDelete = async () => {
     try {
       await deletePost(boardId);
+      updateNodeInfo(nodeInfo?.id, false);
+      setIsActive(false);
+      onRequestClose();
     } catch (error) {
       console.log(error);
     }
-    updateNodeInfo(nodeInfo?.id, false);
-    setIsActive(false);
-    onRequestClose();
   };
 
   const handleCancel = () => {
@@ -83,7 +83,7 @@ const WriteModal = ({
     if (isOpen && nodeInfo?.isActive) {
       const fetchData = async () => {
         try {
-          const data = await getPost(boardId);
+          const data = await getPost(nodeInfo.id as number);
           setTitle(data.title);
           setContent(data.content);
           setInitTitle(data.title);

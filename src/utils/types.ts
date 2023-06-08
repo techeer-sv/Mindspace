@@ -1,6 +1,6 @@
 // NodeMap
 export type NodeObject = object & {
-  id?: string | number;
+  id?: number;
   name?: string;
   x?: number;
   y?: number;

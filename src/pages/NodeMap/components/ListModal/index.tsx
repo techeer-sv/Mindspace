@@ -17,17 +17,27 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getPostData();
-      setName(res.name);
-      setTitle(res.title);
-      setContent(res.content);
-      setDate(res.date);
-      setTime(res.time);
+      try {
+        const res = await getPostData(isSelectedTable);
+        const datatimeString = res.updatedAt;
+        const [datePart, timePart] = datatimeString.split('T');
+        const timeString = timePart.split('.')[0];
+
+        setName(res.userNickname);
+        setTitle(res.title);
+        setContent(res.content);
+        setDate(datePart);
+        setTime(timeString);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
   }, [isSelectedTable]);
 
   const handleSelecteBoard = (id: number) => {
+    console.log(id);
+
     setIsSelectedTable(id);
   };
 

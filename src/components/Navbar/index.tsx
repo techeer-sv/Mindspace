@@ -34,6 +34,11 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const isCurrentlyLoggedIn = localStorage.getItem('accessToken') !== null;
+    setLoggedIn(isCurrentlyLoggedIn);
+  }, []);
+
   useClearUserNicknameCache(isLoggedIn);
 
   return (

@@ -90,11 +90,11 @@ export const getPostListData = async (id: number): Promise<any> => {
 };
 
 export const getPostData = async (id: number): Promise<UserPostdata> => {
-  const res = await axios.get(`boards/${id}`, {
-    params: {
-      node_id: id,
-    },
-  });
-  const data = res.data;
-  return data;
+  if (id !== null) {
+    const res = await axios.get(`boards/${id}`);
+    const data = res.data;
+    return data;
+  } else {
+    return;
+  }
 };

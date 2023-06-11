@@ -22,7 +22,6 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
         const datatimeString = res.updatedAt;
         const [datePart, timePart] = datatimeString.split('T');
         const timeString = timePart.split('.')[0];
-
         setName(res.userNickname);
         setTitle(res.title);
         setContent(res.content);
@@ -36,8 +35,6 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   }, [isSelectedTable]);
 
   const handleSelecteBoard = (id: number) => {
-    console.log(id);
-
     setIsSelectedTable(id);
   };
 

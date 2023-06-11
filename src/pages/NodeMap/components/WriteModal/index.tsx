@@ -25,6 +25,8 @@ const WriteModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [boardId, setBoardId] = useState(0);
   const editorRef = React.useRef(null);
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
 
   const initialize = () => {
     setTitle('');
@@ -84,11 +86,18 @@ const WriteModal = ({
       const fetchData = async () => {
         try {
           const data = await getPost(nodeInfo.id as number);
+          const datatimeString = data.updatedAt;
+          const [datePart, timePart] = datatimeString.split('T');
+          const timeString = timePart.split('.')[0];
+          console.log(data);
+
           setTitle(data.title);
           setContent(data.content);
           setInitTitle(data.title);
           setInitEditedContent(data.content);
           setBoardId(data.id);
+          setDate(datePart);
+          setTime(timeString);
           setIsLoading(false);
         } catch (error) {
           console.log(error);
@@ -153,6 +162,12 @@ const WriteModal = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
+              {!isEditing && (
+                <div className={styles.content__dateTime}>
+                  <span className={styles.content__date}>{date}</span>
+                  <span className={styles.content__time}>{time}</span>
+                </div>
+              )}
             </div>
             <div className={styles.content__editor}>
               <div

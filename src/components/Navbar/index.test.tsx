@@ -28,11 +28,16 @@ const server = setupServer(
   }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  server.listen();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
 afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
-describe('<Navbar />', () => {
+describe('Navbar 컴포넌트', () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -57,52 +62,55 @@ describe('<Navbar />', () => {
     localStorage.clear();
   });
 
-  test('로그인 상태일 때 사용자 닉네임이 표시되는지 테스트', async () => {
-    // 로그인 상태를 시뮬레이션하기 위해 localStorage에 항목을 설정합니다.
-    localStorage.setItem('accessToken', 'testToken');
+  describe('1. 로그인 상태일 때', () => {
+    beforeEach(() => {
+      localStorage.setItem('accessToken', 'testToken');
 
-    render(
-      <BrowserRouter>
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            <Navbar />
-          </QueryClientProvider>
-        </RecoilRoot>
-      </BrowserRouter>,
-    );
-
-    // useUserNicknameQuery 훅이 호출되고 나서 사용자 닉네임이 표시되는 것을 기다립니다.
-    await waitFor(() => {
-      expect(screen.getByText('testName')).toBeInTheDocument();
+      render(
+        <BrowserRouter>
+          <RecoilRoot>
+            <QueryClientProvider client={queryClient}>
+              <Navbar />
+            </QueryClientProvider>
+          </RecoilRoot>
+        </BrowserRouter>,
+      );
     });
 
-    const logoutButton = screen.getByText('logout');
-    expect(logoutButton).toBeInTheDocument();
+    it('1.1 사용자 닉네임을 화면에 표시한다.', async () => {
+      await waitFor(() => {
+        expect(screen.getByText('testName')).toBeInTheDocument();
+      });
+    });
 
-    fireEvent.click(logoutButton);
+    it('1.2 로그아웃 버튼을 화면에 표시한다.', () => {
+      const logoutButton = screen.getByText('logout');
+      expect(logoutButton).toBeInTheDocument();
+    });
 
-    // 로컬 스토리지에서 토큰이 제거되었는지 확인합니다.
-    expect(localStorage.getItem('accessToken')).toBeNull();
+    it('1.3 로그아웃 버튼을 클릭하면 스토리지값을 초기화한다.', () => {
+      const logoutButton = screen.getByText('logout');
+      fireEvent.click(logoutButton);
+      expect(localStorage.getItem('accessToken')).toBeNull();
+    });
   });
 
-  test('로그인하지 않은 상태에서 로그인 버튼이 표시되는지 테스트', async () => {
-    // 이 버튼이 문서에 있는지 확인합니다.
-    const loginButton = screen.getByText('SignIn');
-    expect(loginButton).toBeInTheDocument();
+  describe('2. 로그인 상태가 아닐 때', () => {
+    it('2.1 회원가입과 로그인 버튼을 화면에 표현한다.', async () => {
+      const loginButton = screen.getByText('SignIn');
+      expect(loginButton).toBeInTheDocument();
 
-    // 회원가입 버튼도 문서에 있는지 확인합니다.
-    const signUpButton = screen.getByText('SignUp');
-    expect(signUpButton).toBeInTheDocument();
+      const signUpButton = screen.getByText('SignUp');
+      expect(signUpButton).toBeInTheDocument();
+    });
   });
 
-  test('로고 클릭 시 루트 경로(/)로 이동하는지 테스트', async () => {
+  it('로고 클릭 시 루트 경로(/)로 이동한다.', async () => {
     const links = screen.getAllByTestId('mock-link');
     const logo = links.find((link) => link.getAttribute('data-to') === '/');
 
-    // 로고를 클릭합니다.
     fireEvent.click(logo);
 
-    // useNavigate mock 함수가 호출되었는지, 그리고 "/"로 이동하는지 확인합니다.
     expect(logo).toHaveAttribute('data-to', '/');
   });
 });

@@ -32,11 +32,16 @@ const server = setupServer(
   }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  server.listen();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
 afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
-describe('<SignUpPage />', () => {
+describe('SignUpPage 페이지', () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -57,14 +62,14 @@ describe('<SignUpPage />', () => {
     );
   });
 
-  test('컴포넌트가 처음 렌더링될 때 각 필드가 비어있는지 확인', () => {
+  it('컴포넌트가 처음 렌더링될 때 각 필드는 비어있어야 한다', () => {
     expect(screen.getByPlaceholderText('Email')).toHaveValue('');
     expect(screen.getByPlaceholderText('Nickname')).toHaveValue('');
     expect(screen.getByPlaceholderText('Password')).toHaveValue('');
     expect(screen.getByPlaceholderText('Password Check')).toHaveValue('');
   });
 
-  test('각 필드에 입력값을 제공하면 상태가 제대로 변경되는지 확인', () => {
+  it('각 필드에 입력값을 제공하면 상태가 변경되어야 한다', () => {
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@test.com' },
     });
@@ -88,7 +93,7 @@ describe('<SignUpPage />', () => {
     );
   });
 
-  test('각 필드가 비어 있거나 비밀번호가 일치하지 않는 경우 에러 메시지가 표시되는지 확인', async () => {
+  it('필드가 비어있거나 유효하지 않을때 에러메세지가 출력되어야 한다', async () => {
     fireEvent.click(screen.getByText('SIGN UP'));
     expect(screen.getByText('이메일을 입력해 주세요')).toBeInTheDocument();
 
@@ -121,67 +126,69 @@ describe('<SignUpPage />', () => {
     ).toBeInTheDocument();
   });
 
-  test('중복된 닉네임에 대한 에러 메세지 출력 확인', async () => {
-    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
-      target: { value: 'duplicateNickname' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
-      target: { value: 'test@test.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password Check'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.click(screen.getByText('SIGN UP'));
+  describe('1. 회원가입 버튼을 눌렀을 때', () => {
+    it('1.1 중복된 닉네임을 입력하면 에러 메세지가 출력되어야 한다.', async () => {
+      fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+        target: { value: 'duplicateNickname' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Email'), {
+        target: { value: 'test@test.com' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password Check'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.click(screen.getByText('SIGN UP'));
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('이미 사용중인 닉네임 입니다'),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText('이미 사용중인 닉네임 입니다'),
+        ).toBeInTheDocument();
+      });
     });
-  });
 
-  test('중복된 이메일에 대한 에러 메세지 출력 확인', async () => {
-    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
-      target: { value: 'testNickname' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
-      target: { value: 'duplicateEmail@test.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password Check'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.click(screen.getByText('SIGN UP'));
+    it('1.2 중복된 이메일을 입력하면 에러 메세지가 출력되어야 한다.', async () => {
+      fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+        target: { value: 'testNickname' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Email'), {
+        target: { value: 'duplicateEmail@test.com' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password Check'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.click(screen.getByText('SIGN UP'));
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('이미 사용중인 이메일 입니다'),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText('이미 사용중인 이메일 입니다'),
+        ).toBeInTheDocument();
+      });
     });
-  });
 
-  test('회원가입 정상 처리에 대한 페이지 이동 확인', async () => {
-    fireEvent.change(screen.getByPlaceholderText('Nickname'), {
-      target: { value: 'testNickname' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
-      target: { value: 'test@test.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password Check'), {
-      target: { value: 'testPassword' },
-    });
-    fireEvent.click(screen.getByText('SIGN UP'));
+    it('1.3 정상적으로 회원가입이 진행되면 signin페이지로 이동해야한다.', async () => {
+      fireEvent.change(screen.getByPlaceholderText('Nickname'), {
+        target: { value: 'testNickname' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Email'), {
+        target: { value: 'test@test.com' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Password Check'), {
+        target: { value: 'testPassword' },
+      });
+      fireEvent.click(screen.getByText('SIGN UP'));
 
-    await waitFor(() => {
-      expect(navigateMock).toHaveBeenCalledWith('/signin');
+      await waitFor(() => {
+        expect(navigateMock).toHaveBeenCalledWith('/signin');
+      });
     });
   });
 });

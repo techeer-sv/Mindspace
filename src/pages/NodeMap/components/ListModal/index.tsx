@@ -97,9 +97,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   </div>
                 </div>
                 <div className={styles.post__viewer}>
-                  {isLoading && (
-                    <Viewer initialValue={content} usageStatistics={false} />
-                  )}
+                  <Viewer initialValue={content} usageStatistics={false} />
                 </div>
               </div>
             </div>

@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MindSpaceText from '@/images/MindSpaceText.png';
+import styles from './Navbar.module.scss';
 
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '@/recoil/state/authAtom';
-
-import styles from './Navbar.module.scss';
+import {
+  useUserNicknameQuery,
+  useClearUserNicknameCache,
+} from '@/hooks/queries/user';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
+  const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
+
   const logout = () => {
+    setLoggedIn(false);
     alert('로그아웃 되었습니다');
     navigate('/');
-    setLoggedIn(false);
     localStorage.clear();
   };
 
@@ -28,6 +33,13 @@ const Navbar = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const isCurrentlyLoggedIn = localStorage.getItem('accessToken') !== null;
+    setLoggedIn(isCurrentlyLoggedIn);
+  }, []);
+
+  useClearUserNicknameCache(isLoggedIn);
 
   return (
     <nav className={styles.navbar}>
@@ -65,7 +77,7 @@ const Navbar = () => {
                     : styles.navbar__menu__text
                 }
               >
-                <span>{'testEmail'}</span>
+                <span>{userNickname}</span>
               </li>
               <li>
                 <span

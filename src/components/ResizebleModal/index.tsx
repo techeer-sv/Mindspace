@@ -4,6 +4,7 @@ import styles from './ResizebleModal.module.scss';
 import { ResizableModalProps } from '@/utils/types';
 import { useRecoilState } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
+import { NAVBAR_HEIGHT } from '@/utils/constants';
 
 const ResizableModal = ({
   isOpen,
@@ -14,7 +15,7 @@ const ResizableModal = ({
   const minHeight = window.innerHeight * 0.6;
 
   const maxWidth = window.innerWidth - 50;
-  const maxHeight = window.innerHeight - 76 * 2;
+  const maxHeight = window.innerHeight - NAVBAR_HEIGHT * 2;
 
   const [isResizing, setIsResizing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

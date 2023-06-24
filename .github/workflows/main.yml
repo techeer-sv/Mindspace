@@ -1,14 +1,13 @@
-name: CI
+name: TEST_CICD
 
 on:
   push:
-    branches: [ test/CICD/success ]
+    branches: [develop]
   pull_request:
-    branches: [ test/CICD/success ]
+    branches: [develop]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,10 +15,10 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: yarn install
-    - run: yarn test
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install
+      - run: yarn test

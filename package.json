@@ -34,6 +34,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "aws s3 sync ./dist/ s3://mindspace-front --profile=master",
+    "ci-deploy": "aws s3 sync ./dist/ s3://mindspace-front",
     "test": "VITE_API_URL=http://test/ jest"
   },
   "eslintConfig": {

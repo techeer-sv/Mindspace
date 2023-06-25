@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
 import Navbar from '@/components/Navbar';
-import { getAccessToken } from '@/api/Auth';
 import styles from './../Auth.module.scss';
 
 import { useSetRecoilState } from 'recoil';
 import { isLoggedInAtom } from '@/recoil/state/authAtom';
+import { useSignInMutation } from '@/hooks/queries/user';
 
 function SignInPage() {
   const navigate = useNavigate();
@@ -16,6 +16,17 @@ function SignInPage() {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const setLoggedIn = useSetRecoilState(isLoggedInAtom);
+
+  const handleLoginSuccess = (token: string) => {
+    localStorage.setItem('accessToken', token);
+    setLoggedIn(true);
+    navigate('/');
+  };
+
+  const { mutate: loginMutation } = useSignInMutation(
+    handleLoginSuccess,
+    setErrorMessage,
+  );
 
   const checkIsValid = () => {
     if (email === '') {
@@ -32,16 +43,9 @@ function SignInPage() {
     return true;
   };
 
-  const submitForm = async () => {
+  const submitForm = () => {
     if (checkIsValid()) {
-      try {
-        const accessToken = await getAccessToken(email, password);
-        localStorage.setItem('accessToken', accessToken);
-        setLoggedIn(true);
-        navigate('/');
-      } catch (error) {
-        setErrorMessage('에러가 발생하였습니다 (임시문구)');
-      }
+      loginMutation({ email, password });
     }
   };
 

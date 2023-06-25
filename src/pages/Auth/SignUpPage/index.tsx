@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import styles from './../Auth.module.scss';
 import FormBox from '../components/FormBox';
 import FormButton from '../components/FormButton';
 import Navbar from '@/components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { createUser } from '@/api/Auth';
+import { useSignUpMutation } from '@/hooks/queries/user';
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -14,6 +14,10 @@ function SignUpPage() {
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
 
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const { mutate: signupMutation } = useSignUpMutation(() => {
+    navigate('/signin');
+  }, setErrorMessage);
 
   const checkIsValid = () => {
     if (email === '') {
@@ -44,14 +48,9 @@ function SignUpPage() {
     return true;
   };
 
-  const submitForm = async () => {
+  const submitForm = () => {
     if (checkIsValid()) {
-      try {
-        await createUser(userName, email, password);
-        navigate('/signin');
-      } catch (error) {
-        setErrorMessage('에러가 발생하였습니다 (임시문구)');
-      }
+      signupMutation({ userName, email, password });
     }
   };
 

@@ -1,5 +1,5 @@
 # 워크 플로우의 이름 설정
-name: RUN_UNIT_TEST
+name: TEST
 
 # 워크 플로우의 트리거 설정 (develop브랜치에 대한 push,pr에 대해 처리한다)
 on:
@@ -11,6 +11,7 @@ on:
 # 워크 플로우에서 실행될 작업 정의
 jobs:
   build:
+    name: jest test
     # 작업을 실행할 운영체제 설정
     runs-on: ubuntu-latest
 

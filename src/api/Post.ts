@@ -27,7 +27,11 @@ export const getPost = async (id: number): Promise<PostData> => {
 };
 
 export const deletePost = async (id: number): Promise<void> => {
-  await axios.delete(`boards/${id}`);
+  await axios.delete('boards', {
+    params: {
+      node_id: id,
+    },
+  });
   console.log('id:', id, '글쓰기 삭제 api 요청');
 };
 
@@ -57,27 +61,21 @@ export const updatePost = async (
   title: string,
   content: string,
 ): Promise<void> => {
-  await axios.put(`boards/${id}`, {
-    nodeId: id,
-    title: title,
-    content: content,
-  });
-  console.log('id:', id, '글수정 api 요청');
+  await axios.put(
+    'boards',
+    {
+      title: title,
+      content: content,
+    },
+    {
+      params: {
+        node_id: id,
+      },
+    },
+  );
+  console.log('글수정 api 요청');
   console.log('title : ', title, '\n content:', content);
 };
-
-interface PostListData {
-  data: Array<[]>;
-}
-
-interface ViewPostData {
-  id: number;
-  name: string;
-  title: string;
-  content: string;
-  date: string;
-  time: string;
-}
 
 export const getPostListData = async (id: number): Promise<any> => {
   const res = await axios.get('boards/all', {

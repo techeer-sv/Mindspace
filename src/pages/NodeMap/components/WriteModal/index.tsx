@@ -52,7 +52,7 @@ const WriteModal = ({
 
   const handleSubmit = async () => {
     try {
-      await updatePost(boardId, title, content);
+      await updatePost(nodeInfo.id as number, title, content);
       setInitTitle(title);
       setInitEditedContent(content);
       setIsEditing(false);
@@ -63,7 +63,7 @@ const WriteModal = ({
 
   const handleDelete = async () => {
     try {
-      await deletePost(boardId);
+      await deletePost(nodeInfo.id as number);
       updateNodeInfo(nodeInfo?.id, false);
       setIsActive(false);
       onRequestClose();

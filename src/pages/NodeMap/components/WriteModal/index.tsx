@@ -18,7 +18,7 @@ const WriteModal = ({
   const nodeInfo = useRecoilValue(nodeAtom);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isActive, setIsActive] = useState(nodeInfo.isActive);
+  const [isWritten, setIsWritten] = useState(nodeInfo.isWritten);
   const [initTitle, setInitTitle] = useState(title);
   const [initEditedContent, setInitEditedContent] = useState(content);
   const [isEditing, setIsEditing] = useState(true);
@@ -38,7 +38,7 @@ const WriteModal = ({
   const handleFirstWrite = async () => {
     await createPost(nodeInfo.id as number, title, content);
     setIsEditing(false);
-    setIsActive(true);
+    setIsWritten(true);
     updateNodeInfo(nodeInfo?.id, true);
     setIsLoading(false);
   };
@@ -53,7 +53,7 @@ const WriteModal = ({
   const handleDelete = async () => {
     await deletePost(nodeInfo.id as number);
     updateNodeInfo(nodeInfo?.id, false);
-    setIsActive(false);
+    setIsWritten(false);
     onRequestClose();
   };
 
@@ -65,9 +65,9 @@ const WriteModal = ({
 
   useEffect(() => {
     setIsLoading(true);
-    setIsActive(nodeInfo.isActive);
+    setIsWritten(nodeInfo.isWritten);
 
-    if (isOpen && nodeInfo?.isActive) {
+    if (isOpen && nodeInfo?.isWritten) {
       const fetchData = async () => {
         const data = await getPost(nodeInfo.id as number);
 
@@ -88,7 +88,7 @@ const WriteModal = ({
 
   return (
     <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
-      {isActive ? (
+      {isWritten ? (
         <>
           <div className={styles.header}>
             <button className={styles.header__button} onClick={onRequestClose}>

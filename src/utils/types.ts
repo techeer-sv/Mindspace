@@ -4,7 +4,7 @@ export type NodeObject = object & {
   name?: string;
   x?: number;
   y?: number;
-  isActive?: boolean;
+  isWritten?: boolean;
   vx?: number;
   vy?: number;
   fx?: number;
@@ -14,7 +14,7 @@ export type NodeObject = object & {
 export interface Node extends NodeObject {
   name?: string;
   connect_count?: number;
-  isActive?: boolean;
+  isWritten?: boolean;
 }
 
 export type Context = CanvasRenderingContext2D;
@@ -38,14 +38,14 @@ export interface FormButtonProps {
 export interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  updateNodeInfo: (id: number | string, isActive: boolean) => void;
+  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
 }
 
 // WirteModal
 export interface WriteModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  updateNodeInfo: (id: number | string, isActive: boolean) => void;
+  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
 }
 
 // ListModal

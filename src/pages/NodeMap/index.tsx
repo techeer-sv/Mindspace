@@ -27,7 +27,7 @@ const NodeMap = () => {
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
     setModalIsOpen(true);
-    setNodeInfo({ id: node.id, isActive: node.isActive, name: node.name });
+    setNodeInfo({ id: node.id, isWritten: node.isWritten, name: node.name });
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -105,7 +105,7 @@ const NodeMap = () => {
 
     const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.2 + 1);
 
-    if (node.isActive) {
+    if (node.isWritten) {
       ctx.fillStyle = 'yellow';
     } else {
       ctx.fillStyle = 'white';
@@ -131,10 +131,10 @@ const NodeMap = () => {
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
 
-  const handleNodeInfoUpdate = (id: number | string, isActive: boolean) => {
+  const handleNodeInfoUpdate = (id: number | string, isWritten: boolean) => {
     const updatedNodeData = {
       nodes: nodeData.nodes.map((node: Node) =>
-        node.id === id ? { ...node, isActive: isActive } : node,
+        node.id === id ? { ...node, isWritten: isWritten } : node,
       ),
       links: nodeData.links,
     };

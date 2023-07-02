@@ -13,7 +13,7 @@ export type NodeObject = object & {
 
 export interface Node extends NodeObject {
   name?: string;
-  connect_count?: number;
+  connectCount?: number;
   isWritten?: boolean;
 }
 

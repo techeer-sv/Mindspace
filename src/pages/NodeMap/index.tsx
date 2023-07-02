@@ -98,12 +98,12 @@ const NodeMap = () => {
   };
 
   const nodeCanvasObject = (node: Node, ctx: Context) => {
-    node.connect_count = node.connect_count || 0;
+    node.connectCount = node.connectCount || 0;
     node.x = node.x || 0;
     node.y = node.y || 0;
     node.name = node.name || '';
 
-    const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.2 + 1);
+    const nodeSize = nodeVal * nodeRelSize * (node.connectCount * 0.2 + 1);
 
     if (node.isWritten) {
       ctx.fillStyle = 'yellow';
@@ -112,13 +112,13 @@ const NodeMap = () => {
     }
 
     switch (true) {
-      case node.connect_count <= 2:
+      case node.connectCount <= 2:
         drawStart(ctx, node, nodeSize);
         break;
-      case node.connect_count >= 3 && node.connect_count < 5:
+      case node.connectCount >= 3 && node.connectCount < 5:
         drawStart(ctx, node, nodeSize);
         break;
-      case node.connect_count >= 5:
+      case node.connectCount >= 5:
         drawCircle(ctx, node, nodeSize);
         break;
       default:

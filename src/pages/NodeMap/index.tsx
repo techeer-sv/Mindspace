@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
-import { NodeObject, Node, Context } from '@/utils/types';
+import { NodeObject, Node, Context, GraphData } from '@/utils/types';
 import Navbar from '@/components/Navbar';
 import Loading from '@/components/Loading';
 import Modal from 'react-modal';
@@ -10,13 +10,13 @@ import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useNodeListQuery } from '@/hooks/queries/node';
 const NodeMap = () => {
   // eslint-disable-next-line
-  const [nodeData, setNodeData] = useState(null);
+  const [nodeData, setNodeData] = useState<GraphData>(null);
   const fgRef = useRef<any>();
   const nodeRelSize = 3;
   const nodeVal = 3;
 
   // modal
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   Modal.setAppElement('#root');
 
   // recoil
@@ -144,6 +144,7 @@ const NodeMap = () => {
   useEffect(() => {
     if (status === 'success') {
       setNodeData(data);
+
       setTimeout(() => {
         fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
         fgRef.current?.d3Force('link').distance(70);
@@ -152,7 +153,7 @@ const NodeMap = () => {
       setTimeout(() => {
         if (fgRef.current) {
           fgRef.current.zoomToFit(1000);
-          nodeData.nodes.forEach((node: Node) => {
+          data.nodes.forEach((node: Node) => {
             node.fx = node.x;
             node.fy = node.y;
           });

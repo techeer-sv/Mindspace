@@ -17,6 +17,19 @@ export interface Node extends NodeObject {
   isWritten?: boolean;
 }
 
+interface Link {
+  source: Node;
+  target: Node;
+  __indexColor: string;
+  __controlPoints: null;
+  index: number;
+}
+
+export interface GraphData {
+  nodes: Node[];
+  links: Link[];
+}
+
 export type Context = CanvasRenderingContext2D;
 
 // Auth

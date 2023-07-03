@@ -1,5 +1,5 @@
 import axios from '@/utils/baseAxios';
-import { NodeObject, Node } from '@/utils/types';
+import { GraphData, Node } from '@/utils/types';
 
 /**
  * // TODO
@@ -9,7 +9,7 @@ import { NodeObject, Node } from '@/utils/types';
  * 더미 데이터 기반의 정보를 프론트에서 가공해서 사용합니다.
  */
 
-export const getNodeList = async (): Promise<NodeObject> => {
+export const getNodeList = async (): Promise<GraphData> => {
   const response = await axios.get('node/check');
 
   const nodeData = response.data;

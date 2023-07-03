@@ -150,6 +150,5 @@ export const getNodeList = async (): Promise<GraphData> => {
     links: dummyLink,
   };
 
-  console.log('here', nodeList);
   return nodeList;
 };

@@ -18,11 +18,11 @@ export interface Node extends NodeObject {
 }
 
 interface Link {
-  source: Node;
-  target: Node;
-  __indexColor: string;
-  __controlPoints: null;
-  index: number;
+  source: Node | number;
+  target: Node | number;
+  __indexColor?: string;
+  __controlPoints?: null;
+  index?: number;
 }
 
 export interface GraphData {

@@ -5,15 +5,13 @@ import Navbar from '@/components/Navbar';
 import Loading from '@/components/Loading';
 import Modal from 'react-modal';
 import NodeModal from '@/pages/NodeMap/components/Modal';
-import { getNodeList } from '@/api/Node';
 import { useRecoilState } from 'recoil';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
-
+import { useNodeListQuery } from '@/hooks/queries/node';
 const NodeMap = () => {
   // eslint-disable-next-line
-  const [initialLoad, setInitialLoad] = useState(true);
-  const fgRef = useRef<any>();
   const [nodeData, setNodeData] = useState(null);
+  const fgRef = useRef<any>();
   const nodeRelSize = 3;
   const nodeVal = 3;
 
@@ -24,10 +22,12 @@ const NodeMap = () => {
   // recoil
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
+  const { data, isLoading, status } = useNodeListQuery();
+
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
-    setModalIsOpen(true);
     setNodeInfo({ id: node.id, isWritten: node.isWritten, name: node.name });
+    setModalIsOpen(true);
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -142,7 +142,8 @@ const NodeMap = () => {
   };
 
   useEffect(() => {
-    if (initialLoad && nodeData) {
+    if (status === 'success') {
+      setNodeData(data);
       setTimeout(() => {
         fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
         fgRef.current?.d3Force('link').distance(70);
@@ -156,44 +157,39 @@ const NodeMap = () => {
             node.fy = node.y;
           });
         }
-        setInitialLoad(false);
       }, 500);
     }
-  }, [nodeData, initialLoad]);
-
-  useEffect(() => {
-    const fetchNodeList = async () => {
-      setNodeData(await getNodeList());
-      setInitialLoad(true);
-    };
-    fetchNodeList();
-  }, []);
+  }, [data, status]);
 
   return (
     <div>
       <Navbar />
-      {nodeData ? (
-        <ForceGraph2D
-          ref={fgRef}
-          nodeRelSize={nodeRelSize}
-          nodeVal={nodeVal}
-          nodeCanvasObject={nodeCanvasObject}
-          onNodeClick={handleClick}
-          graphData={nodeData}
-          linkColor={() => 'white'}
-          enableNodeDrag={false}
-        />
-      ) : (
+      {isLoading ? (
         <Loading />
-      )}
-
-      {nodeInfo && (
+      ) : (
         <>
-          <NodeModal
-            isOpen={modalIsOpen}
-            onRequestClose={() => setModalIsOpen(false)}
-            updateNodeInfo={handleNodeInfoUpdate}
-          />
+          {nodeData && (
+            <ForceGraph2D
+              ref={fgRef}
+              nodeRelSize={nodeRelSize}
+              nodeVal={nodeVal}
+              nodeCanvasObject={nodeCanvasObject}
+              onNodeClick={handleClick}
+              graphData={nodeData}
+              linkColor={() => 'white'}
+              enableNodeDrag={false}
+            />
+          )}
+
+          {nodeInfo && (
+            <>
+              <NodeModal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                updateNodeInfo={handleNodeInfoUpdate}
+              />
+            </>
+          )}
         </>
       )}
     </div>

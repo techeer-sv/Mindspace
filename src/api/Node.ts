@@ -9,11 +9,6 @@ import { NodeObject, Node } from '@/utils/types';
  * 더미 데이터 기반의 정보를 프론트에서 가공해서 사용합니다.
  */
 
-interface GetAccessTokenParams {
-  email: string;
-  password: string;
-}
-
 export const getNodeList = async (): Promise<NodeObject> => {
   const response = await axios.get('node/check');
 
@@ -155,5 +150,6 @@ export const getNodeList = async (): Promise<NodeObject> => {
     links: dummyLink,
   };
 
+  console.log('here', nodeList);
   return nodeList;
 };

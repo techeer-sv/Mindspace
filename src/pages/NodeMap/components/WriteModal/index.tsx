@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
-import { createPost, getPost, updatePost, deletePost } from '@/api/Post';
+import { getPost } from '@/api/Post';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -9,6 +10,12 @@ import { WriteModalProps } from '@/utils/types';
 import ResizableModal from '@/components/ResizebleModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
+import {
+  GetPost,
+  useCreatePostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} from '@/hooks/queries/board';
 
 const WriteModal = ({
   isOpen,
@@ -38,38 +45,52 @@ const WriteModal = ({
     setContent(editorRef.current.getInstance().getMarkdown());
   };
 
-  const handleFirstWrite = async () => {
-    try {
-      await createPost(nodeInfo.id as number, title, content);
-      setIsEditing(false);
-      setIsActive(true);
-      updateNodeInfo(nodeInfo?.id, true);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  // TODO : 에러 메세지 처리
+  const [createPostErrorMessage, setCreatePostErrorMessage] =
+    useState<string>('');
+
+  const { mutate: createPostMutation } = useCreatePostMutation(() => {
+    setIsLoading(false);
+    setIsEditing(false);
+    setIsActive(true);
+    updateNodeInfo(nodeInfo?.id, true);
+  }, setCreatePostErrorMessage);
+
+  const handleFirstWrite = () => {
+    createPostMutation({
+      id: nodeInfo.id as number,
+      title: title,
+      content: content,
+    });
   };
 
-  const handleSubmit = async () => {
-    try {
-      await updatePost(nodeInfo.id as number, title, content);
-      setInitTitle(title);
-      setInitEditedContent(content);
-      setIsEditing(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const { mutate: updatePostMutation } = useUpdatePostMutation(() => {
+    setInitTitle(title);
+    setInitEditedContent(content);
+    setIsEditing(false);
+  });
+
+  const handleSubmit = () => {
+    updatePostMutation({
+      id: nodeInfo.id as number,
+      title: title,
+      content: content,
+    });
   };
 
-  const handleDelete = async () => {
-    try {
-      await deletePost(nodeInfo.id as number);
-      updateNodeInfo(nodeInfo?.id, false);
-      setIsActive(false);
-      onRequestClose();
-    } catch (error) {
-      console.log(error);
-    }
+  const [deletePostErrorMessage, setDeletePostErrorMessage] =
+    useState<string>('');
+
+  const { mutate: deletePostMutation } = useDeletePostMutation(() => {
+    updateNodeInfo(nodeInfo?.id, false);
+    setIsActive(false);
+    onRequestClose();
+  }, setDeletePostErrorMessage);
+
+  const handleDelete = () => {
+    deletePostMutation({
+      id: nodeInfo.id as number,
+    });
   };
 
   const handleCancel = () => {

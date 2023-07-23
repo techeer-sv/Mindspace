@@ -26,7 +26,11 @@ export const getPost = async (id: number): Promise<PostData> => {
   return data;
 };
 
-export const deletePost = async (id: number): Promise<void> => {
+interface DeletePostParams {
+  id: number;
+}
+
+export const deletePost = async ({ id }: DeletePostParams) => {
   await axios.delete('boards', {
     params: {
       node_id: id,
@@ -35,11 +39,13 @@ export const deletePost = async (id: number): Promise<void> => {
   console.log('id:', id, '글쓰기 삭제 api 요청');
 };
 
-export const createPost = async (
-  id: number,
-  title: string,
-  content: string,
-): Promise<void> => {
+interface PostParams {
+  id: number;
+  title: string;
+  content: string;
+}
+
+export const createPost = async ({ id, title, content }: PostParams) => {
   await axios.post(
     'boards',
     {
@@ -56,11 +62,7 @@ export const createPost = async (
   console.log('title : ', title, '\n content:', content);
 };
 
-export const updatePost = async (
-  id: number,
-  title: string,
-  content: string,
-): Promise<void> => {
+export const updatePost = async ({ id, title, content }: PostParams) => {
   await axios.put(
     'boards',
     {
@@ -77,7 +79,7 @@ export const updatePost = async (
   console.log('title : ', title, '\n content:', content);
 };
 
-export const getPostListData = async (id: number): Promise<any> => {
+export const getPostListData = async (id: number) => {
   const res = await axios.get('boards/all', {
     params: {
       node_id: id,

@@ -66,20 +66,3 @@ export interface ErrorResponse {
   errorCode: string;
   errorMessage: string;
 }
-
-// PostData
-export interface PostData {
-  id: number;
-  title: string;
-  content: string;
-  updatedAt: string;
-}
-
-// UserPostData
-export interface UserPostData {
-  id: number;
-  title: string;
-  content: string;
-  updatedAt: string;
-  userNickname: string;
-}

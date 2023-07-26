@@ -5,6 +5,8 @@ import { ListModalProps } from '@/utils/types';
 import { getPostData } from '@/api/Post';
 import { Viewer } from '@toast-ui/react-editor';
 import ResizableModal from '@/components/ResizebleModal';
+import { usePostGetQuery } from '@/hooks/queries/board';
+import { error } from 'console';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
@@ -16,29 +18,22 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [time, setTime] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getPostData(isSelectedTable);
-        if (res) {
-          const datatimeString = res.updatedAt;
-          const [datePart, timePart] = datatimeString.split('T');
-          const timeString = timePart.split('.')[0];
-          setContent(res.content);
-          setName(res.userNickname);
-          setTitle(res.title);
-          console.log(res.content);
+  const { data: postData } = usePostGetQuery(isSelectedTable);
 
-          setDate(datePart);
-          setTime(timeString);
-          setIsLoading(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [isSelectedTable]);
+  useEffect(() => {
+    if (postData) {
+      const datatimeString = postData.updatedAt;
+      const [datePart, timePart] = datatimeString.split('T');
+      const timeString = timePart.split('.')[0];
+      setContent(postData.content);
+      setName(postData.userNickname);
+      setTitle(postData.title);
+
+      setDate(datePart);
+      setTime(timeString);
+      setIsLoading(true);
+    }
+  }, [isSelectedTable, postData]);
 
   const handleSelecteBoard = (id: number) => {
     setIsSelectedTable(id);

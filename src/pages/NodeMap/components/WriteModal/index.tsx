@@ -10,7 +10,7 @@ import ResizableModal from '@/components/ResizebleModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 import {
-  usePostGetQuery,
+  useUserPostGetQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
@@ -98,7 +98,7 @@ const WriteModal = ({
     setTitle(initTitle);
   };
 
-  const { data: postData } = usePostGetQuery(
+  const { data: postData } = useUserPostGetQuery(
     nodeInfo.id as number,
     isOpen,
     nodeInfo?.isActive,

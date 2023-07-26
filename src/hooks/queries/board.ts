@@ -1,15 +1,21 @@
 import { useQuery, useMutation } from 'react-query';
-import axios from '@/utils/baseAxios';
-import { PostData, UserPostData, ErrorResponse } from '@/utils/types';
-import { createPost, updatePost, deletePost, getPost } from '@/api/Post';
+import { ErrorResponse } from '@/utils/types';
+import {
+  createPost,
+  updatePost,
+  deletePost,
+  getPost,
+  getPostListData,
+  getPostData,
+} from '@/api/Post';
 import { AxiosError } from 'axios';
 
-export const usePostGetQuery = (
+export const useUserPostGetQuery = (
   id: number,
   isOpen: boolean,
   isActive: boolean,
 ) => {
-  return useQuery(['getPost', id], () => getPost(id), {
+  return useQuery(['userPost', id], () => getPost(id), {
     enabled: isOpen && isActive,
   });
 };
@@ -62,24 +68,10 @@ export const useUpdatePostMutation = (successAction: () => void) => {
   });
 };
 
-export const GetPostListData = (id: number) => {
-  return useQuery<PostData[], Error>(['postList', id], async () => {
-    const res = await axios.get('boards/all', {
-      params: {
-        node_id: id,
-      },
-    });
-    return res.data;
-  });
+export const usePostListGetQuery = (id: number) => {
+  return useQuery(['postList', id], () => getPostListData(id));
 };
 
-export const GetPostData = (id: number) => {
-  return useQuery<UserPostData, Error>(['postData', id], async () => {
-    if (id !== null) {
-      const res = await axios.get(`boards/${id}`);
-      return res.data;
-    } else {
-      throw new Error('Invalid ID');
-    }
-  });
+export const usePostGetQuery = (id: number) => {
+  return useQuery(['postData', id], () => getPostData(id));
 };

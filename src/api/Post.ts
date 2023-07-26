@@ -15,6 +15,7 @@ interface UserPostdata {
   userNickname: string;
 }
 
+/** 본인이 작성한 글 확인 */
 export const getPost = async (id: number): Promise<PostData> => {
   const res = await axios.get('boards', {
     params: {
@@ -89,6 +90,7 @@ export const getPostListData = async (id: number) => {
   return data;
 };
 
+/** 글 목록 중 하나 확인 */
 export const getPostData = async (id: number): Promise<UserPostdata> => {
   if (id !== null) {
     const res = await axios.get(`boards/${id}`);

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
-import { getPost } from '@/api/Post';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -11,7 +10,7 @@ import ResizableModal from '@/components/ResizebleModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 import {
-  GetPost,
+  usePostGetQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
@@ -99,34 +98,32 @@ const WriteModal = ({
     setTitle(initTitle);
   };
 
+  const { data: postData } = usePostGetQuery(
+    nodeInfo.id as number,
+    isOpen,
+    nodeInfo?.isActive,
+  );
+
   useEffect(() => {
+    setIsEditing(false);
     setIsLoading(true);
     setIsActive(nodeInfo.isActive);
 
     if (isOpen && nodeInfo?.isActive) {
-      const fetchData = async () => {
-        try {
-          const data = await getPost(nodeInfo.id as number);
-          const datatimeString = data.updatedAt;
-          const [datePart, timePart] = datatimeString.split('T');
-          const timeString = timePart.split('.')[0];
-          console.log(data);
+      if (postData) {
+        const datatimeString = postData.updatedAt;
+        const [datePart, timePart] = datatimeString.split('T');
+        const timeString = timePart.split('.')[0];
 
-          setTitle(data.title);
-          setContent(data.content);
-          setInitTitle(data.title);
-          setInitEditedContent(data.content);
-          setBoardId(data.id);
-          setDate(datePart);
-          setTime(timeString);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchData();
-      setIsEditing(false);
+        setTitle(postData.title);
+        setContent(postData.content);
+        setInitTitle(postData.title);
+        setInitEditedContent(postData.content);
+        setBoardId(postData.id);
+        setDate(datePart);
+        setTime(timeString);
+        setIsLoading(false);
+      }
     } else {
       initialize();
     }

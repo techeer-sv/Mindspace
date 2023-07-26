@@ -1,18 +1,16 @@
 import { useQuery, useMutation } from 'react-query';
 import axios from '@/utils/baseAxios';
 import { PostData, UserPostData, ErrorResponse } from '@/utils/types';
-import { createPost, updatePost, deletePost } from '@/api/Post';
+import { createPost, updatePost, deletePost, getPost } from '@/api/Post';
 import { AxiosError } from 'axios';
 
-// FIXME : enabled 사용해서 -> isOpen && nodeInfo?.isActive이 될 때만 호출하도록 하면 됨
-export const GetPost = (id: number) => {
-  return useQuery<PostData, Error>(['post', id], async () => {
-    const res = await axios.get('boards', {
-      params: {
-        node_id: id,
-      },
-    });
-    return res.data;
+export const usePostGetQuery = (
+  id: number,
+  isOpen: boolean,
+  isActive: boolean,
+) => {
+  return useQuery(['getPost', id], () => getPost(id), {
+    enabled: isOpen && isActive,
   });
 };
 

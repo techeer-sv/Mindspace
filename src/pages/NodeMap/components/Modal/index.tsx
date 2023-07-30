@@ -53,7 +53,7 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
           <span className={styles.content__title}>{selectedNodeInfo.name}</span>
           <div>
             <button onClick={openWriteModal} className={styles.content__button}>
-              {selectedNodeInfo.isActive ? '조회' : '작성'}
+              {selectedNodeInfo.isWritten ? '조회' : '작성'}
             </button>
             <button
               onClick={handleClickLIst}

@@ -1,33 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
-import { NodeObject, Node, Context } from '@/utils/types';
+import { NodeObject, Node, Context, GraphData } from '@/utils/types';
 import Navbar from '@/components/Navbar';
 import Loading from '@/components/Loading';
 import Modal from 'react-modal';
 import NodeModal from '@/pages/NodeMap/components/Modal';
-import { getNodeList } from '@/api/Node';
 import { useRecoilState } from 'recoil';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
-
+import { useNodeListQuery } from '@/hooks/queries/node';
 const NodeMap = () => {
   // eslint-disable-next-line
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [nodeData, setNodeData] = useState<GraphData>(null);
   const fgRef = useRef<any>();
-  const [nodeData, setNodeData] = useState(null);
   const nodeRelSize = 3;
   const nodeVal = 3;
 
   // modal
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   Modal.setAppElement('#root');
 
   // recoil
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
+  const { data, isLoading, status } = useNodeListQuery();
+
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
+    setNodeInfo({ id: node.id, isWritten: node.isWritten, name: node.name });
     setModalIsOpen(true);
-    setNodeInfo({ id: node.id, isActive: node.isActive, name: node.name });
   };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
@@ -98,27 +98,27 @@ const NodeMap = () => {
   };
 
   const nodeCanvasObject = (node: Node, ctx: Context) => {
-    node.connect_count = node.connect_count || 0;
+    node.connectCount = node.connectCount || 0;
     node.x = node.x || 0;
     node.y = node.y || 0;
     node.name = node.name || '';
 
-    const nodeSize = nodeVal * nodeRelSize * (node.connect_count * 0.2 + 1);
+    const nodeSize = nodeVal * nodeRelSize * (node.connectCount * 0.2 + 1);
 
-    if (node.isActive) {
+    if (node.isWritten) {
       ctx.fillStyle = 'yellow';
     } else {
       ctx.fillStyle = 'white';
     }
 
     switch (true) {
-      case node.connect_count <= 2:
+      case node.connectCount <= 2:
         drawStart(ctx, node, nodeSize);
         break;
-      case node.connect_count >= 3 && node.connect_count < 5:
+      case node.connectCount >= 3 && node.connectCount < 5:
         drawStart(ctx, node, nodeSize);
         break;
-      case node.connect_count >= 5:
+      case node.connectCount >= 5:
         drawCircle(ctx, node, nodeSize);
         break;
       default:
@@ -131,10 +131,10 @@ const NodeMap = () => {
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
 
-  const handleNodeInfoUpdate = (id: number | string, isActive: boolean) => {
+  const handleNodeInfoUpdate = (id: number | string, isWritten: boolean) => {
     const updatedNodeData = {
       nodes: nodeData.nodes.map((node: Node) =>
-        node.id === id ? { ...node, isActive: isActive } : node,
+        node.id === id ? { ...node, isWritten: isWritten } : node,
       ),
       links: nodeData.links,
     };
@@ -142,7 +142,9 @@ const NodeMap = () => {
   };
 
   useEffect(() => {
-    if (initialLoad && nodeData) {
+    if (status === 'success') {
+      setNodeData(data);
+
       setTimeout(() => {
         fgRef.current?.d3Force('charge').strength(-500).distanceMax(300);
         fgRef.current?.d3Force('link').distance(70);
@@ -151,49 +153,44 @@ const NodeMap = () => {
       setTimeout(() => {
         if (fgRef.current) {
           fgRef.current.zoomToFit(1000);
-          nodeData.nodes.forEach((node: Node) => {
+          data.nodes.forEach((node: Node) => {
             node.fx = node.x;
             node.fy = node.y;
           });
         }
-        setInitialLoad(false);
       }, 500);
     }
-  }, [nodeData, initialLoad]);
-
-  useEffect(() => {
-    const fetchNodeList = async () => {
-      setNodeData(await getNodeList());
-      setInitialLoad(true);
-    };
-    fetchNodeList();
-  }, []);
+  }, [data, status]);
 
   return (
     <div>
       <Navbar />
-      {nodeData ? (
-        <ForceGraph2D
-          ref={fgRef}
-          nodeRelSize={nodeRelSize}
-          nodeVal={nodeVal}
-          nodeCanvasObject={nodeCanvasObject}
-          onNodeClick={handleClick}
-          graphData={nodeData}
-          linkColor={() => 'white'}
-          enableNodeDrag={false}
-        />
-      ) : (
+      {isLoading ? (
         <Loading />
-      )}
-
-      {nodeInfo && (
+      ) : (
         <>
-          <NodeModal
-            isOpen={modalIsOpen}
-            onRequestClose={() => setModalIsOpen(false)}
-            updateNodeInfo={handleNodeInfoUpdate}
-          />
+          {nodeData && (
+            <ForceGraph2D
+              ref={fgRef}
+              nodeRelSize={nodeRelSize}
+              nodeVal={nodeVal}
+              nodeCanvasObject={nodeCanvasObject}
+              onNodeClick={handleClick}
+              graphData={nodeData}
+              linkColor={() => 'white'}
+              enableNodeDrag={false}
+            />
+          )}
+
+          {nodeInfo && (
+            <>
+              <NodeModal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                updateNodeInfo={handleNodeInfoUpdate}
+              />
+            </>
+          )}
         </>
       )}
     </div>

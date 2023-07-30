@@ -24,7 +24,7 @@ const WriteModal = ({
   const nodeInfo = useRecoilValue(nodeAtom);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isActive, setIsActive] = useState(nodeInfo.isActive);
+  const [isWritten, setIsWritten] = useState(nodeInfo.isWritten);
   const [initTitle, setInitTitle] = useState(title);
   const [initEditedContent, setInitEditedContent] = useState(content);
   const [isEditing, setIsEditing] = useState(true);
@@ -50,7 +50,7 @@ const WriteModal = ({
   const { mutate: createPostMutation } = useCreatePostMutation(() => {
     setDataIsLoading(false);
     setIsEditing(false);
-    setIsActive(true);
+    setIsWritten(true);
     updateNodeInfo(nodeInfo?.id, true);
   }, setCreatePostErrorMessage);
 
@@ -81,7 +81,7 @@ const WriteModal = ({
 
   const { mutate: deletePostMutation } = useDeletePostMutation(() => {
     updateNodeInfo(nodeInfo?.id, false);
-    setIsActive(false);
+    setIsWritten(false);
     onRequestClose();
   }, setDeletePostErrorMessage);
 
@@ -111,21 +111,20 @@ const WriteModal = ({
   const { data: postData, isLoading } = useUserPostGetQuery(
     nodeInfo.id as number,
     isOpen,
-    nodeInfo?.isActive,
+    nodeInfo?.isWritten,
   );
 
   useEffect(() => {
     setIsEditing(false);
-    setIsActive(nodeInfo.isActive);
+    setIsWritten(nodeInfo.isWritten);
 
-    if (isOpen && nodeInfo?.isActive) {
+    if (isOpen && nodeInfo?.isWritten) {
       if (isLoading) {
         alert('로딩중입니다. 잠시만 기다려주세요.');
       } else if (postData) {
         const datatimeString = postData.updatedAt;
         const [datePart, timePart] = datatimeString.split('T');
         const timeString = timePart.split('.')[0];
-
         setTitle(postData.title);
         setContent(postData.content);
         setInitTitle(postData.title);
@@ -141,7 +140,7 @@ const WriteModal = ({
 
   return (
     <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
-      {isActive ? (
+      {isWritten ? (
         <>
           <div className={styles.header}>
             <button className={styles.header__button} onClick={onRequestClose}>

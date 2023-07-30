@@ -92,6 +92,17 @@ const WriteModal = ({
     });
   };
 
+  useEffect(() => {
+    if (createPostErrorMessage) {
+      alert(createPostErrorMessage);
+      setCreatePostErrorMessage('');
+    }
+    if (deletePostErrorMessage) {
+      alert(deletePostErrorMessage);
+      setDeletePostErrorMessage('');
+    }
+  }, [createPostErrorMessage, deletePostErrorMessage]);
+
   const handleCancel = () => {
     setIsEditing(false);
     setContent(initEditedContent);

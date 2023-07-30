@@ -1,29 +1,13 @@
 import axios from '@/utils/baseAxios';
 
-interface PostData {
-  id: number;
-  title: string;
-  content: string;
-  updatedAt: string;
-}
-
-interface UserPostdata {
-  id: number;
-  title: string;
-  content: string;
-  updatedAt: string;
-  userNickname: string;
-}
-
 /** 본인이 작성한 글 확인 */
-export const getPost = async (id: number): Promise<PostData> => {
+export const getPost = async (id: number) => {
   const res = await axios.get('boards', {
     params: {
       node_id: id,
     },
   });
   const data = res.data;
-  console.log('id:', id, '값에 대한 글 정보 api 요청');
   return data;
 };
 
@@ -37,7 +21,6 @@ export const deletePost = async ({ id }: DeletePostParams) => {
       node_id: id,
     },
   });
-  console.log('id:', id, '글쓰기 삭제 api 요청');
 };
 
 interface PostParams {
@@ -59,8 +42,6 @@ export const createPost = async ({ id, title, content }: PostParams) => {
       },
     },
   );
-  console.log('id:', id, '글쓰기 api 요청');
-  console.log('title : ', title, '\n content:', content);
 };
 
 export const updatePost = async ({ id, title, content }: PostParams) => {
@@ -76,8 +57,6 @@ export const updatePost = async ({ id, title, content }: PostParams) => {
       },
     },
   );
-  console.log('글수정 api 요청');
-  console.log('title : ', title, '\n content:', content);
 };
 
 export const getPostListData = async (id: number) => {
@@ -91,7 +70,7 @@ export const getPostListData = async (id: number) => {
 };
 
 /** 글 목록 중 하나 확인 */
-export const getPostData = async (id: number): Promise<UserPostdata> => {
+export const getPostData = async (id: number) => {
   if (id !== null) {
     const res = await axios.get(`boards/${id}`);
     const data = res.data;

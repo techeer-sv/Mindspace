@@ -28,7 +28,7 @@ const WriteModal = ({
   const [initTitle, setInitTitle] = useState(title);
   const [initEditedContent, setInitEditedContent] = useState(content);
   const [isEditing, setIsEditing] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataIsLoading, setDataIsLoading] = useState(true);
   const [boardId, setBoardId] = useState(0);
   const editorRef = React.useRef(null);
   const [date, setDate] = useState('');
@@ -44,12 +44,11 @@ const WriteModal = ({
     setContent(editorRef.current.getInstance().getMarkdown());
   };
 
-  // TODO : 에러 메세지 처리
   const [createPostErrorMessage, setCreatePostErrorMessage] =
     useState<string>('');
 
   const { mutate: createPostMutation } = useCreatePostMutation(() => {
-    setIsLoading(false);
+    setDataIsLoading(false);
     setIsEditing(false);
     setIsActive(true);
     updateNodeInfo(nodeInfo?.id, true);
@@ -109,7 +108,7 @@ const WriteModal = ({
     setTitle(initTitle);
   };
 
-  const { data: postData } = useUserPostGetQuery(
+  const { data: postData, isLoading } = useUserPostGetQuery(
     nodeInfo.id as number,
     isOpen,
     nodeInfo?.isActive,
@@ -117,11 +116,12 @@ const WriteModal = ({
 
   useEffect(() => {
     setIsEditing(false);
-    setIsLoading(true);
     setIsActive(nodeInfo.isActive);
 
     if (isOpen && nodeInfo?.isActive) {
-      if (postData) {
+      if (isLoading) {
+        alert('로딩중입니다. 잠시만 기다려주세요.');
+      } else if (postData) {
         const datatimeString = postData.updatedAt;
         const [datePart, timePart] = datatimeString.split('T');
         const timeString = timePart.split('.')[0];
@@ -133,12 +133,11 @@ const WriteModal = ({
         setBoardId(postData.id);
         setDate(datePart);
         setTime(timeString);
-        setIsLoading(false);
       }
     } else {
       initialize();
     }
-  }, [boardId, isOpen, nodeInfo]);
+  }, [boardId, isOpen, nodeInfo, isLoading]);
 
   return (
     <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -213,7 +212,7 @@ const WriteModal = ({
                     ref={editorRef}
                   />
                 ) : (
-                  !isLoading && (
+                  !dataIsLoading && (
                     <div className={styles.content__viewer}>
                       <Viewer initialValue={content} usageStatistics={false} />
                     </div>

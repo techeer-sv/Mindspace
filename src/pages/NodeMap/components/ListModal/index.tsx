@@ -14,24 +14,28 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [content, setContent] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [dataIsLoading, setDataIsLoading] = useState(false);
 
-  const { data: postData } = usePostGetQuery(isSelectedTable);
+  const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
 
   useEffect(() => {
     if (postData) {
-      const datatimeString = postData.updatedAt;
-      const [datePart, timePart] = datatimeString.split('T');
-      const timeString = timePart.split('.')[0];
-      setContent(postData.content);
-      setName(postData.userNickname);
-      setTitle(postData.title);
+      if (isLoading) {
+        alert('로딩중입니다. 잠시만 기다려주세요.');
+      } else {
+        const datatimeString = postData.updatedAt;
+        const [datePart, timePart] = datatimeString.split('T');
+        const timeString = timePart.split('.')[0];
+        setContent(postData.content);
+        setName(postData.userNickname);
+        setTitle(postData.title);
 
-      setDate(datePart);
-      setTime(timeString);
-      setIsLoading(true);
+        setDate(datePart);
+        setTime(timeString);
+        setDataIsLoading(true);
+      }
     }
-  }, [isSelectedTable, postData]);
+  }, [isSelectedTable, postData, isLoading]);
 
   const handleSelecteBoard = (id: number) => {
     setIsSelectedTable(id);
@@ -50,12 +54,12 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           <PostTable OnClickedId={handleSelecteBoard} />
         </>
       ) : (
-        isLoading && (
+        dataIsLoading && (
           <>
             <button
               className={styles.header__button}
               onClick={() => {
-                setIsLoading(false);
+                setDataIsLoading(false);
                 setIsSelectedTable(null);
               }}
             >

@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
-import { createPost, getPost, updatePost, deletePost } from '@/api/Post';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -9,6 +9,12 @@ import { WriteModalProps } from '@/utils/types';
 import ResizableModal from '@/components/ResizebleModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
+import {
+  useUserPostGetQuery,
+  useCreatePostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} from '@/hooks/queries/board';
 
 const WriteModal = ({
   isOpen,
@@ -22,8 +28,11 @@ const WriteModal = ({
   const [initTitle, setInitTitle] = useState(title);
   const [initEditedContent, setInitEditedContent] = useState(content);
   const [isEditing, setIsEditing] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataIsLoading, setDataIsLoading] = useState(true);
+  const [boardId, setBoardId] = useState(0);
   const editorRef = React.useRef(null);
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
 
   const initialize = () => {
     setTitle('');
@@ -35,27 +44,63 @@ const WriteModal = ({
     setContent(editorRef.current.getInstance().getMarkdown());
   };
 
-  const handleFirstWrite = async () => {
-    await createPost(nodeInfo.id as number, title, content);
+  const [createPostErrorMessage, setCreatePostErrorMessage] =
+    useState<string>('');
+
+  const { mutate: createPostMutation } = useCreatePostMutation(() => {
+    setDataIsLoading(false);
     setIsEditing(false);
     setIsWritten(true);
     updateNodeInfo(nodeInfo?.id, true);
-    setIsLoading(false);
+  }, setCreatePostErrorMessage);
+
+  const handleFirstWrite = () => {
+    createPostMutation({
+      id: nodeInfo.id as number,
+      title: title,
+      content: content,
+    });
   };
 
-  const handleSubmit = async () => {
-    await updatePost(nodeInfo.id as number, title, content);
+  const { mutate: updatePostMutation } = useUpdatePostMutation(() => {
     setInitTitle(title);
     setInitEditedContent(content);
     setIsEditing(false);
+  });
+
+  const handleSubmit = () => {
+    updatePostMutation({
+      id: nodeInfo.id as number,
+      title: title,
+      content: content,
+    });
   };
 
-  const handleDelete = async () => {
-    await deletePost(nodeInfo.id as number);
+  const [deletePostErrorMessage, setDeletePostErrorMessage] =
+    useState<string>('');
+
+  const { mutate: deletePostMutation } = useDeletePostMutation(() => {
     updateNodeInfo(nodeInfo?.id, false);
     setIsWritten(false);
     onRequestClose();
+  }, setDeletePostErrorMessage);
+
+  const handleDelete = () => {
+    deletePostMutation({
+      id: nodeInfo.id as number,
+    });
   };
+
+  useEffect(() => {
+    if (createPostErrorMessage) {
+      alert(createPostErrorMessage);
+      setCreatePostErrorMessage('');
+    }
+    if (deletePostErrorMessage) {
+      alert(deletePostErrorMessage);
+      setDeletePostErrorMessage('');
+    }
+  }, [createPostErrorMessage, deletePostErrorMessage]);
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -63,28 +108,35 @@ const WriteModal = ({
     setTitle(initTitle);
   };
 
+  const { data: postData, isLoading } = useUserPostGetQuery(
+    nodeInfo.id as number,
+    isOpen,
+    nodeInfo?.isWritten,
+  );
+
   useEffect(() => {
-    setIsLoading(true);
+    setIsEditing(false);
     setIsWritten(nodeInfo.isWritten);
 
     if (isOpen && nodeInfo?.isWritten) {
-      const fetchData = async () => {
-        const data = await getPost(nodeInfo.id as number);
-
-        setTitle(data.title);
-        setContent(data.content);
-        setInitTitle(data.title);
-        setInitEditedContent(data.content);
-
-        setIsLoading(false);
-      };
-
-      fetchData();
-      setIsEditing(false);
+      if (isLoading) {
+        alert('로딩중입니다. 잠시만 기다려주세요.');
+      } else if (postData) {
+        const datatimeString = postData.updatedAt;
+        const [datePart, timePart] = datatimeString.split('T');
+        const timeString = timePart.split('.')[0];
+        setTitle(postData.title);
+        setContent(postData.content);
+        setInitTitle(postData.title);
+        setInitEditedContent(postData.content);
+        setBoardId(postData.id);
+        setDate(datePart);
+        setTime(timeString);
+      }
     } else {
       initialize();
     }
-  }, [isOpen, nodeInfo]);
+  }, [boardId, isOpen, nodeInfo, isLoading]);
 
   return (
     <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -137,6 +189,12 @@ const WriteModal = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
+              {!isEditing && (
+                <div className={styles.content__dateTime}>
+                  <span className={styles.content__date}>{date}</span>
+                  <span className={styles.content__time}>{time}</span>
+                </div>
+              )}
             </div>
             <div className={styles.content__editor}>
               <div
@@ -153,7 +211,7 @@ const WriteModal = ({
                     ref={editorRef}
                   />
                 ) : (
-                  !isLoading && (
+                  !dataIsLoading && (
                     <div className={styles.content__viewer}>
                       <Viewer initialValue={content} usageStatistics={false} />
                     </div>

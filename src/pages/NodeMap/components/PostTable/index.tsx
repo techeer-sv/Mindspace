@@ -3,9 +3,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { CellClickedEvent } from 'ag-grid-community';
 import { useEffect, useState } from 'react';
-import { getPostListData } from '@/api/Post';
 import { useRecoilValue } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
+import { nodeAtom } from '@/recoil/state/nodeAtom';
+import { usePostListGetQuery } from '@/hooks/queries/board';
 
 interface PostTableProps {
   OnClickedId: (id: number) => void;
@@ -13,18 +14,18 @@ interface PostTableProps {
 
 function PostTable({ OnClickedId }: PostTableProps) {
   const [rowData, setRowData] = useState([]);
+  const selectedNodeInfo = useRecoilValue(nodeAtom);
+
+  const { data: postListData } = usePostListGetQuery(selectedNodeInfo.id);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await getPostListData();
-      setRowData(res.data);
-    };
-    fetchData();
-  }, []);
+    setRowData(postListData);
+  }, [postListData, selectedNodeInfo.id]);
 
   const [columnDefs] = useState([
     { field: 'title' },
-    { field: 'name' },
-    { field: 'date' },
+    { field: 'userNickname' },
+    { field: 'updatedAt' },
   ]);
 
   const onRowDataClicked = (params: CellClickedEvent) => {

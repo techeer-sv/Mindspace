@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQueryClient, useQuery, useMutation } from 'react-query';
 import { getUserNickname, createUser, getAccessToken } from '@/api/Auth';
-import { KEY } from '@/utils/constants';
+import { KEY } from '@/asset/constants';
 import { AxiosError } from 'axios';
 import { ErrorResponse } from '@/utils/types';
 

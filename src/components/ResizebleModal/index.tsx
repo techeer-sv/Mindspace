@@ -4,7 +4,7 @@ import styles from './ResizebleModal.module.scss';
 import { ResizableModalProps } from '@/utils/types';
 import { useRecoilState } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
-import { NAVBAR_HEIGHT } from '@/utils/constants';
+import { NAVBAR_HEIGHT } from '@/asset/constants';
 
 const ResizableModal = ({
   isOpen,

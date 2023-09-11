@@ -67,6 +67,9 @@ devDependencies:
   jest:
     specifier: ^29.5.0
     version: 29.5.0(@types/node@20.3.1)(ts-node@10.9.1)
+  nest-neo4j:
+    specifier: ^0.3.1
+    version: 0.3.1
   pg:
     specifier: ^8.11.3
     version: 8.11.3
@@ -1851,7 +1854,6 @@ packages:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-    dev: false
 
   /busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -3896,6 +3898,32 @@ packages:
 
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+    dev: true
+
+  /neo4j-driver-bolt-connection@5.12.0:
+    resolution: {integrity: sha512-dlYbFsfT0HopGItitG5uDK4nAkcqSPNtRqMz318qy//7fb/7OXVLGYikj57Ve1toJiJD8IIVErt/dVuEUHVxGA==}
+    dependencies:
+      buffer: 6.0.3
+      neo4j-driver-core: 5.12.0
+      string_decoder: 1.3.0
+    dev: true
+
+  /neo4j-driver-core@5.12.0:
+    resolution: {integrity: sha512-xBRi5oezysDUvtvBiIgBchzumkDZxvR9ol9sUtA9PBgVENeSmPH3CncitY8S979CFELS6wH7kydcjPLB4QMOzA==}
+    dev: true
+
+  /neo4j-driver@5.12.0:
+    resolution: {integrity: sha512-T2Vz63XDkL9TomM16dBusuXbo7d9SIGw2g3VR/rmrWTdbl1V1LYFx/u1P7AwBsFuX08oncKHfZwHGsWrCvdMyA==}
+    dependencies:
+      neo4j-driver-bolt-connection: 5.12.0
+      neo4j-driver-core: 5.12.0
+      rxjs: 7.8.1
+    dev: true
+
+  /nest-neo4j@0.3.1:
+    resolution: {integrity: sha512-Anp2Qmn8tledjzgU+R76Pw9eTmRYtwwTuqknWWgGNfBnd2VdRDQRaVEscTmoLM6KNkd0W10NU1hie4CWwZ2qTg==}
+    dependencies:
+      neo4j-driver: 5.12.0
     dev: true
 
   /node-abort-controller@3.1.1:

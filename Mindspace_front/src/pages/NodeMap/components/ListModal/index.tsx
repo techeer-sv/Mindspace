@@ -76,21 +76,18 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                     >
                       {title}
                     </span>
-                    <div
-                      className={
-                        styles.post__content__wrapper__header__text__nickname
-                      }
-                    >
-                      <span>{name}</span>
-                    </div>
                   </div>
-                  <div className={styles.post__content__wrapper__dateTime}>
+                  <div className={styles.post__content__wrapper__info}>
                     <span
-                      className={styles.post__content__wrapper__dateTime__date}
+                      className={styles.post__content__wrapper__info__name}
+                    >
+                      {name}
+                    </span>
+                    <span
+                        className={styles.post__content__wrapper__info__date}
                     >
                       {date}
                     </span>
-                    <span>{time}</span>
                   </div>
                 </div>
                 <div className={styles.post__viewer}>

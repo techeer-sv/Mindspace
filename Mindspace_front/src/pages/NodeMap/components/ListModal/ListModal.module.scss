@@ -19,11 +19,14 @@
   }
 
   &__content {
-    padding: 0 1rem 0 1rem;
+    padding: 2rem 2rem 0 2rem;
     display: flex;
 
-    height: 90%;
+    height: 80%;
     background-color: white;
+    border-radius: 10px;
+    margin: 0 auto;
+    width: 90%;
 
     &__wrapper {
       display: flex;
@@ -39,35 +42,29 @@
           flex-direction: column;
           margin: 1%;
 
-          &__nickname {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 4rem;
-            height: 1.8rem;
-            margin-top: 3%;
-            border-radius: 1rem;
-            border: none;
-            background-color: #a6a6c8;
-          }
-
           &__title {
             font-size: 1.7rem;
           }
         }
       }
 
-      &__dateTime {
+      &__info {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 2rem 0 0 auto;
+        margin: 1rem 0 0 auto;
         height: 1rem;
         width: 8rem;
 
         &__date {
-          margin-right: 3%;
+          margin-right: 0;
+          align-self: flex-end;
+        }
+
+        &__name {
+          margin-right: 0;
+          align-self: flex-end;
         }
       }
 

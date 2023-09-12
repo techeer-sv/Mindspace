@@ -30,16 +30,16 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
         onRequestClose={onRequestClose}
         style={{
           overlay: {
-            backgroundColor: 'rgba(166, 166, 200, 0.2)',
+            backgroundColor: 'rgba(166, 166, 200, 0.17)',
           },
           content: {
             position: 'fixed',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            background: 'rgba(166, 166, 200, 0.6)',
+            background: 'rgba(255, 255, 255, 0.3)',
             borderRadius: '1rem',
-            border: 'none',
+            border: '1px solid white',
             width: '50%',
             maxWidth: '40rem',
             height: '20rem',

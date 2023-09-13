@@ -1,0 +1,5 @@
+# env
+.env
+
+# neo4j data
+neo4j

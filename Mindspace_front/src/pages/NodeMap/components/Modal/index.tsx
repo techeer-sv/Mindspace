@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './Modal.module.scss';
-import Modal from 'react-modal';
+import CustomModal from '@/components/CustomModal';
 import WriteModal from '@/pages/NodeMap/components/WriteModal';
 import { ModalProps } from '@/utils/types';
 import ListModal from '../ListModal';
@@ -25,26 +25,11 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
 
   return (
     <>
-      <Modal
+      <CustomModal
         isOpen={isOpen}
         onRequestClose={onRequestClose}
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(166, 166, 200, 0.17)',
-          },
-          content: {
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            background: 'rgba(255, 255, 255, 0.3)',
-            borderRadius: '1rem',
-            border: '1px solid white',
-            width: '50%',
-            maxWidth: '40rem',
-            height: '20rem',
-          },
-        }}
+        width="50%"
+        height="20rem"
       >
         <button className={styles.header__button} onClick={onRequestClose}>
           <span className={styles.header__span}>x</span>
@@ -63,7 +48,7 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
             </button>
           </div>
         </div>
-      </Modal>
+      </CustomModal>
       <WriteModal
         isOpen={writeModalIsOpen}
         updateNodeInfo={updateNodeInfo}

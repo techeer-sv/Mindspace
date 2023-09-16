@@ -4,7 +4,7 @@ import { UserMapper } from './dto/user.mapper';
 import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { Response } from 'express';
-import {ApiOperation, ApiTags} from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
 @Controller('api/v1/user')

@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '@/utils/types';
 import {
   createPost,
@@ -24,8 +24,11 @@ export const useDeletePostMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation(deletePost, {
     onSuccess: () => {
+      queryClient.invalidateQueries(['userPost']);
       successAction();
     },
     onError: (error: AxiosError<ErrorResponse>) => {
@@ -42,8 +45,11 @@ export const useCreatePostMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation(createPost, {
     onSuccess: () => {
+      queryClient.invalidateQueries(['userPost']);
       successAction();
     },
     onError: (error: AxiosError<ErrorResponse>) => {
@@ -61,8 +67,11 @@ export const useCreatePostMutation = (
 };
 
 export const useUpdatePostMutation = (successAction: () => void) => {
+  const queryClient = useQueryClient();
+
   return useMutation(updatePost, {
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries(['userPost', variables.id]);
       successAction();
     },
   });

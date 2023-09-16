@@ -139,6 +139,7 @@ const NodeMap = () => {
       links: nodeData.links,
     };
     setNodeData(updatedNodeData);
+    setNodeInfo({ ...nodeInfo, isWritten: isWritten });
   };
 
   useEffect(() => {

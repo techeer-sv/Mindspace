@@ -61,7 +61,7 @@ export interface WriteModalProps {
   updateNodeInfo: (id: number | string, isWritten: boolean) => void;
 }
 
-interface BoardResponseDto {
+export interface BoardResponseDto {
   id: number;
   userNickname: string;
   title: string;

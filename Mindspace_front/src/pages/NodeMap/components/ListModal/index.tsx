@@ -40,7 +40,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           >
             <span className={styles.header__span}>x</span>
           </button>
-          <PostTable OnClickedId={handleSelecteBoard} />
+          <PostTable onClickedId={handleSelecteBoard} />
         </>
       ) : (
         !isLoading && (

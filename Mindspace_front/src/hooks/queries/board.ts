@@ -17,6 +17,7 @@ export const useUserPostGetQuery = (
 ) => {
   return useQuery(['userPost', id], () => getPost(id), {
     enabled: isOpen && isActive,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -24,11 +25,8 @@ export const useDeletePostMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
-  const queryClient = useQueryClient();
-
   return useMutation(deletePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['userPost']);
       successAction();
     },
     onError: (error: AxiosError<ErrorResponse>) => {

@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { useDeletePostMutation } from '@/hooks/queries/board';
 
 import { ViewEditProps } from '@/utils/types';
+import { formatDateTime, DateTimeFormat } from '@/utils/dateTime';
 
 const ReadViewer = ({
   nodeData,
@@ -20,20 +21,6 @@ const ReadViewer = ({
 }: ViewEditProps) => {
   const nodeInfo = useRecoilValue(nodeAtom);
   const viewerRef = useRef(null);
-
-  const datatimeString = nodeData.updatedAt;
-  const date = new Date(datatimeString);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  const datePart = `${year}-${month}-${day}`;
-  const timePart = `${hours}:${minutes}:${seconds}`;
 
   const [createPostErrorMessage, setCreatePostErrorMessage] =
     useState<string>('');
@@ -90,8 +77,12 @@ const ReadViewer = ({
           <input disabled={false} type="text" value={nodeData.title} />
 
           <div className={styles.content__dateTime}>
-            <span className={styles.content__date}>{datePart}</span>
-            <span className={styles.content__time}>{timePart}</span>
+            <span className={styles.content__date}>
+              {formatDateTime(nodeData.updatedAt, DateTimeFormat.Date)}
+            </span>
+            <span className={styles.content__time}>
+              {formatDateTime(nodeData.updatedAt, DateTimeFormat.Time)}
+            </span>
           </div>
         </div>
         <div className={styles.content__editor}>

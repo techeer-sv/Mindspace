@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PostTable from '../PostTable';
 import styles from './ListModal.module.scss';
 import { ListModalProps } from '@/utils/types';
@@ -6,40 +6,22 @@ import { Viewer } from '@toast-ui/react-editor';
 import CustomModal from '@/components/CustomModal';
 import { usePostGetQuery } from '@/hooks/queries/board';
 
+import { formatDateTime, DateTimeFormat } from '@/utils/dateTime';
+
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
-
-  const [name, setName] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [dataIsLoading, setDataIsLoading] = useState(false);
-
+  const viewerRef = useRef(null);
   const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
-
-  useEffect(() => {
-    if (postData) {
-      if (isLoading) {
-        alert('로딩중입니다. 잠시만 기다려주세요.');
-      } else {
-        const datatimeString = postData.updatedAt;
-        const [datePart, timePart] = datatimeString.split('T');
-        const timeString = timePart.split('.')[0];
-        setContent(postData.content);
-        setName(postData.userNickname);
-        setTitle(postData.title);
-
-        setDate(datePart);
-        setTime(timeString);
-        setDataIsLoading(true);
-      }
-    }
-  }, [isSelectedTable, postData, isLoading]);
 
   const handleSelecteBoard = (id: number) => {
     setIsSelectedTable(id);
   };
+
+  useEffect(() => {
+    if (viewerRef.current) {
+      viewerRef.current.getInstance().setMarkdown(postData?.content);
+    }
+  }, [postData?.content]);
 
   return (
     <CustomModal
@@ -61,12 +43,11 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           <PostTable OnClickedId={handleSelecteBoard} />
         </>
       ) : (
-        dataIsLoading && (
+        !isLoading && (
           <>
             <button
               className={styles.header__button}
               onClick={() => {
-                setDataIsLoading(false);
                 setIsSelectedTable(null);
               }}
             >
@@ -81,20 +62,24 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                         styles.post__content__wrapper__header__text__title
                       }
                     >
-                      {title}
+                      {postData?.title}
                     </span>
                   </div>
                   <div className={styles.post__content__wrapper__info}>
                     <span className={styles.post__content__wrapper__info__name}>
-                      {name}
+                      {postData.userNickname}
                     </span>
                     <span className={styles.post__content__wrapper__info__date}>
-                      {date}
+                      {formatDateTime(postData.updatedAt, DateTimeFormat.Date)}
                     </span>
                   </div>
                 </div>
                 <div className={styles.post__viewer}>
-                  <Viewer initialValue={content} usageStatistics={false} />
+                  <Viewer
+                    ref={viewerRef}
+                    initialValue={postData?.content}
+                    usageStatistics={false}
+                  />
                 </div>
               </div>
             </div>

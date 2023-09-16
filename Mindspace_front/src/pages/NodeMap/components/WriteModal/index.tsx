@@ -48,6 +48,12 @@ const WriteModal = ({
     onRequestClose();
   };
 
+  const commonProps = {
+    onClose: handleClose,
+    onEditToggle: () => setIsEditing((prevState) => !prevState),
+    updateNodeInfo: updateNodeInfo,
+  };
+
   return (
     <CustomModal
       isOpen={isOpen}
@@ -57,31 +63,15 @@ const WriteModal = ({
         padding: '1rem',
       }}
     >
-      {!nodeInfo?.isWritten ? (
-        <WriteEditor
-          onClose={handleClose}
-          onEditToggle={() => setIsEditing((prevState) => !prevState)}
-          updateNodeInfo={updateNodeInfo}
-        />
-      ) : isEditing ? (
-        !isLoading && (
+      {!isLoading &&
+        (nodeInfo?.isWritten && !isEditing ? (
+          <ReadViewer nodeData={postData} {...commonProps} />
+        ) : (
           <WriteEditor
-            nodeData={postData}
-            onClose={handleClose}
-            onEditToggle={() => setIsEditing((prevState) => !prevState)}
-            updateNodeInfo={updateNodeInfo}
+            nodeData={isEditing ? postData : undefined}
+            {...commonProps}
           />
-        )
-      ) : (
-        !isLoading && (
-          <ReadViewer
-            nodeData={postData}
-            onClose={handleClose}
-            onEditToggle={() => setIsEditing((prevState) => !prevState)}
-            updateNodeInfo={updateNodeInfo}
-          />
-        )
-      )}
+        ))}
     </CustomModal>
   );
 };

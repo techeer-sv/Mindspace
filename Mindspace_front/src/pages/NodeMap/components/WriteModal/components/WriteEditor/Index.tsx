@@ -55,6 +55,13 @@ const WriteEditor = ({
     }
   };
 
+  useEffect(() => {
+    if (createPostErrorMessage) {
+      alert(createPostErrorMessage);
+      setCreatePostErrorMessage('');
+    }
+  }, [createPostErrorMessage]);
+
   return (
     <>
       <div className={styles.header}>

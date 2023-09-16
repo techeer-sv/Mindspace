@@ -3,7 +3,7 @@ import PostTable from '../PostTable';
 import styles from './ListModal.module.scss';
 import { ListModalProps } from '@/utils/types';
 import { Viewer } from '@toast-ui/react-editor';
-import ResizableModal from '@/components/ResizebleModal';
+import CustomModal from '@/components/CustomModal';
 import { usePostGetQuery } from '@/hooks/queries/board';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
@@ -42,7 +42,14 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   };
 
   return (
-    <ResizableModal isOpen={listModalOpen} onRequestClose={onListRequestClose}>
+    <CustomModal
+      isOpen={listModalOpen}
+      onRequestClose={onListRequestClose}
+      resizable
+      style={{
+        padding: '1rem',
+      }}
+    >
       {!isSelectedTable ? (
         <>
           <button
@@ -76,21 +83,14 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                     >
                       {title}
                     </span>
-                    <div
-                      className={
-                        styles.post__content__wrapper__header__text__nickname
-                      }
-                    >
-                      <span>{name}</span>
-                    </div>
                   </div>
-                  <div className={styles.post__content__wrapper__dateTime}>
-                    <span
-                      className={styles.post__content__wrapper__dateTime__date}
-                    >
+                  <div className={styles.post__content__wrapper__info}>
+                    <span className={styles.post__content__wrapper__info__name}>
+                      {name}
+                    </span>
+                    <span className={styles.post__content__wrapper__info__date}>
                       {date}
                     </span>
-                    <span>{time}</span>
                   </div>
                 </div>
                 <div className={styles.post__viewer}>
@@ -101,7 +101,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           </>
         )
       )}
-    </ResizableModal>
+    </CustomModal>
   );
 }
 

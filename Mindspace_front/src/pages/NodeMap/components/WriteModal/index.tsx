@@ -6,7 +6,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './WriteModal.module.scss';
 import { WriteModalProps } from '@/utils/types';
-import ResizableModal from '@/components/ResizebleModal';
+import CustomModal from '@/components/CustomModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 import {
@@ -139,7 +139,14 @@ const WriteModal = ({
   }, [boardId, isOpen, nodeInfo, isLoading]);
 
   return (
-    <ResizableModal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <CustomModal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      resizable
+      style={{
+        padding: '1rem',
+      }}
+    >
       {isWritten ? (
         <>
           <div className={styles.header}>
@@ -264,7 +271,7 @@ const WriteModal = ({
           </div>
         </>
       )}
-    </ResizableModal>
+    </CustomModal>
   );
 };
 

@@ -39,9 +39,11 @@ function PostTable({ OnClickedId }: PostTableProps) {
     <div
       className="ag-theme-alpine"
       style={{
-        width: modalWidth,
+        width: modalWidth - 70,
         height: modalHeight - 70,
         margin: 'auto auto',
+        borderRadius: '10px',
+        overflow: 'hidden',
       }}
     >
       <AgGridReact

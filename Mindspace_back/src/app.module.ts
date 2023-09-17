@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Neo4jModule } from 'nest-neo4j';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { Neo4jModule } from 'nest-neo4j';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [],
+      entities: [User],
       synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({
@@ -26,6 +28,7 @@ import { Neo4jModule } from 'nest-neo4j';
       username: process.env.NEO4J_USERNAME,
       password: process.env.NEO4J_PASSWORD,
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],

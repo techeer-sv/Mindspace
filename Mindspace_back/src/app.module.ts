@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Neo4jModule } from 'nest-neo4j';
 import { Node } from './node/entities/node.entity'; 
+import { NodeModule } from './node/node.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Node } from './node/entities/node.entity';
       username: process.env.NEO4J_USERNAME,
       password: process.env.NEO4J_PASSWORD,
     }),
+    NodeModule,
   ],
   controllers: [],
   providers: [],

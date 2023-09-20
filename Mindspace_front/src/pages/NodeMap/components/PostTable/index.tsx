@@ -2,25 +2,29 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { CellClickedEvent } from 'ag-grid-community';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { usePostListGetQuery } from '@/hooks/queries/board';
 
+import { formatDateTime, DateTimeFormat } from '@/utils/dateTime';
+import { BoardResponseDto } from '@/utils/types';
 interface PostTableProps {
-  OnClickedId: (id: number) => void;
+  onClickedId: (id: number) => void;
 }
 
-function PostTable({ OnClickedId }: PostTableProps) {
-  const [rowData, setRowData] = useState([]);
+function PostTable({ onClickedId }: PostTableProps) {
   const selectedNodeInfo = useRecoilValue(nodeAtom);
 
   const { data: postListData } = usePostListGetQuery(selectedNodeInfo.id);
 
-  useEffect(() => {
-    setRowData(postListData);
-  }, [postListData, selectedNodeInfo.id]);
+  const formatPostListData = (dataList: BoardResponseDto[]) => {
+    return dataList?.map((data: BoardResponseDto) => ({
+      ...data,
+      updatedAt: formatDateTime(data.updatedAt, DateTimeFormat.Date),
+    }));
+  };
 
   const [columnDefs] = useState([
     { field: 'title' },
@@ -29,7 +33,7 @@ function PostTable({ OnClickedId }: PostTableProps) {
   ]);
 
   const onRowDataClicked = (params: CellClickedEvent) => {
-    OnClickedId(params.data.id);
+    onClickedId(params.data.id);
   };
 
   const modalWidth = useRecoilValue(ModalWidthAtom);
@@ -47,7 +51,7 @@ function PostTable({ OnClickedId }: PostTableProps) {
       }}
     >
       <AgGridReact
-        rowData={rowData}
+        rowData={formatPostListData(postListData)}
         columnDefs={columnDefs}
         defaultColDef={{
           sortable: true,
@@ -56,7 +60,7 @@ function PostTable({ OnClickedId }: PostTableProps) {
           flex: 1,
         }}
         onCellClicked={onRowDataClicked}
-      ></AgGridReact>
+      />
     </div>
   );
 }

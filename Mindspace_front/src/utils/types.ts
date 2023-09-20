@@ -61,6 +61,22 @@ export interface WriteModalProps {
   updateNodeInfo: (id: number | string, isWritten: boolean) => void;
 }
 
+export interface BoardResponseDto {
+  id: number;
+  userNickname: string;
+  title: string;
+  content: string;
+  updatedAt: string;
+}
+
+// WriteEditor || ReadViwer
+export interface ViewEditProps {
+  nodeData?: BoardResponseDto;
+  onClose: () => void;
+  onEditToggle: () => void;
+  updateNodeInfo: (id: number | undefined, isWritten: boolean) => void;
+}
+
 // ListModal
 export interface ListModalProps {
   listModalOpen: boolean;

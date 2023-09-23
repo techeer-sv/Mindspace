@@ -17,71 +17,97 @@
     font-size: 1.5rem;
     color: white;
   }
-
-  &__content {
-    padding: 2rem 2rem 0 2rem;
+  &__wrapper{
     display: flex;
+    width: 100%;
+    height: 90%;
 
-    height: 80%;
-    background-color: white;
-    border-radius: 10px;
-    margin: 0 auto;
-    width: 90%;
-
-    &__wrapper {
+    &__content {
+      padding: 2rem 2rem 0 2rem;
       display: flex;
-      flex-direction: column;
+      flex: 2;
+
+      background-color: white;
+      border-radius: 10px;
+      margin: 0 auto;
       width: 100%;
 
-      &__header {
+      &__wrapper {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+        width: 100%;
 
-        &__text {
+        &__header {
+          display: flex;
+          flex-direction: row;
+
+          &__text {
+            display: flex;
+            flex-direction: column;
+            margin: 1%;
+
+            &__title {
+              font-size: 1.7rem;
+            }
+          }
+        }
+
+        &__info {
           display: flex;
           flex-direction: column;
-          margin: 1%;
+          justify-content: center;
+          align-items: center;
+          margin: 0 0 0 auto;
+          height: 1rem;
+          width: 8rem;
 
-          &__title {
-            font-size: 1.7rem;
+          &__button {
+            font-size: 1rem;
+          }
+
+          &__date {
+            margin-right: 0;
+            align-self: flex-end;
+          }
+
+          &__name {
+            margin-right: 0;
+            align-self: flex-end;
+          }
+        }
+
+        &__content {
+          &__span {
+            font-size: 1rem;
+            margin: 1%;
           }
         }
       }
-
-      &__info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 1rem 0 0 auto;
-        height: 1rem;
-        width: 8rem;
-
-        &__date {
-          margin-right: 0;
-          align-self: flex-end;
-        }
-
-        &__name {
-          margin-right: 0;
-          align-self: flex-end;
-        }
-      }
-
-      &__content {
-        &__span {
-          font-size: 1rem;
-          margin: 1%;
-        }
-      }
     }
-  }
 
-  &__viewer {
-    overflow-y: auto;
-    position: relative;
-    border-top: 1px #ebedf2 solid;
-    padding: 5px 0 0 10px;
-    background: white;
+    &__viewer {
+      overflow-y: auto;
+      position: relative;
+      border-top: 1px #ebedf2 solid;
+      padding: 5px 0 0 10px;
+      background: white;
+    }
+    
+    .commentModal,
+    .hiddenCommentModal {
+      flex: 1;
+      transition: all 0.3s ease-out;
+      overflow-y: auto;
+      background-color: white;
+      height: 100%;
+      width: 30%;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+
+    .hiddenCommentModal {
+      transform: translateX(-100%);
+      flex: 0;
+    }
   }
 }

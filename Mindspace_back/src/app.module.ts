@@ -6,6 +6,9 @@ import { Node } from './node/entities/node.entity';
 import { NodeModule } from './node/node.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { Board } from './board/entities/board.entity';
+import { BoardModule } from './board/board.module';
+
 
 @Module({
   imports: [
@@ -20,7 +23,7 @@ import { User } from './user/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Node, User],
+      entities: [Node, User, Board],
       synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({
@@ -32,6 +35,7 @@ import { User } from './user/entities/user.entity';
     }),
     NodeModule,
     UserModule,
+    BoardModule,
   ],
   controllers: [],
   providers: [],

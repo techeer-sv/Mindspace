@@ -5,6 +5,8 @@ import { User } from './entities/user.entity';
 import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserMapper } from './dto/user.mapper';
+import { BoardService } from '../board/board.service';
+
 
 @Injectable()
 export class UserService {
@@ -38,4 +40,14 @@ export class UserService {
   async getAllUser(): Promise<User[]> {
     return await this.userRepository.find();
   }
+  async findUserById(userId: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id: userId } }); // `where` 키워드 추가
+
+    if (!user) {
+      throw new Error('유저를 찾을 수 없음');
+    }
+
+    return user;
+  }
+
 }

@@ -6,6 +6,12 @@ import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserMapper } from './dto/user.mapper';
 import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
+import {
+  UserEmailDuplicatedException,
+  UserInvalidPasswordException,
+  UserNicknameDuplicatedException,
+  UserNotFoundException,
+} from './exception/errorResponse';
 
 @Injectable()
 export class UserService {
@@ -16,6 +22,20 @@ export class UserService {
   ) {}
 
   async signupUser(userSignupRequestDto: UserSignupRequestDto): Promise<User> {
+    const emailExists = await this.userRepository.findOne({
+      where: { email: userSignupRequestDto.email },
+    });
+    if (emailExists) {
+      throw new UserEmailDuplicatedException();
+    }
+
+    const nicknameExists = await this.userRepository.findOne({
+      where: { nickname: userSignupRequestDto.nickname },
+    });
+    if (nicknameExists) {
+      throw new UserNicknameDuplicatedException();
+    }
+
     const userEntity = this.userMapper.DtoToEntity(userSignupRequestDto);
     return await this.userRepository.save(userEntity);
   }
@@ -26,11 +46,11 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('해당 이메일로 가입한 사용자 없음');
+      throw new UserNotFoundException();
     }
 
     if (user.password !== userLoginRequestDto.password) {
-      throw new Error('비밀번호 오류');
+      throw new UserInvalidPasswordException();
     }
 
     // TODO: jwt token

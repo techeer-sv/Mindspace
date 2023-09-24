@@ -9,7 +9,7 @@ import { User } from './user/entities/user.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 전체적으로 사용
-      cache: true,
+      // cache: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -24,7 +24,7 @@ import { User } from './user/entities/user.entity';
     Neo4jModule.forRoot({
       scheme: 'neo4j',
       host: process.env.NEO4J_HOST,
-      port: Number(process.env.NEO4J_PORT),
+      port: process.env.NEO4J_PORT,
       username: process.env.NEO4J_USERNAME,
       password: process.env.NEO4J_PASSWORD,
     }),

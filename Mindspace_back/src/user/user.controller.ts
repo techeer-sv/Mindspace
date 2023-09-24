@@ -7,7 +7,7 @@ import { Response } from 'express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
-@Controller('api/v1/user')
+@Controller('api/v1/users')
 export class UserController {
   constructor(
     private readonly userService: UserService,

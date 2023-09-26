@@ -1,15 +1,40 @@
-import { Module } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestMiddleware,
+  NestModule,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Neo4jModule } from 'nest-neo4j';
+import { Node } from './node/entities/node.entity'; 
+import { NodeModule } from './node/node.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  private logger = new Logger('HTTP');
+  use(req: Request, res: Response, next: NextFunction) {
+    const { method, originalUrl } = req;
+    const userAgent = req.get('user-agent') || '';
+    res.on('finish', () => {
+      const { statusCode } = res;
+      this.logger.log(
+        `${method} ${statusCode} - ${originalUrl} - ${userAgent}`,
+      );
+    });
+    next();
+  }
+}
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 전체적으로 사용
-      // cache: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -18,7 +43,7 @@ import { User } from './user/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User],
+      entities: [Node, User],
       synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({
@@ -28,9 +53,14 @@ import { User } from './user/entities/user.entity';
       username: process.env.NEO4J_USERNAME,
       password: process.env.NEO4J_PASSWORD,
     }),
+    NodeModule,
     UserModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

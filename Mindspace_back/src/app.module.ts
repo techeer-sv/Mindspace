@@ -1,4 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+import {
+  Injectable,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestMiddleware,
+  NestModule,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Neo4jModule } from 'nest-neo4j';
@@ -9,11 +17,26 @@ import { User } from './user/entities/user.entity';
 import { Board } from './board/entities/board.entity';
 import { BoardModule } from './board/board.module';
 
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  private logger = new Logger('HTTP');
+  use(req: Request, res: Response, next: NextFunction) {
+    const { method, originalUrl } = req;
+    const userAgent = req.get('user-agent') || '';
+    res.on('finish', () => {
+      const { statusCode } = res;
+      this.logger.log(
+        `${method} ${statusCode} - ${originalUrl} - ${userAgent}`,
+      );
+    });
+    next();
+  }
+}
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 전체적으로 사용
-      cache: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -28,7 +51,7 @@ import { BoardModule } from './board/board.module';
     Neo4jModule.forRoot({
       scheme: 'neo4j',
       host: process.env.NEO4J_HOST,
-      port: Number(process.env.NEO4J_PORT),
+      port: process.env.NEO4J_PORT,
       username: process.env.NEO4J_USERNAME,
       password: process.env.NEO4J_PASSWORD,
     }),
@@ -39,4 +62,8 @@ import { BoardModule } from './board/board.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

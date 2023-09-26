@@ -4,11 +4,14 @@ import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BoardDto {
-    @ApiProperty({ description: 'Title of the board', example: 'Sample Title' })
-    @IsNotEmpty()
-    title: string;
+  @ApiProperty({ description: 'Title of the board', example: 'Sample Title' })
+  @IsNotEmpty()
+  title: string;
 
-    @ApiProperty({ description: 'Content of the board', example: 'This is a sample content.' })
-    @IsNotEmpty()
-    content: string;
+  @ApiProperty({
+    description: 'Content of the board',
+    example: 'This is a sample content.',
+  })
+  @IsNotEmpty()
+  content: string;
 }

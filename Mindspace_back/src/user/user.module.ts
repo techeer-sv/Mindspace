@@ -8,9 +8,8 @@ import { UserMapper } from './dto/user.mapper';
 // user.module.ts
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [UserService, UserMapper],  // UserService가 여기에 포함되어 있어야 합니다.
+  providers: [UserService, UserMapper], // UserService가 여기에 포함되어 있어야 합니다.
   controllers: [UserController],
-  exports: [UserService]  // UserService를 내보내야 합니다.
+  exports: [UserService], // UserService를 내보내야 합니다.
 })
 export class UserModule {}
-

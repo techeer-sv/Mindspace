@@ -3,9 +3,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBoardDto {
-    @ApiProperty({description: 'Title of the board', example: 'Sample Title'})
-    title: string;
+  @ApiProperty({ description: 'Title of the board', example: 'Sample Title' })
+  title: string;
 
-    @ApiProperty({description: 'Content of the board', example: 'This is a sample content.'})
-    content: string;
+  @ApiProperty({
+    description: 'Content of the board',
+    example: 'This is a sample content.',
+  })
+  content: string;
 }

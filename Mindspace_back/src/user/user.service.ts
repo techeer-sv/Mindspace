@@ -5,8 +5,6 @@ import { User } from './entities/user.entity';
 import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserMapper } from './dto/user.mapper';
-import { BoardService } from '../board/board.service';
-
 
 @Injectable()
 export class UserService {
@@ -49,5 +47,4 @@ export class UserService {
 
     return user;
   }
-
 }

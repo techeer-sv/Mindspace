@@ -2,18 +2,12 @@ import React from 'react';
 import styles from './CommentModal.module.scss';
 import CommentIcon from '../../../../asset/icon/Comment.svg';
 import SendCommentIcon from '../../../../asset/icon/SendComment.svg';
+import { CommentModalProps } from '@/utils/types';
 
-type CommentModalProps = {
-  isOpen: boolean;
-  initialValue: {
-    id: number;
-    nickname: string;
-    content: string;
-    date: string;
-  }[];
-};
-
-const CommentModal : React.FC<CommentModalProps> = ({ isOpen, initialValue }) => {
+const CommentModal = ({
+  isOpen,
+  initialValue,
+}: CommentModalProps) => {
   return (
         <div className={isOpen ? styles.comment : styles.hiddencomment}>
             <div className={styles.comment__header}>

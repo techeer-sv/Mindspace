@@ -83,7 +83,7 @@ export interface ListModalProps {
   onListRequestClose: () => void;
 }
 
-///CustomModal
+// CustomModal
 export interface CustomModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -92,6 +92,17 @@ export interface CustomModalProps {
   width?: string;
   height?: string;
   style?: React.CSSProperties;
+}
+
+//CommentModal
+export interface CommentModalProps {
+  isOpen: boolean;
+  initialValue: {
+    id: number;
+    nickname: string;
+    content: string;
+    date: string;
+  }[];
 }
 
 // ErrorResponse

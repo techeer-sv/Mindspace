@@ -7,19 +7,32 @@ import CustomModal from '@/components/CustomModal';
 import { usePostGetQuery } from '@/hooks/queries/board';
 
 import { formatDateTime, DateTimeFormat } from '@/utils/dateTime';
-import CommentIcon from '../../../../asset/icon/Comment.svg';
-import SendCommentIcon from '../../../../asset/icon/SendComment.svg';
+import CommentModal from '@/pages/NodeMap/components/CommentModal';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
   const viewerRef = useRef(null);
   const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
+  const commentData = [
+    {
+      id: 1,
+      nickname: '작성자1',
+      content: '댓글 내용1',
+      date: '5분전',
+    },
+    {
+      id: 2,
+      nickname: '작성자2',
+      content: '댓글 내용2',
+      date: '10분전',
+    },
+  ];
   const toggleCommentModal = () => {
     setCommentModalOpen(prev => !prev);
   };
 
-  const handleSelecteBoard = (id: number) => {
+  const handleSelectBoard = (id: number) => {
     setIsSelectedTable(id);
   };
 
@@ -46,7 +59,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           >
             <span className={styles.header__span}>x</span>
           </button>
-          <PostTable onClickedId={handleSelecteBoard} />
+          <PostTable onClickedId={handleSelectBoard} />
         </>
       ) : (
         !isLoading && (
@@ -94,39 +107,10 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                 </div>
               </div>
             </div>
-              <div className={commentModalOpen ? styles.post__wrapper__comment : styles.post__wrapper__hiddencomment}>
-                <div className={styles.post__wrapper__comment__header}>
-                    <div className={styles.post__wrapper__comment__header__icon}>
-                      <img src={CommentIcon} alt="Comment Icon" />
-                    </div>
-                    <span className={styles.post__wrapper__comment__header__text}>댓글 3</span>
-                </div>
-                <div className={styles.post__wrapper__comment__input}>
-                  <input type="text" placeholder="Enter your comment" />
-                    <div className={styles.post__wrapper__comment__input__icon}>
-                      <button>
-                        <img src={SendCommentIcon} alt="Comment Icon" />
-                      </button>
-                    </div>
-                </div>
-                <div className={styles.post__wrapper__comment__content}>
-                  <div className={styles.post__wrapper__comment__content__nickname}>
-                    <span className={styles.post__wrapper__comment__content__nickname__text}>
-                      바라밥밥
-                    </span>
-                  </div>
-                  <div className={styles.post__wrapper__comment__content__box}>
-                    <span className={styles.post__wrapper__comment__content__box__text}>
-                      잘 쓰셨네요.
-                    </span>
-                  </div>
-                  <div className={styles.post__wrapper__comment__content__time}>
-                    <span className={styles.post__wrapper__comment__content__time__text}>
-                      5분전
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <CommentModal
+                  isOpen={commentModalOpen}
+                  initialValue={commentData}
+              />
             </div>
           </>
         )

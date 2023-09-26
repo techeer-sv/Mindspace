@@ -8,6 +8,7 @@
   box-sizing: border-box;
   border-radius: 10px;
   margin-left: 0.5rem;
+  transform: translateX(0);
 
   &__header {
     display: flex;
@@ -92,6 +93,6 @@
 }
 
 .hiddencomment {
-  transform: translateX(-100%);
+  transform: translateX(100%);
   flex: 0;
 }

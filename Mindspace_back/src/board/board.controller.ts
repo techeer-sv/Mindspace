@@ -31,13 +31,8 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @ApiOperation({ summary: '노드별 모든 게시글 조회' })
-  @ApiQuery({
-    name: 'node_id',
-    description: '조회하려는 노드의 ID',
-    required: true,
-    type: Number,
-  })
-  @Get('/all')
+  @ApiQuery({name: 'node_id', description: '조회하려는 노드의 ID', required: true, type: Number,})
+  @Get()
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
   ): Promise<BoardNodeResponseDto[]> {
@@ -46,13 +41,13 @@ export class BoardController {
 
   @ApiOperation({ summary: '게시글 생성' })
   @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID' })
-  @ApiHeader({ name: 'userId', description: '사용자 ID' })
+  @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
   @ApiResponse({ status: 201, description: '게시글 작성 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Post()
   async createBoard(
     @Query('node_id') nodeId: number,
-    @Headers('userId') userIdHeader: string,
+    @Headers('Authorization') userIdHeader: string,
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
     // <-- 변경된 반환 타입
@@ -62,13 +57,13 @@ export class BoardController {
 
   @ApiOperation({ summary: '게시글 수정' })
   @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID' })
-  @ApiHeader({ name: 'userId', description: '사용자 ID' })
+  @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
   @ApiResponse({ status: 201, description: '게시글 작성 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Put()
   async updateBoard(
     @Query('node_id') nodeId: number,
-    @Headers('userId') userIdHeader: string,
+    @Headers('Authorization') userIdHeader: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
     // <-- 변경된 반환 타입
@@ -80,19 +75,14 @@ export class BoardController {
   @Delete()
   async deleteOwnBoard(
     @Query('node_id') nodeId: number,
-    @Headers('userId') userId: string,
+    @Headers('Authorization') userId: string,
   ) {
     return this.boardService.deleteOwnBoard(nodeId, userId);
   }
 
   @ApiOperation({ summary: '특정 노드의 사용자 게시글 조회' })
-  @ApiQuery({
-    name: 'node_id',
-    description: '조회하려는 노드의 ID',
-    required: true,
-    type: Number,
-  })
-  @ApiHeader({ name: 'userId', description: '사용자 ID', required: true })
+  @ApiQuery({name: 'node_id', description: '조회하려는 노드의 ID', required: true, type: Number,})
+  @ApiHeader({ name: 'Authorization', description: '사용자 ID', required: true })
   @ApiResponse({
     status: 200,
     description: '게시글 조회 성공',
@@ -102,7 +92,7 @@ export class BoardController {
   @Get()
   async getBoardByNodeId(
     @Query('node_id') nodeId: number,
-    @Headers('userId') userIdHeader: string,
+    @Headers('Authorization') userIdHeader: string,
   ): Promise<SpecificBoardNodeDto> {
     const userId = parseInt(userIdHeader);
     return await this.boardService.getBoardByNodeIdAndUserId(nodeId, userId);

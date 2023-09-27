@@ -1,10 +1,19 @@
-import { Controller, Post, Get, Body, HttpStatus, Res } from '@nestjs/common';
-import { UserService } from './user.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  HttpStatus,
+  Res,
+  Headers,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { UserMapper } from './dto/user.mapper';
 import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
-import { Response } from 'express';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
+import { UserService } from './user.service';
 
 @ApiTags('User')
 @Controller('api/v1/users')
@@ -43,5 +52,13 @@ export class UserController {
   async getAllUser(@Res() res: Response): Promise<void> {
     const users = await this.userService.getAllUser();
     res.status(HttpStatus.OK).json(users);
+  }
+
+  @ApiOperation({ summary: '닉네임 반환' })
+  @Get('/nickname')
+  async getUserNickname(
+    @Headers('authorization') userId: number,
+  ): Promise<UserNicknameResponseDto> {
+    return this.userService.getUserNickname(userId);
   }
 }

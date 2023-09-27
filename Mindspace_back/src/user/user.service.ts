@@ -1,19 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserMapper } from './dto/user.mapper';
+import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
+import {
+  UserEmailDuplicatedException,
+  UserInvalidPasswordException,
+  UserNicknameDuplicatedException,
+  UserNotFoundException,
+} from './exception/errorResponse';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly userMapper: UserMapper,
   ) {}
 
   async signupUser(userSignupRequestDto: UserSignupRequestDto): Promise<User> {
+    const emailExists = await this.userRepository.findOne({
+      where: { email: userSignupRequestDto.email },
+    });
+    if (emailExists) {
+      throw new UserEmailDuplicatedException();
+    }
+
+    const nicknameExists = await this.userRepository.findOne({
+      where: { nickname: userSignupRequestDto.nickname },
+    });
+    if (nicknameExists) {
+      throw new UserNicknameDuplicatedException();
+    }
+
     const userEntity = this.userMapper.DtoToEntity(userSignupRequestDto);
     return await this.userRepository.save(userEntity);
   }
@@ -24,11 +46,11 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('해당 이메일로 가입한 사용자 없음');
+      throw new UserNotFoundException();
     }
 
     if (user.password !== userLoginRequestDto.password) {
-      throw new Error('비밀번호 오류');
+      throw new UserInvalidPasswordException();
     }
 
     // TODO: jwt token
@@ -38,11 +60,23 @@ export class UserService {
   async getAllUser(): Promise<User[]> {
     return await this.userRepository.find();
   }
+
   async findUserById(userId: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id: userId } }); // `where` 키워드 추가
 
     if (!user) {
       throw new Error('유저를 찾을 수 없음');
+    }
+
+  async getUserNickname(userId: number): Promise<UserNicknameResponseDto> {
+    const user = await this.isUserExisted(userId);
+    return this.userMapper.nicknameDtoFromEntity(user);
+  }
+
+  async isUserExisted(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id: id } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
 
     return user;

@@ -6,7 +6,7 @@ import { Node } from './entities/node.entity';
 export class NodeController {
     constructor(private readonly nodeService: NodeService) {}
 
-    @Get('/all')
+    @Get()
     async getAllNode(): Promise<Node[]> {
         return this.nodeService.getAllNode();
     }

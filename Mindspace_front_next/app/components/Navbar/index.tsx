@@ -14,7 +14,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   // const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
-  const isLoggedIn = true; // TODO : 임시로 true로 설정
+  const isLoggedIn = false; // TODO : 임시로 true로 설정
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 

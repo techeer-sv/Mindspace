@@ -67,7 +67,7 @@
     border-bottom: 1px #ebedf2 solid;
 
     &__nickname {
-      margin: 0 0 0.5rem 0;
+      margin-bottom: 0.5rem;
 
       &__text {
         font-size: 15px;
@@ -85,13 +85,12 @@
     }
 
     &__time {
-      margin: 0 0 0.5rem 0;
+      margin-bottom: 0.5rem;
 
       &__text {
         font-size: 12px;
       }
     }
-
   }
 }
 

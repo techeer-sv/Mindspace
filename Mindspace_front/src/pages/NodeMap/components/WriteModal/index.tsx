@@ -8,7 +8,6 @@ import CustomModal from '@/components/CustomModal';
 import { nodeAtom } from '@/recoil/state/nodeAtom';
 import { useRecoilValue } from 'recoil';
 import { useUserPostGetQuery } from '@/hooks/queries/board';
-
 import WriteEditor from './components/WriteEditor';
 import ReadViewer from './components/ReadViewer';
 

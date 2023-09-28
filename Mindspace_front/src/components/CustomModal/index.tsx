@@ -4,7 +4,7 @@ import styles from './CustomModal.module.scss';
 import { CustomModalProps } from '@/utils/types';
 import { useRecoilState } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
-import { NAVBAR_HEIGHT } from '@/asset/constants';
+import { NAVBAR_HEIGHT } from '@/assets/constants';
 
 const CustomModal = ({
   isOpen,
@@ -82,6 +82,7 @@ const CustomModal = ({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
+          overflow: 'hidden',
           background: 'rgba(255, 255, 255, 0.3)',
           borderRadius: '1rem',
           border: '1px solid white',

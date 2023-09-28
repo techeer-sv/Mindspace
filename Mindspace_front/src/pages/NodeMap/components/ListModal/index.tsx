@@ -7,14 +7,34 @@ import CustomModal from '@/components/CustomModal';
 import { usePostGetQuery } from '@/hooks/queries/board';
 
 import { formatDateTime, DateTimeFormat } from '@/utils/dateTime';
+import CommentModal from '@/pages/NodeMap/components/CommentModal';
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState(null);
   const viewerRef = useRef(null);
   const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
+  const [commentModalOpen, setCommentModalOpen] = useState(false);
+  const commentData = [
+    {
+      id: 1,
+      nickname: '작성자1',
+      content: '댓글 내용1',
+      date: '5분전',
+    },
+    {
+      id: 2,
+      nickname: '작성자2',
+      content: '댓글 내용2',
+      date: '10분전',
+    },
+  ];
+  const toggleCommentModal = () => {
+    setCommentModalOpen(prev => !prev);
+  };
 
-  const handleSelecteBoard = (id: number) => {
+  const handleSelectBoard = (id: number) => {
     setIsSelectedTable(id);
+    setCommentModalOpen(false);
   };
 
   useEffect(() => {
@@ -40,7 +60,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           >
             <span className={styles.header__span}>x</span>
           </button>
-          <PostTable onClickedId={handleSelecteBoard} />
+          <PostTable onClickedId={handleSelectBoard} />
         </>
       ) : (
         !isLoading && (
@@ -53,28 +73,33 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
             >
               <span className={styles.post__button}>Back</span>
             </button>
-            <div className={styles.post__content}>
-              <div className={styles.post__content__wrapper}>
-                <div className={styles.post__content__wrapper__header}>
-                  <div className={styles.post__content__wrapper__header__text}>
+            <div className={styles.post__wrapper}>
+            <div className={styles.post__wrapper__content}>
+              <div className={styles.post__wrapper__content__wrapper}>
+                <div className={styles.post__wrapper__content__wrapper__header}>
+                  <div className={styles.post__wrapper__content__wrapper__header__text}>
                     <span
                       className={
-                        styles.post__content__wrapper__header__text__title
+                        styles.post__wrapper__content__wrapper__header__text__title
                       }
                     >
                       {postData?.title}
                     </span>
                   </div>
-                  <div className={styles.post__content__wrapper__info}>
-                    <span className={styles.post__content__wrapper__info__name}>
+                  <div className={styles.post__wrapper__content__wrapper__info}>
+                      <div className={styles.post__wrapper__content__wrapper__info__box}>
+                        <button onClick={toggleCommentModal} className={styles.post__wrapper__content__wrapper__info__box__button}>댓글</button>
+                      </div>
+                    <span className={styles.post__wrapper__content__wrapper__info__name}>
                       {postData.userNickname}
                     </span>
-                    <span className={styles.post__content__wrapper__info__date}>
+                    <span className={styles.post__wrapper__content__wrapper__info__date}>
                       {formatDateTime(postData.updatedAt, DateTimeFormat.Date)}
                     </span>
                   </div>
+
                 </div>
-                <div className={styles.post__viewer}>
+                <div className={styles.post__wrapper__viewer}>
                   <Viewer
                     ref={viewerRef}
                     initialValue={postData?.content}
@@ -82,6 +107,11 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   />
                 </div>
               </div>
+            </div>
+              <CommentModal
+                  isOpen={commentModalOpen}
+                  initialValue={commentData}
+              />
             </div>
           </>
         )

@@ -34,6 +34,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
 
   const handleSelectBoard = (id: number) => {
     setIsSelectedTable(id);
+    setCommentModalOpen(false);
   };
 
   useEffect(() => {

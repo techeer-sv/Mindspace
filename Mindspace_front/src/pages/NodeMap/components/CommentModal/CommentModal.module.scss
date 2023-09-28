@@ -55,6 +55,10 @@
         cursor: pointer;
         overflow: hidden;
       }
+
+      button:hover img {
+        opacity: 0.5;
+      }
     }
   }
 

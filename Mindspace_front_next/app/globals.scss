@@ -1,0 +1,59 @@
+html {
+  height: 100vh;
+  width: 100%;
+  font-family: "KCC-Chassam", sans-serif;
+}
+body {
+  margin: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url("/images/BackGround.png");
+  background-size: cover;
+  overflow: hidden;
+}
+
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: otf ttf) {
+  $src: null;
+  $formats: (
+    otf: "opentype",
+    ttf: "truetype",
+  );
+  @each $ext in $exts {
+    $format: map-get($formats, $ext);
+    $src: append($src, url(quote($path)) format(quote($format)), comma);
+  }
+  @font-face {
+    font-family: quote($name);
+    font-style: $style;
+    font-weight: $weight;
+    src: $src;
+  }
+}
+
+/* 적용 예 */
+@include font-face("KCC-Chassam", "/fonts/KCC-Chassam.otf", 400, null, otf);
+
+span {
+  font-family: "KCC-Chassam", sans-serif;
+}
+
+button {
+  font-family: "KCC-Chassam", sans-serif;
+}
+
+input {
+  font-family: "KCC-Chassam", sans-serif;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+}
+
+p {
+  font-family: "KCC-Chassam", sans-serif;
+}
+
+div {
+  font-family: "KCC-Chassam", sans-serif;
+}

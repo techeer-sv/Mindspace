@@ -1,10 +1,22 @@
+import styles from "./page.module.scss";
 import Image from "next/image";
-import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div>
-      <h4 className="title">테스트</h4>
+    <div className={styles.content}>
+      <div className={styles.content__subtitle}>
+        <span>Mind Maps for Developers</span>
+      </div>
+      <div className={styles.content__title}>
+        <Image
+          src="/images/MindSpaceText.png"
+          width={1037}
+          height={195}
+          alt="logo"
+        />
+      </div>
+
+      <button className={styles.content__button}>EXPLORE</button>
     </div>
   );
 }

@@ -1,0 +1,139 @@
+@import "../../constants/styles/colors.scss";
+
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+  padding: 0.5rem 0rem;
+  border-bottom: none;
+  color: black;
+
+  &__title {
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 3rem;
+    }
+  }
+
+  &__menu {
+    margin-left: auto;
+
+    ul {
+      display: flex;
+      padding: 0;
+    }
+
+    &__text {
+      span {
+        cursor: default !important;
+      }
+    }
+
+    li {
+      list-style-type: none;
+      margin-right: 3rem;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      color: white;
+
+      & > a,
+      & > span {
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        color: white;
+      }
+    }
+
+    &--expanded {
+      display: block;
+
+      &__text {
+        display: none !important;
+      }
+
+      ul {
+        z-index: 10;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background-color: map-get($navbar, mobileBackground);
+
+        border-top: 1px solid black;
+
+        li {
+          text-align: center;
+          margin: 0;
+        }
+
+        li a {
+          color: black;
+          width: 100%;
+          padding: 1.5rem 0;
+        }
+
+        li span {
+          color: black;
+          width: 100%;
+          padding: 1.5rem 0;
+        }
+
+        li:hover {
+          background-color: #eee;
+        }
+      }
+    }
+  }
+
+  &__hamburger {
+    border: 0;
+    height: 40px;
+    width: 40px;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: map-get($navbar, main);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    display: none;
+
+    &:hover {
+      background-color: map-get($navbar, hover);
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .navbar {
+      &__title {
+        img {
+          height: 2rem;
+        }
+      }
+    }
+
+    &__hamburger {
+      display: block;
+    }
+
+    &__menu {
+      display: none;
+    }
+
+    &__menu--expanded {
+      display: block;
+    }
+  }
+}

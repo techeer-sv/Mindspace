@@ -54,7 +54,7 @@ export interface ModalProps {
   updateNodeInfo: (id: number | string, isWritten: boolean) => void;
 }
 
-// WirteModal
+// WriteModal
 export interface WriteModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -69,7 +69,7 @@ export interface BoardResponseDto {
   updatedAt: string;
 }
 
-// WriteEditor || ReadViwer
+// WriteEditor || ReadViewer
 export interface ViewEditProps {
   nodeData?: BoardResponseDto;
   onClose: () => void;
@@ -94,15 +94,18 @@ export interface CustomModalProps {
   style?: React.CSSProperties;
 }
 
-//CommentModal
+// Comment
+interface Comment {
+  id: number;
+  nickname: string;
+  content: string;
+  date: string;
+}
+
+// CommentModal
 export interface CommentModalProps {
   isOpen: boolean;
-  initialValue: {
-    id: number;
-    nickname: string;
-    content: string;
-    date: string;
-  }[];
+  initialValue: Comment[];
 }
 
 // ErrorResponse

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CommentModal.module.scss';
-import CommentIcon from '../../../../asset/icon/Comment.svg';
-import SendCommentIcon from '../../../../asset/icon/SendComment.svg';
+import CommentIcon from '@/assets/icons/Comment.svg';
+import SendCommentIcon from '@/assets/icons/SendComment.svg';
 import { CommentModalProps } from '@/utils/types';
 
 const CommentModal = ({

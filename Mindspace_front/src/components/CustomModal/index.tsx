@@ -4,7 +4,7 @@ import styles from './CustomModal.module.scss';
 import { CustomModalProps } from '@/utils/types';
 import { useRecoilState } from 'recoil';
 import { ModalWidthAtom, ModalHeightAtom } from '@/recoil/state/resizeAtom';
-import { NAVBAR_HEIGHT } from '@/asset/constants';
+import { NAVBAR_HEIGHT } from '@/assets/constants';
 
 const CustomModal = ({
   isOpen,

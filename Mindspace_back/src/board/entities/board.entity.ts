@@ -1,18 +1,17 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../user/entities/user.entity'; // User 엔터티 임포트
-//swagger에서 본문 바디 얘사에 안 나오게 하고 싶으면 @ApiProperty를 지우면 안나옴
+import { User } from '../../user/entities/user.entity';
+import { Timestamp } from '../../global/common/timeStamp'; // User 엔터티 임포트
+// swagger에서 본문 바디 얘사에 안 나오게 하고 싶으면 @ApiProperty를 지우면 안나옴
 
 @Entity('boards')
-export class Board {
+export class Board extends Timestamp {
   @PrimaryGeneratedColumn('increment', { name: 'board_id' })
   @ApiProperty({ description: '게시글의 ID.' })
   id: number;
@@ -38,15 +37,4 @@ export class Board {
 
   @Column({ name: 'user_id', type: 'int', nullable: false })
   userId: number;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  @ApiProperty({ description: '게시글의 마지막 업데이트 시간.' })
-  updatedAt: Date;
 }

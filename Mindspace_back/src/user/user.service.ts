@@ -67,6 +67,8 @@ export class UserService {
     if (!user) {
       throw new Error('유저를 찾을 수 없음');
     }
+    return user;
+  }
 
   async getUserNickname(userId: number): Promise<UserNicknameResponseDto> {
     const user = await this.isUserExisted(userId);
@@ -78,7 +80,6 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-
     return user;
   }
 }

@@ -61,6 +61,13 @@ export class UserService {
     return await this.userRepository.find();
   }
 
+  async findUserById(userId: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id: userId } }); // `where` 키워드 추가
+
+    if (!user) {
+      throw new Error('유저를 찾을 수 없음');
+    }
+
   async getUserNickname(userId: number): Promise<UserNicknameResponseDto> {
     const user = await this.isUserExisted(userId);
     return this.userMapper.nicknameDtoFromEntity(user);
@@ -71,6 +78,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+
     return user;
   }
 }

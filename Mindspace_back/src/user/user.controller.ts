@@ -16,7 +16,7 @@ import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
 import { UserService } from './user.service';
 
 @ApiTags('User')
-@Controller('api/v1/user')
+@Controller('api/v1/users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -48,7 +48,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '회원 전체 조회' })
-  @Get('/all')
+  @Get()
   async getAllUser(@Res() res: Response): Promise<void> {
     const users = await this.userService.getAllUser();
     res.status(HttpStatus.OK).json(users);

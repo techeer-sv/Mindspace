@@ -16,10 +16,13 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { Board } from './board/entities/board.entity';
 import { BoardModule } from './board/board.module';
+import { CommentModule } from './comment/comment.module';
+import { Comment } from './comment/entities/comment.entity';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   private logger = new Logger('HTTP');
+
   use(req: Request, res: Response, next: NextFunction) {
     const { method, originalUrl } = req;
     const userAgent = req.get('user-agent') || '';
@@ -45,7 +48,7 @@ export class LoggerMiddleware implements NestMiddleware {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Node, User, Board],
+      entities: [Node, User, Board, Comment],
       synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({
@@ -58,6 +61,7 @@ export class LoggerMiddleware implements NestMiddleware {
     NodeModule,
     UserModule,
     BoardModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [],

@@ -29,6 +29,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.0
     version: 0.14.0
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13

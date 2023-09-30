@@ -10,6 +10,7 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { ApiHeader, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CommentResponseDto } from './dto/comment-response.dto';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
@@ -26,5 +27,13 @@ export class CommentController {
   ): Promise<CreateCommentDto> {
     const userId = userIdHeader; // 문자열로 변환
     return this.commentService.createComment(boardId, userId, createCommentDto);
+  }
+
+  @ApiQuery({ name: 'board_id', description: '댓글을 조회할 게시글의 ID' })
+  @Get()
+  async getComments(
+    @Query('board_id') boardId: number,
+  ): Promise<CommentResponseDto[]> {
+    return await this.commentService.getCommentsByBoardId(boardId);
   }
 }

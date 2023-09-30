@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { formatDistanceToNow } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { CreateCommentDto } from './create-comment.dto';
 import { Comment } from '../entities/comment.entity';
+import { CommentResponseDto } from './comment-response.dto';
 
 @Injectable()
 export class CommentMapper {
-  dtoToEntity(
+  DtoToEntity(
     createCommentDto: CreateCommentDto,
     boardId: number,
     userId: number,
@@ -16,5 +19,17 @@ export class CommentMapper {
     comment.userId = userId;
     comment.userNickname = userNickname;
     return comment;
+  }
+
+  static commentToResponseDto(comment: Comment): CommentResponseDto {
+    return {
+      id: comment.id,
+      userNickname: comment.userNickname,
+      content: comment.content,
+      updatedAt: formatDistanceToNow(comment.updatedAt, {
+        addSuffix: true,
+        locale: ko,
+      }),
+    };
   }
 }

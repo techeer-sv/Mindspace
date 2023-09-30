@@ -6,6 +6,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UserService } from '../user/user.service';
 import { CommentMapper } from './dto/comment.mapper.dto';
 import { CommentResponseDto } from './dto/comment-response.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -38,5 +39,19 @@ export class CommentService {
     return comments.map((comment) =>
       CommentMapper.commentToResponseDto(comment),
     );
+  }
+
+  async updateComment(
+    comment_id: number,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<UpdateCommentDto> {
+    const comment = await this.commentRepository.findOne({
+      where: { id: comment_id },
+    });
+    if (!comment) {
+      throw new Error('댓글을 찾을 수 없습니다.');
+    }
+    comment.content = updateCommentDto.content;
+    return await this.commentRepository.save(comment);
   }
 }

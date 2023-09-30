@@ -6,11 +6,13 @@ import {
   Param,
   Query,
   Headers,
+  Put,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { ApiHeader, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentResponseDto } from './dto/comment-response.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
@@ -35,5 +37,13 @@ export class CommentController {
     @Query('board_id') boardId: number,
   ): Promise<CommentResponseDto[]> {
     return await this.commentService.getCommentsByBoardId(boardId);
+  }
+
+  @Put(':commentId')
+  async updateComment(
+    @Param('commentId') commentId: number,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<UpdateCommentDto> {
+    return await this.commentService.updateComment(commentId, updateCommentDto);
   }
 }

@@ -34,8 +34,16 @@ export class CommentService {
     return await this.commentRepository.save(comment);
   }
 
-  async getCommentsByBoardId(boardId: number): Promise<CommentResponseDto[]> {
-    const comments = await this.commentRepository.find({ where: { boardId } });
+  async getCommentsByBoardId(
+    boardId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<CommentResponseDto[]> {
+    const comments = await this.commentRepository.find({
+      where: { boardId },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
     return comments.map((comment) =>
       CommentMapper.commentToResponseDto(comment),
     );

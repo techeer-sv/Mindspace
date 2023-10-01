@@ -27,15 +27,11 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @ApiOperation({ summary: '댓글 생성' })
-  @ApiParam({
-    name: 'boardId',
-    type: 'number',
-    description: '게시판의 ID',
-  })
+  @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
   @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
-  @Post(':boardId')
+  @Post()
   async createComment(
-    @Param('boardId') boardId: number,
+    @Param('board_id') boardId: number,
     @Headers('Authorization') userIdHeader: string,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<CreateCommentDto> {
@@ -44,6 +40,7 @@ export class CommentController {
   }
 
   @ApiOperation({ summary: '댓글 조회' })
+  @ApiQuery({ name: 'board_id', description: '댓글을 조회할 게시글의 ID' })
   @ApiQuery({
     name: 'page',
     required: false,
@@ -56,14 +53,9 @@ export class CommentController {
     type: Number,
     description: '페이지 당 댓글 수(기본값: 10)',
   })
-  @ApiParam({
-    name: 'boardId',
-    type: 'number',
-    description: '게시판의 ID',
-  })
-  @Get(':boardId')
+  @Get()
   async getComments(
-    @Param('boardId') boardId: number,
+    @Param('board_id') boardId: number,
     @Query('page') page = 1,
     @Query('pageSize') pageSize = 10,
   ): Promise<CommentResponseDto[]> {

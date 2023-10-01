@@ -21,11 +21,10 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @ApiOperation({ summary: '댓글 생성' })
-  @ApiQuery({ name: 'board_id', description: '댓글을 작성할 노드의 ID' })
   @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
-  @Post()
+  @Post(':boardId')
   async createComment(
-    @Query('board_id') boardId: number,
+    @Param('boardId') boardId: number,
     @Headers('Authorization') userIdHeader: string,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<CreateCommentDto> {
@@ -34,10 +33,9 @@ export class CommentController {
   }
 
   @ApiOperation({ summary: '댓글 조회' })
-  @ApiQuery({ name: 'board_id', description: '댓글을 조회할 게시글의 ID' })
-  @Get()
+  @Get(':boardId')
   async getComments(
-    @Query('board_id') boardId: number,
+    @Param('boardId') boardId: number,
   ): Promise<CommentResponseDto[]> {
     return await this.commentService.getCommentsByBoardId(boardId);
   }

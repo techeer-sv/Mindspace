@@ -13,5 +13,6 @@ import { UserModule } from '../user/user.module'; // Corrected this import to Bo
   ],
   providers: [BoardService, BoardMapper],
   controllers: [BoardController],
+  exports: [BoardService],
 })
 export class BoardModule {}

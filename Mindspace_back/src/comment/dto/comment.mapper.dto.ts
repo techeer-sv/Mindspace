@@ -4,19 +4,21 @@ import { ko } from 'date-fns/locale';
 import { CreateCommentDto } from './create-comment.dto';
 import { Comment } from '../entities/comment.entity';
 import { CommentResponseDto } from './comment-response.dto';
+import { User } from '../../user/entities/user.entity';
+import { Board } from '../../board/entities/board.entity';
 
 @Injectable()
 export class CommentMapper {
   DtoToEntity(
     createCommentDto: CreateCommentDto,
-    boardId: number,
-    userId: number,
+    user: User,
+    board: Board,
     userNickname: string,
   ): Comment {
     const comment = new Comment();
     comment.content = createCommentDto.content;
-    comment.boardId = boardId;
-    comment.userId = userId;
+    comment.user = user;
+    comment.board = board;
     comment.userNickname = userNickname;
     return comment;
   }

@@ -24,9 +24,6 @@ export class Comment extends Timestamp {
   @JoinColumn({ name: 'user_id' }) // 외래 키 컬럼 설정
   user: User; // User 엔터티 타입의 프로퍼티 추가
 
-  @Column({ name: 'user_id', type: 'int', nullable: false })
-  userId: number;
-
   @Column({ name: 'user_nickname', type: 'varchar', nullable: false })
   @ApiProperty({ description: '댓글을 작성한 사용자의 닉네임.' })
   userNickname: string;
@@ -34,7 +31,4 @@ export class Comment extends Timestamp {
   @ManyToOne(() => Board) // Board 엔터티를 참조하는 ManyToOne 관계 설정
   @JoinColumn({ name: 'board_id' }) // 외래 키 컬럼 설정
   board: Board; // Board 엔터티 타입의 프로퍼티 추가
-
-  @Column({ name: 'board_id', type: 'int', nullable: false })
-  boardId: number;
 }

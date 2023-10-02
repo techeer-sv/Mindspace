@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
@@ -7,6 +7,7 @@ import { UserService } from '../user/user.service';
 import { CommentMapper } from './dto/comment.mapper.dto';
 import { CommentResponseDto } from './dto/comment-response.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { BoardService } from '../board/board.service';
 
 @Injectable()
 export class CommentService {
@@ -15,6 +16,7 @@ export class CommentService {
     private readonly commentRepository: Repository<Comment>,
     private readonly commentMapper: CommentMapper,
     private readonly userService: UserService,
+    private readonly boardService: BoardService,
   ) {}
 
   async createComment(
@@ -24,12 +26,22 @@ export class CommentService {
   ): Promise<Comment> {
     const convertedUserId = Number(userId);
     const user = await this.userService.findUserById(convertedUserId);
-    const userNickname = user.nickname;
+
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    const board = await this.boardService.findBoardById(boardId);
+
+    if (!board) {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
+
     const comment = this.commentMapper.DtoToEntity(
       createCommentDto,
-      boardId,
-      convertedUserId,
-      userNickname,
+      user,
+      board,
+      user.nickname,
     );
     return await this.commentRepository.save(comment);
   }
@@ -40,10 +52,11 @@ export class CommentService {
     pageSize: number,
   ): Promise<CommentResponseDto[]> {
     const comments = await this.commentRepository.find({
-      where: { boardId },
+      where: { board: { id: boardId } },
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
+
     return comments.map((comment) =>
       CommentMapper.commentToResponseDto(comment),
     );

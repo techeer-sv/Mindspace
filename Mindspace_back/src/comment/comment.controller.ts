@@ -8,6 +8,8 @@ import {
   Headers,
   Put,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -30,13 +32,16 @@ export class CommentController {
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
   @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async createComment(
     @Param('board_id') boardId: number,
     @Headers('Authorization') userIdHeader: string,
     @Body() createCommentDto: CreateCommentDto,
-  ): Promise<CreateCommentDto> {
-    const userId = userIdHeader; // 문자열로 변환
-    return this.commentService.createComment(boardId, userId, createCommentDto);
+  ): Promise<{ message: string }> {
+    const userId = userIdHeader;
+    await this.commentService.createComment(boardId, userId, createCommentDto);
+
+    return { message: '댓글이 성공적으로 작성되었습니다.' };
   }
 
   @ApiOperation({ summary: '댓글 조회' })

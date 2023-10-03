@@ -14,14 +14,17 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import {
+  ApiCreatedResponse,
   ApiHeader,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { CommentResponseDto } from './dto/comment-response.dto';
+import { Comment } from './entities/comment.entity';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { PagingParams } from '../global/common/type';
+import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
@@ -34,7 +37,7 @@ export class CommentController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createComment(
-    @Param('board_id') boardId: number,
+    @Query('board_id') boardId: number,
     @Headers('Authorization') userIdHeader: string,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<{ message: string }> {
@@ -47,27 +50,29 @@ export class CommentController {
   @ApiOperation({ summary: '댓글 조회' })
   @ApiQuery({ name: 'board_id', description: '댓글을 조회할 게시글의 ID' })
   @ApiQuery({
-    name: 'page',
+    name: 'beforeCursor',
     required: false,
-    type: Number,
-    description: '페이지 번호(기본값: 1)',
+    type: String,
+    description: '이전 커서 값',
   })
   @ApiQuery({
-    name: 'pageSize',
+    name: 'afterCursor',
     required: false,
-    type: Number,
-    description: '페이지 당 댓글 수(기본값: 10)',
+    type: String,
+    description: '다음 커서 값',
+  })
+  @ApiCreatedResponse({
+    description: '댓글 조회 성공',
+    type: PaginatedCommentResponseDto,
   })
   @Get()
   async getComments(
-    @Param('board_id') boardId: number,
-    @Query('page') page = 1,
-    @Query('pageSize') pageSize = 10,
-  ): Promise<CommentResponseDto[]> {
+    @Query('board_id') boardId: number,
+    @Query() pagingParams: PagingParams,
+  ): Promise<PaginatedCommentResponseDto> {
     return await this.commentService.getCommentsByBoardId(
       boardId,
-      page,
-      pageSize,
+      pagingParams,
     );
   }
 
@@ -76,6 +81,10 @@ export class CommentController {
     name: 'commentId',
     type: 'number',
     description: '게시글의 ID',
+  })
+  @ApiCreatedResponse({
+    description: '댓글 수정 성공',
+    type: Comment,
   })
   @Put(':commentId')
   async updateComment(

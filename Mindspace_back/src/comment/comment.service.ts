@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PagingParams } from '../global/common/type';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UserService } from '../user/user.service';
@@ -8,12 +9,14 @@ import { CommentMapper } from './dto/comment.mapper.dto';
 import { CommentResponseDto } from './dto/comment-response.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { BoardService } from '../board/board.service';
+import { CustomCommentRepository } from './repository/comment.repository';
 
 @Injectable()
 export class CommentService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
+    private readonly customCommentRepository: CustomCommentRepository,
     private readonly commentMapper: CommentMapper,
     private readonly userService: UserService,
     private readonly boardService: BoardService,
@@ -45,21 +48,22 @@ export class CommentService {
     );
     return await this.commentRepository.save(comment);
   }
-
-  async getCommentsByBoardId(
-    boardId: number,
-    page: number,
-    pageSize: number,
-  ): Promise<CommentResponseDto[]> {
-    const comments = await this.commentRepository.find({
-      where: { board: { id: boardId } },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
-
-    return comments.map((comment) =>
-      CommentMapper.commentToResponseDto(comment),
+  async getCommentsByBoardId(boardId: number, pagingParams: PagingParams) {
+    const comments = await this.customCommentRepository.paginate(
+      boardId,
+      pagingParams,
     );
+
+    const transformedComments: CommentResponseDto[] = comments.data.map(
+      (comment) => {
+        return CommentMapper.commentToResponseDto(comment);
+      },
+    );
+
+    return {
+      ...comments,
+      data: transformedComments,
+    };
   }
 
   async updateComment(

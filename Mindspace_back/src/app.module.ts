@@ -18,6 +18,7 @@ import { Board } from './board/entities/board.entity';
 import { BoardModule } from './board/board.module';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/entities/comment.entity';
+import { CustomCommentRepository } from './comment/repository/comment.repository';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -48,7 +49,7 @@ export class LoggerMiddleware implements NestMiddleware {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Node, User, Board, Comment],
+      entities: [Node, User, Board, Comment, CustomCommentRepository],
       synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({

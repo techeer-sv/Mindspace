@@ -31,7 +31,8 @@
     "date-fns": "^2.30.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "typeorm-cursor-pagination": "^0.10.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

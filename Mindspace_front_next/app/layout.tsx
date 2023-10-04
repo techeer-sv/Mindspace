@@ -2,6 +2,7 @@ import "./globals.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LayoutProvider from "./LayoutProvider";
+import Recoil from "@/components/Recoil";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +36,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
-        <LayoutProvider>{children}</LayoutProvider>
+        <Recoil>
+          <LayoutProvider>{children}</LayoutProvider>
+        </Recoil>
       </body>
     </html>
   );

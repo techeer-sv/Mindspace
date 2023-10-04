@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 import styles from "./../Auth.module.scss";
 import { getAccessToken } from "@/api/auth";
 
+import { useSetRecoilState } from "recoil";
+import { isLoggedInAtom } from "@/recoil/state/authAtom";
+
 // import { useSetRecoilState } from 'recoil';
 // import { isLoggedInAtom } from '@/recoil/state/authAtom';
 // import { useSignInMutation } from '@/hooks/queries/user';
 
-//TODO: recoil 및 api연결 로직에 대한 처리가 필요합니다. (일단 주석처리)
+//TODO:  react-qurery 로직에 대한 처리가 필요합니다.
 
 export default function SignInPage() {
   const router = useRouter();
@@ -20,13 +23,13 @@ export default function SignInPage() {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  //   const setLoggedIn = useSetRecoilState(isLoggedInAtom);
+  const setLoggedIn = useSetRecoilState(isLoggedInAtom);
 
-  //   const handleLoginSuccess = (token: string) => {
-  //     localStorage.setItem('accessToken', token);
-  //     setLoggedIn(true);
-  //     navigate('/');
-  //   };
+  const handleLoginSuccess = (token: string) => {
+    localStorage.setItem("accessToken", token);
+    setLoggedIn(true);
+    router.push("/");
+  };
 
   //   const { mutate: loginMutation } = useSignInMutation(
   //     handleLoginSuccess,
@@ -58,8 +61,7 @@ export default function SignInPage() {
           password,
         });
 
-        localStorage.setItem("accessToken", token);
-        router.push("/");
+        handleLoginSuccess(token);
       } catch (error: any) {
         setErrorMessage(error.errorMessage);
       }

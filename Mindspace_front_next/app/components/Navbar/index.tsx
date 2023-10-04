@@ -4,28 +4,28 @@ import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/link";
 import Image from "next/image";
-
-// import { useRecoilState } from 'recoil';
-// import { isLoggedInAtom } from '@/recoil/state/authAtom';
+import { useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
+import { isLoggedInAtom } from "@/recoil/state/authAtom";
 // import {
 //   useUserNicknameQuery,
 //   useClearUserNicknameCache,
 // } from '@/hooks/queries/user';
 
 const Navbar = () => {
-  // const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
-  const isLoggedIn = false; // TODO : 임시로 true로 설정
-
+  const router = useRouter();
+  const isLoggedInInitial = localStorage.getItem("accessToken") !== null;
+  const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   // const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
 
-  // const logout = () => {
-  //   setLoggedIn(false);
-  //   alert('로그아웃 되었습니다');
-  //   navigate('/');
-  //   localStorage.clear();
-  // };
+  const logout = () => {
+    setLoggedIn(false);
+    alert("로그아웃 되었습니다");
+    router.push("/");
+    localStorage.clear();
+  };
 
   // useEffect(() => {
   //   const handleResize = () => {
@@ -37,10 +37,9 @@ const Navbar = () => {
   //   };
   // }, []);
 
-  // useEffect(() => {
-  //   const isCurrentlyLoggedIn = localStorage.getItem('accessToken') !== null;
-  //   setLoggedIn(isCurrentlyLoggedIn);
-  // }, []);
+  useEffect(() => {
+    setLoggedIn(isLoggedInInitial);
+  }, []);
 
   // useClearUserNicknameCache(isLoggedIn);
 
@@ -88,13 +87,7 @@ const Navbar = () => {
                 <span>{"사용자 이름"}</span>
               </li>
               <li>
-                <span
-                  onClick={() => {
-                    console.log("로그아웃 클릭");
-                  }}
-                >
-                  logout
-                </span>
+                <span onClick={logout}>logout</span>
               </li>
             </>
           ) : (

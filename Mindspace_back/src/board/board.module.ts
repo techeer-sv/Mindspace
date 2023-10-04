@@ -4,12 +4,14 @@ import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
 import { Board } from './entities/board.entity';
 import { BoardMapper } from './dto/board.mapper.dto';
-import { UserModule } from '../user/user.module'; // Corrected this import to BoardMapper
+import { UserModule } from '../user/user.module';
+import { NodeModule } from '../node/node.module';  // Import NodeModule
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Board]),
-    UserModule, // Add UserModule to the imports array
+    UserModule,
+    NodeModule,  // Add NodeModule to the imports array
   ],
   providers: [BoardService, BoardMapper],
   controllers: [BoardController],

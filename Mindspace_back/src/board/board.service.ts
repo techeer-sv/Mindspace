@@ -14,6 +14,10 @@ import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
+import {TitleNullException} from "./exception/TitleNullException";
+import {ContentNullException} from "./exception/ContentNullException";
+import {NodeNotFoundException} from "./exception/NodeNotFoundException";
+import {NodeService} from "../node/node.service";
 
 @Injectable()
 export class BoardService {
@@ -22,6 +26,7 @@ export class BoardService {
     private readonly boardRepository: Repository<Board>,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
+    private readonly nodeService: NodeService,
   ) {}
 
   async getAllBoardsByNodeId(nodeId: number): Promise<BoardNodeResponseDto[]> {
@@ -33,23 +38,42 @@ export class BoardService {
   }
 
   async createBoard(
-    nodeId: number,
-    userId: string,
-    createBoardDto: CreateBoardDto,
+      nodeId: number,
+      userId: string,
+      createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
+
+    // 제목이 없거나 빈 문자열인 경우 예외를 발생시킵니다.
+    if (!createBoardDto.title || createBoardDto.title.trim() === '') {
+      throw new TitleNullException();
+    }
+
+    // 내용이 없거나 빈 문자열인 경우 예외를 발생시킵니다.
+    if (!createBoardDto.content || createBoardDto.content.trim() === '') {
+      throw new ContentNullException();
+    }
+
+    // 노드의 유효성 확인
+    const node = await this.nodeService.findById(nodeId);
+    if (!node) {
+      throw new NodeNotFoundException();
+    }
+
     const convertedUserId = Number(userId);
     const user = await this.userService.findUserById(convertedUserId);
     const userNickname = user.nickname;
 
     const board = this.boardMapper.dtoToEntity(
-      createBoardDto,
-      nodeId,
-      convertedUserId,
-      userNickname,
+        createBoardDto,
+        nodeId,
+        convertedUserId,
+        userNickname,
     );
     const savedBoard = await this.boardRepository.save(board);
     return BoardMapper.boardToResponseDto(savedBoard);
   }
+
+
 
   async getBoardById(id: number): Promise<BoardResponseDto> {
     const boardEntity: Board = await this.boardRepository.findOne({

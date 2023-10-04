@@ -10,4 +10,10 @@ export class NodeService {
     async getAllNode(): Promise<Node[]> {
         return this.nodeRepository.find();
     }
+
+    async findById(nodeId: number): Promise<Node | undefined> {
+        return this.nodeRepository.findOne({ where: { id: nodeId } });
+    }
+
+
 }

@@ -26,19 +26,29 @@ const CommentModal = ({
             </div>
             {initialValue.map(comment => (
                 <div key={comment.id} className={styles.comment__content}>
-                    <div className={styles.comment__content__nickname}>
-                        <span className={styles.comment__content__nickname__text}>
-                          {comment.nickname}
-                        </span>
+                    <div className={styles.comment__content__header}>
+                        <div className={styles.comment__content__nickname}>
+                            <span className={styles.comment__content__nickname__text}>
+                                {comment.nickname}
+                            </span>
+                        </div>
+                        <div className={styles.comment__content__header__action}>
+                            <button className={styles.comment__content__header__action__edit}>
+                                수정
+                            </button>
+                            <button className={styles.comment__content__header__action__remove}>
+                                삭제
+                            </button>
+                        </div>
                     </div>
                     <div className={styles.comment__content__box}>
                         <span className={styles.comment__content__box__text}>
-                          {comment.content}
+                            {comment.content}
                         </span>
                     </div>
                     <div className={styles.comment__content__time}>
                         <span className={styles.comment__content__time__text}>
-                          {comment.date}
+                            {comment.date}
                         </span>
                     </div>
                 </div>

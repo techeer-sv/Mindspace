@@ -66,12 +66,35 @@
     margin: 0 1.5rem 1rem 1.5rem;
     border-bottom: 1px #ebedf2 solid;
 
-    &__nickname {
-      margin-bottom: 0.5rem;
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      &__text {
-        font-size: 15px;
-        font-weight: bold;
+      &__nickname {
+        &__text {
+          font-size: 15px;
+          font-weight: bold;
+        }
+      }
+
+      &__action {
+        display: flex;
+        gap: 10px;
+
+        &__edit, &__remove {
+          border: none;
+          background-color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: navy;
+            color: white;
+          }
+        }
       }
     }
 

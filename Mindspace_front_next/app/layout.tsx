@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LayoutProvider from "./LayoutProvider";
 import Recoil from "@/components/Recoil";
+import ReactQuery from "@/components/ReactQuery";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,7 +38,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Recoil>
-          <LayoutProvider>{children}</LayoutProvider>
+          <ReactQuery>
+            <LayoutProvider>{children}</LayoutProvider>
+          </ReactQuery>
         </Recoil>
       </body>
     </html>

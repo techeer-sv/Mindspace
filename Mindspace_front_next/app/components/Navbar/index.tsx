@@ -13,8 +13,14 @@ import { isLoggedInAtom } from "@/recoil/state/authAtom";
 // } from '@/hooks/queries/user';
 
 const Navbar = () => {
+  const [isClient, setIsClient] = useState(false);
+
   const router = useRouter();
-  const isLoggedInInitial = localStorage.getItem("accessToken") !== null;
+
+  const isLoggedInInitial =
+    typeof window !== "undefined"
+      ? localStorage.getItem("accessToken") !== null
+      : false;
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -38,10 +44,28 @@ const Navbar = () => {
   // }, []);
 
   useEffect(() => {
-    setLoggedIn(isLoggedInInitial);
+    setIsClient(true);
+    const isCurrentlyLoggedIn = localStorage.getItem("accessToken") !== null;
+    setLoggedIn(isCurrentlyLoggedIn);
   }, []);
 
   // useClearUserNicknameCache(isLoggedIn);
+
+  if (!isClient) {
+    // 서버사이드 렌더링의 경우 기본 틀만 보여줌
+    return (
+      <nav className={styles.navbar}>
+        <Link href="/" className={styles.navbar__title}>
+          <Image
+            src="/images/MindSpaceText.png"
+            alt="logo"
+            width={250}
+            height={50}
+          />
+        </Link>
+      </nav>
+    );
+  }
 
   return (
     <nav className={styles.navbar}>

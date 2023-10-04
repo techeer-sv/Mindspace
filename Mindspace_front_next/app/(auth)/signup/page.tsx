@@ -1,16 +1,16 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./../Auth.module.scss";
 import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
-// import Navbar from '@/components/Navbar';
-
+import { createUser } from "@/api/auth";
 // import { useSignUpMutation } from '@/hooks/queries/user';
-
 //TODO: recoil 및 api연결 로직에 대한 처리가 필요합니다. (일단 주석처리)
 
 export default function SignUpPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -51,15 +51,26 @@ export default function SignUpPage() {
     return true;
   };
 
-  // const submitForm = () => {
-  //   if (checkIsValid()) {
-  //     signupMutation({ userName, email, password });
-  //   }
-  // };
+  const submitForm = async () => {
+    if (checkIsValid()) {
+      console.log(userName, email, password);
+      // signupMutation({ userName, email, password });
+      try {
+        // API 호출
+        await createUser({
+          userName,
+          email,
+          password,
+        });
+        router.push("/signin");
+      } catch (error: any) {
+        setErrorMessage(error.errorMessage);
+      }
+    }
+  };
 
   return (
     <>
-      {/* <Navbar /> */}
       <div className={styles.content}>
         <div className={styles.content__signup__box}>
           <span className={styles.content__title}>Create Account</span>
@@ -97,10 +108,7 @@ export default function SignUpPage() {
           />
           <div className={styles.error}>{errorMessage}</div>
           <div className={styles.button_wapper}>
-            <FormButton
-              text="SIGN UP"
-              clickAction={() => console.log("SIGN UP 클릭")}
-            />
+            <FormButton text="SIGN UP" clickAction={submitForm} />
           </div>
         </div>
       </div>

@@ -129,4 +129,14 @@ export class BoardService {
     }
     return BoardMapper.toBoardDetailDto(board);
   }
+
+  async findBoardById(boardId: number): Promise<Board> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new Error(`Board with ID ${boardId} not found`);
+    }
+    return board;
+  }
 }

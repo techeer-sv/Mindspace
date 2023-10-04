@@ -35,6 +35,8 @@ services:
       context: ./Mindspace_back
       dockerfile: Dockerfile
     restart: always
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - '8080:8080'
     depends_on:

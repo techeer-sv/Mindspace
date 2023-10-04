@@ -5,7 +5,10 @@ const defaultHeaders = {
   "Content-Type": "application/json",
 };
 
-export async function baseFetch(endpoint: string, options?: RequestInit) {
+export async function baseFetch<T = any>(
+  endpoint: string,
+  options?: RequestInit,
+) {
   const accessToken = localStorage.getItem("accessToken");
 
   const authHeader: Record<string, string> = {};
@@ -23,7 +26,7 @@ export async function baseFetch(endpoint: string, options?: RequestInit) {
     headers: new Headers(combinedHeaders),
   });
 
-  return handleResponse(response);
+  return handleResponse<T>(response);
 }
 
 class ApiError extends Error {

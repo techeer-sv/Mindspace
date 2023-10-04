@@ -3,8 +3,9 @@
 import { useState } from "react";
 import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
-// import Navbar from '@/components/Navbar';
+import { useRouter } from "next/navigation";
 import styles from "./../Auth.module.scss";
+import { getAccessToken } from "@/api/auth";
 
 // import { useSetRecoilState } from 'recoil';
 // import { isLoggedInAtom } from '@/recoil/state/authAtom';
@@ -13,6 +14,8 @@ import styles from "./../Auth.module.scss";
 //TODO: recoil 및 api연결 로직에 대한 처리가 필요합니다. (일단 주석처리)
 
 export default function SignInPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -45,11 +48,23 @@ export default function SignInPage() {
     return true;
   };
 
-  //   const submitForm = () => {
-  //     if (checkIsValid()) {
-  //       loginMutation({ email, password });
-  //     }
-  //   };
+  const submitForm = async () => {
+    if (checkIsValid()) {
+      // loginMutation({ email, password });
+
+      try {
+        const token = await getAccessToken({
+          email,
+          password,
+        });
+
+        localStorage.setItem("accessToken", token);
+        router.push("/");
+      } catch (error: any) {
+        setErrorMessage(error.errorMessage);
+      }
+    }
+  };
 
   return (
     <>
@@ -75,12 +90,9 @@ export default function SignInPage() {
           />
           <div className={styles.error}>{errorMessage}</div>
           <div className={styles.button_wapper}>
+            <FormButton clickAction={submitForm} text="SIGN IN" />
             <FormButton
-              clickAction={() => console.log("SIGN IN 클릭")}
-              text="SIGN IN"
-            />
-            <FormButton
-              clickAction={() => console.log("SIGN UP 클릭")}
+              clickAction={() => router.push("/signup")}
               text="SIGN UP"
             />
           </div>

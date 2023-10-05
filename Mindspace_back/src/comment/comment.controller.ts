@@ -33,12 +33,12 @@ export class CommentController {
 
   @ApiOperation({ summary: '댓글 생성' })
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
-  @ApiHeader({ name: 'Authorization', description: '사용자 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createComment(
     @Query('board_id') boardId: number,
-    @Headers('Authorization') userIdHeader: string,
+    @Headers('user_id') userIdHeader: string,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<{ message: string }> {
     const userId = userIdHeader;

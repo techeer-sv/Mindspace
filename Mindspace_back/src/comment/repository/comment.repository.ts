@@ -14,6 +14,7 @@ export class CustomCommentRepository {
 
   async paginate(boardId: number, pagingParams?: PagingParams) {
     const queryBuilder = this.CommentRepository.createQueryBuilder('comment')
+      .innerJoinAndSelect('comment.user', 'user')
       .where('comment.board_id = :boardId', { boardId })
       .orderBy('comment.id', 'DESC');
 

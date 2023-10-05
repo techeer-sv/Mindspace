@@ -19,14 +19,14 @@ export class CommentMapper {
     comment.content = createCommentDto.content;
     comment.user = user;
     comment.board = board;
-    comment.userNickname = userNickname;
+    user.nickname = userNickname;
     return comment;
   }
 
   static commentToResponseDto(comment: Comment): CommentResponseDto {
     return {
       id: comment.id,
-      userNickname: comment.userNickname,
+      userNickname: comment.user.nickname,
       content: comment.content,
       updatedAt: formatDistanceToNow(comment.updatedAt, {
         addSuffix: true,

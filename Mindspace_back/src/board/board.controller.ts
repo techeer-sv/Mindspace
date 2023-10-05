@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -45,8 +46,8 @@ export class BoardController {
   }
 
   @ApiOperation({ summary: '게시글 생성' })
-  @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID'})
-  @ApiHeader({ name: 'user_id', description: '사용자 ID'})
+  @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @ApiResponse({ status: 201, description: '게시글 작성 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Post()
@@ -77,11 +78,16 @@ export class BoardController {
   }
 
   @ApiOperation({ summary: '게시글 삭제' })
+  @ApiQuery({ name: 'node_id', description: '게시글을 삭제할 노드의 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
+  @ApiResponse({ status: 201, description: '게시글 삭제 성공', type: Board }) // 201 Created response
+  @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Delete()
   async deleteOwnBoard(
     @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Headers('user_id') userIdHeader: string,
   ) {
+    const userId = userIdHeader; // 문자열로 변환
     return this.boardService.deleteOwnBoard(nodeId, userId);
   }
 

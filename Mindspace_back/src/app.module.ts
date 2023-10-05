@@ -50,7 +50,6 @@ export class LoggerMiddleware implements NestMiddleware {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [Node, User, Board, Comment, CustomCommentRepository],
-      synchronize: true, // 개발 환경에서만 true로 설정
     }),
     Neo4jModule.forRoot({
       scheme: 'neo4j',

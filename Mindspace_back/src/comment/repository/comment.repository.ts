@@ -13,7 +13,6 @@ export class CustomCommentRepository {
   ) {}
 
   async paginate(boardId: number, pagingParams?: PagingParams) {
-    // 수정: pagingParams 파라미터 추가
     const queryBuilder = this.CommentRepository.createQueryBuilder('comment')
       .where('comment.board_id = :boardId', { boardId })
       .orderBy('comment.id', 'DESC');
@@ -29,7 +28,7 @@ export class CustomCommentRepository {
       },
     });
 
-    const paginationResult = await paginator.paginate(queryBuilder); // 수정: paginationResult 변수 추가
+    const paginationResult = await paginator.paginate(queryBuilder);
 
     return {
       data: paginationResult.data,

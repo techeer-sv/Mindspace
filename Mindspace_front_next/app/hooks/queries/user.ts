@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useQueryClient, useQuery, useMutation } from "react-query";
 import { createUser, getAccessToken, getUserNickname } from "@/api/auth";
 import { USER_QUERIES } from "@/constants/queryKeys";
+import { FIVE_MINUTES_IN_MILLISECONDS } from "@/constants/common";
+import { APIErrorResponse } from "@/constants/types";
 
 export const useUserNicknameQuery = (isLoggedIn: boolean) => {
   return useQuery([USER_QUERIES.NICKNAME], getUserNickname, {
     enabled: isLoggedIn,
-    staleTime: 1000 * 60 * 5,
+    staleTime: FIVE_MINUTES_IN_MILLISECONDS,
   });
 };
 
@@ -28,7 +30,7 @@ export const useSignUpMutation = (
     onSuccess: () => {
       successAction();
     },
-    onError: (error: any) => {
+    onError: (error: APIErrorResponse) => {
       errorAction(error.errorMessage);
     },
   });
@@ -42,7 +44,7 @@ export const useSignInMutation = (
     onSuccess: (accessToken) => {
       successAction(accessToken);
     },
-    onError: (error: any) => {
+    onError: (error: APIErrorResponse) => {
       errorAction(error.errorMessage);
     },
   });

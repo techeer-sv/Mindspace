@@ -1,16 +1,16 @@
 import { baseFetch } from "./baseFetch";
-
-interface CreateUserParams {
-  userName: string;
-  email: string;
-  password: string;
-}
+import {
+  NicknameResponse,
+  SignInResponse,
+  SignInRequest,
+  SignUpReqeust,
+} from "@/constants/types";
 
 export const createUser = async ({
   userName,
   email,
   password,
-}: CreateUserParams) => {
+}: SignUpReqeust) => {
   const endpoint = "user/signup";
   const body = JSON.stringify({
     nickname: userName,
@@ -25,29 +25,18 @@ export const createUser = async ({
 };
 
 // TODO : 향후 응답 구조가 수정되면 맞춰서 처리해야합니다 (id가아니라 accessToken을 받아옴)
-interface UserResponse {
-  id: string;
-  email: string;
-  password: string;
-  nickname: string;
-}
-
-interface GetAccessTokenParams {
-  email: string;
-  password: string;
-}
 
 export const getAccessToken = async ({
   email,
   password,
-}: GetAccessTokenParams): Promise<string> => {
+}: SignInRequest): Promise<string> => {
   const endpoint = "user/login";
   const body = JSON.stringify({
     email: email,
     password: password,
   });
 
-  const response = await baseFetch<UserResponse>(endpoint, {
+  const response = await baseFetch<SignInResponse>(endpoint, {
     method: "POST",
     body: body,
   });
@@ -56,14 +45,10 @@ export const getAccessToken = async ({
   return response.id;
 };
 
-interface UserNicknameResponse {
-  nickname: string;
-}
-
 export const getUserNickname = async (): Promise<string> => {
   const endpoint = "user/nickname";
 
-  const response = await baseFetch<UserNicknameResponse>(endpoint, {
+  const response = await baseFetch<NicknameResponse>(endpoint, {
     method: "GET",
   });
 

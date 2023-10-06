@@ -14,13 +14,13 @@ import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
-import {TitleNullException} from "./exception/TitleNullException";
-import {ContentNullException} from "./exception/ContentNullException";
-import {NodeNotFoundException} from "./exception/NodeNotFoundException";
-import {NodeService} from "../node/node.service";
-import {BoardNotFoundException} from "./exception/BoardNotFoundException";
-import {InvalidPostDeleteException} from "./exception/InvalidPostDeleteException";
-import {NodeAlreadyWrittenException} from "./exception/NodeAlreadyWrittenException";
+import { TitleNullException } from './exception/TitleNullException';
+import { ContentNullException } from './exception/ContentNullException';
+import { NodeNotFoundException } from './exception/NodeNotFoundException';
+import { NodeService } from '../node/node.service';
+import { BoardNotFoundException } from './exception/BoardNotFoundException';
+import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
+import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
 
 @Injectable()
 export class BoardService {
@@ -37,24 +37,27 @@ export class BoardService {
     const boards = await this.boardRepository.find({
       where: { nodeId: nodeId },
     });
+
+    if (!boards || boards.length === 0) {
+      throw new NodeNotFoundException();
+    }
+
     return boards.map((board) => BoardMapper.BoardNodeResponseDto(board));
   }
 
   async createBoard(
-      nodeId: number,
-      userId: string,
-      createBoardDto: CreateBoardDto,
+    nodeId: number,
+    userId: string,
+    createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-
     // nodeId가 없으면 DEFAULT_NODE_ID 사용
     nodeId = nodeId ? nodeId : this.DEFAULT_NODE_ID;
 
     // 입력된 nodeId로 노드 조회
     const existingNode = await this.nodeService.findById(nodeId);
     if (!existingNode) {
-      throw new NodeNotFoundException();  // 노드가 없으면 예외 발생
+      throw new NodeNotFoundException(); // 노드가 없으면 예외 발생
     }
-
 
     // userId를 숫자로 변환
     const convertedUserId = Number(userId);
@@ -75,10 +78,10 @@ export class BoardService {
 
     // DTO를 엔터티로 변환
     const board = this.boardMapper.dtoToEntity(
-        createBoardDto,
-        nodeId,
-        convertedUserId,
-        userNickname,
+      createBoardDto,
+      nodeId,
+      convertedUserId,
+      userNickname,
     );
 
     // 게시글 저장 후 반환
@@ -86,13 +89,11 @@ export class BoardService {
     return BoardMapper.boardToResponseDto(savedBoard);
   }
 
-
   async updateBoard(
-      nodeId: number,
-      userId: string,  // userId의 타입을 string에서 number로 변경
-      updateBoardDto: UpdateBoardDto,
+    nodeId: number,
+    userId: string, // userId의 타입을 string에서 number로 변경
+    updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
-
     // 노드의 유효성 확인
     const node = await this.nodeService.findById(nodeId);
     if (!node) {
@@ -101,7 +102,7 @@ export class BoardService {
 
     const convertedUserId = Number(userId);
 
-// 해당 노드와 사용자 ID로 게시글을 조회
+    // 해당 노드와 사용자 ID로 게시글을 조회
     const board = await this.boardRepository.findOne({
       where: { nodeId: nodeId, userId: convertedUserId },
     });
@@ -128,7 +129,6 @@ export class BoardService {
     return BoardMapper.boardToResponseDto(updatedBoard);
   }
 
-
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
     const convertedUserId = parseInt(userId); // userId를 숫자로 변환
 
@@ -154,8 +154,6 @@ export class BoardService {
       throw new InvalidPostDeleteException(); // 게시물 삭제 실패 예외 처리
     }
   }
-
-
 
   async getBoardByNodeIdAndUserId(
     nodeId: number,

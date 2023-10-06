@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import LayoutProvider from "./LayoutProvider";
 import Recoil from "@/components/Recoil";
 import ReactQuery from "@/components/ReactQuery";
+import AuthProvider from "./AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Recoil>
           <ReactQuery>
-            <LayoutProvider>{children}</LayoutProvider>
+            <AuthProvider>
+              <LayoutProvider>{children}</LayoutProvider>
+            </AuthProvider>
           </ReactQuery>
         </Recoil>
       </body>

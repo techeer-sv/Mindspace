@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useQueryClient, useQuery, useMutation } from "react-query";
 import { createUser, getAccessToken, getUserNickname } from "@/api/auth";
+import { USER_QUERIES } from "@/constants/queryKeys";
 
 export const useUserNicknameQuery = (isLoggedIn: boolean) => {
-  return useQuery(["USER_NICKNAME"], getUserNickname, {
+  return useQuery([USER_QUERIES.NICKNAME], getUserNickname, {
     enabled: isLoggedIn,
     staleTime: 1000 * 60 * 5,
   });
@@ -14,7 +15,7 @@ export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      queryClient.invalidateQueries("USER_NICKNAME");
+      queryClient.invalidateQueries(USER_QUERIES.NICKNAME);
     }
   }, [isLoggedIn, queryClient]);
 };

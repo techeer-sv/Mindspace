@@ -29,6 +29,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.0
     version: 0.14.0
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
@@ -38,6 +41,9 @@ dependencies:
   typeorm:
     specifier: ^0.3.17
     version: 0.3.17(pg@8.11.3)(ts-node@10.9.1)
+  typeorm-cursor-pagination:
+    specifier: ^0.10.1
+    version: 0.10.1(typeorm@0.3.17)
 
 devDependencies:
   '@nestjs/cli':
@@ -5128,6 +5134,14 @@ packages:
 
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
+
+  /typeorm-cursor-pagination@0.10.1(typeorm@0.3.17):
+    resolution: {integrity: sha512-ezMx9giREI8aBVUpOs7RPn5/uIdygqlduuXJcKiny9UnUXev3zIJaoXCHlrenT6pgcR1cx3baHG/HImPEgeVgA==}
+    peerDependencies:
+      typeorm: ^0.3.6
+    dependencies:
+      typeorm: 0.3.17(pg@8.11.3)(ts-node@10.9.1)
+    dev: false
 
   /typeorm@0.3.17(pg@8.11.3)(ts-node@10.9.1):
     resolution: {integrity: sha512-UDjUEwIQalO9tWw9O2A4GU+sT3oyoUXheHJy4ft+RFdnRdQctdQ34L9SqE2p7LdwzafHx1maxT+bqXON+Qnmig==}

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -91,20 +92,24 @@ export class BoardService {
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
     const convertedUserId = parseInt(userId); // userId를 숫자로 변환
+    if (isNaN(convertedUserId)) {
+      throw new BadRequestException('Invalid user ID.');
+    }
 
     const board = await this.boardRepository.findOne({
-      where: { id: nodeId, userId: convertedUserId },
+      where: { nodeId: nodeId, userId: convertedUserId },
     });
 
     if (!board) {
-      throw new NotFoundException(`게시물 ${nodeId}를 찾을 수 없습니다.`);
+      throw new NotFoundException(
+        `${nodeId}에 작성된 게시물을 찾을 수 없습니다.`,
+      );
     }
 
-    if (board.userId !== convertedUserId) {
-      throw new UnauthorizedException(`게시물을 삭제할 권한이 없습니다.`);
-    }
-
-    await this.boardRepository.delete(nodeId);
+    await this.boardRepository.delete({
+      nodeId: nodeId,
+      userId: convertedUserId,
+    });
   }
 
   async getBoardByNodeIdAndUserId(
@@ -128,5 +133,15 @@ export class BoardService {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);
     }
     return BoardMapper.toBoardDetailDto(board);
+  }
+
+  async findBoardById(boardId: number): Promise<Board> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new Error(`Board with ID ${boardId} not found`);
+    }
+    return board;
   }
 }

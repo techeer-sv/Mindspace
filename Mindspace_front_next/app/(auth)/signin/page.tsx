@@ -5,16 +5,11 @@ import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
 import { useRouter } from "next/navigation";
 import styles from "./../Auth.module.scss";
-import { getAccessToken } from "@/api/auth";
 
 import { useSetRecoilState } from "recoil";
 import { isLoggedInAtom } from "@/recoil/state/authAtom";
 
-// import { useSetRecoilState } from 'recoil';
-// import { isLoggedInAtom } from '@/recoil/state/authAtom';
-// import { useSignInMutation } from '@/hooks/queries/user';
-
-//TODO:  react-qurery 로직에 대한 처리가 필요합니다.
+import { useSignInMutation } from "@/hooks/queries/user";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -31,10 +26,10 @@ export default function SignInPage() {
     router.push("/");
   };
 
-  //   const { mutate: loginMutation } = useSignInMutation(
-  //     handleLoginSuccess,
-  //     setErrorMessage,
-  //   );
+  const { mutate: loginMutation } = useSignInMutation(
+    handleLoginSuccess,
+    setErrorMessage,
+  );
 
   const checkIsValid = () => {
     if (email === "") {
@@ -53,24 +48,12 @@ export default function SignInPage() {
 
   const submitForm = async () => {
     if (checkIsValid()) {
-      // loginMutation({ email, password });
-
-      try {
-        const token = await getAccessToken({
-          email,
-          password,
-        });
-
-        handleLoginSuccess(token);
-      } catch (error: any) {
-        setErrorMessage(error.errorMessage);
-      }
+      loginMutation({ email, password });
     }
   };
 
   return (
     <>
-      {/* <Navbar /> */}
       <div className={styles.content}>
         <div className={styles.content__signin__box}>
           <span className={styles.content__title}>SIGN IN</span>

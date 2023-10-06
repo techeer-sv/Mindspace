@@ -4,9 +4,7 @@ import { useState } from "react";
 import styles from "./../Auth.module.scss";
 import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
-import { createUser } from "@/api/auth";
-// import { useSignUpMutation } from '@/hooks/queries/user';
-//TODO: recoil 및 api연결 로직에 대한 처리가 필요합니다. (일단 주석처리)
+import { useSignUpMutation } from "@/hooks/queries/user";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -18,9 +16,14 @@ export default function SignUpPage() {
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // const { mutate: signupMutation } = useSignUpMutation(() => {
-  //   navigate('/signin');
-  // }, setErrorMessage);
+  const handleLoginSuccess = () => {
+    router.push("/signin");
+  };
+
+  const { mutate: signupMutation } = useSignUpMutation(
+    handleLoginSuccess,
+    setErrorMessage,
+  );
 
   const checkIsValid = () => {
     if (email === "") {
@@ -53,19 +56,7 @@ export default function SignUpPage() {
 
   const submitForm = async () => {
     if (checkIsValid()) {
-      console.log(userName, email, password);
-      // signupMutation({ userName, email, password });
-      try {
-        // API 호출
-        await createUser({
-          userName,
-          email,
-          password,
-        });
-        router.push("/signin");
-      } catch (error: any) {
-        setErrorMessage(error.errorMessage);
-      }
+      signupMutation({ userName, email, password });
     }
   };
 

@@ -59,6 +59,15 @@ export class BoardService {
       throw new NodeNotFoundException(); // 노드가 없으면 예외 발생
     }
 
+    // Check if a board already exists for this node
+    const existingBoard = await this.boardRepository.findOne({
+      where: { nodeId: nodeId },
+    });
+
+    if (existingBoard) {
+      throw new NodeAlreadyWrittenException();
+    }
+
     // userId를 숫자로 변환
     const convertedUserId = Number(userId);
 

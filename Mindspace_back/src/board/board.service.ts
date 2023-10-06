@@ -139,7 +139,7 @@ export class BoardService {
 
     // 게시글이 없는 경우
     if (!board) {
-      throw new BoardNotFoundException(); // 게시물을 찾을 수 없습니다 예외 처리
+      throw new InvalidPostDeleteException(); // 게시물을 찾을 수 없습니다 예외 처리
     }
 
     // 사용자 ID가 일치하지 않는 경우
@@ -149,10 +149,6 @@ export class BoardService {
 
     // 게시글 삭제
     const deleteResult = await this.boardRepository.delete(board.id);
-
-    if (!deleteResult.affected) {
-      throw new InvalidPostDeleteException(); // 게시물 삭제 실패 예외 처리
-    }
   }
 
   async getBoardByNodeIdAndUserId(

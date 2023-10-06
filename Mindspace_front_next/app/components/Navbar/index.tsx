@@ -7,24 +7,20 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { isLoggedInAtom } from "@/recoil/state/authAtom";
-// import {
-//   useUserNicknameQuery,
-//   useClearUserNicknameCache,
-// } from '@/hooks/queries/user';
+import {
+  useUserNicknameQuery,
+  useClearUserNicknameCache,
+} from "@/hooks/queries/user";
 
 const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
 
   const router = useRouter();
 
-  const isLoggedInInitial =
-    typeof window !== "undefined"
-      ? localStorage.getItem("accessToken") !== null
-      : false;
   const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  // const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
+  const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
 
   const logout = () => {
     setLoggedIn(false);
@@ -33,6 +29,7 @@ const Navbar = () => {
     localStorage.clear();
   };
 
+  useClearUserNicknameCache(isLoggedIn);
   // useEffect(() => {
   //   const handleResize = () => {
   //     setIsNavExpanded(false);
@@ -108,7 +105,7 @@ const Navbar = () => {
                     : styles.navbar__menu__text
                 }
               >
-                <span>{"사용자 이름"}</span>
+                <span>{userNickname}</span>
               </li>
               <li>
                 <span onClick={logout}>logout</span>

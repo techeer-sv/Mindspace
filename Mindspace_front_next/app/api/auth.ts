@@ -55,3 +55,17 @@ export const getAccessToken = async ({
   //TODO: 백엔드 업데이트에 따라서 "id"를 "accessToken"으로 수정해야합니다
   return response.id;
 };
+
+interface UserNicknameResponse {
+  nickname: string;
+}
+
+export const getUserNickname = async (): Promise<string> => {
+  const endpoint = "user/nickname";
+
+  const response = await baseFetch<UserNicknameResponse>(endpoint, {
+    method: "GET",
+  });
+
+  return response.nickname;
+};

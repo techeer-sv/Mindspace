@@ -13,7 +13,8 @@ export async function baseFetch<T = any>(
 
   const authHeader: Record<string, string> = {};
   if (accessToken) {
-    authHeader.Authorization = `Bearer ${accessToken}`;
+    authHeader.Authorization = `${accessToken}`;
+    // TODO 향후 Bearer(혹은 기타 토큰타입) 를 붙여 토큰정보를 보낼 것
   }
   const combinedHeaders = {
     ...defaultHeaders,
@@ -27,16 +28,6 @@ export async function baseFetch<T = any>(
   });
 
   return handleResponse<T>(response);
-}
-
-class ApiError extends Error {
-  constructor(
-    public code: string,
-    message?: string,
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -69,11 +68,9 @@ export class BoardController {
   @Put()
   async updateBoard(
     @Query('node_id') nodeId: number,
-    @Headers('user_id') userIdHeader: string,
+    @Headers('user_id') userId: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
-    // <-- 변경된 반환 타입
-    const userId = userIdHeader; // 문자열로 변환
     return this.boardService.updateBoard(nodeId, userId, updateBoardDto);
   }
 
@@ -85,9 +82,8 @@ export class BoardController {
   @Delete()
   async deleteOwnBoard(
     @Query('node_id') nodeId: number,
-    @Headers('user_id') userIdHeader: string,
+    @Headers('user_id') userId: string,
   ) {
-    const userId = userIdHeader; // 문자열로 변환
     return this.boardService.deleteOwnBoard(nodeId, userId);
   }
 

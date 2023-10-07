@@ -8,5 +8,6 @@ import { NodeService } from './node.service';
   imports: [TypeOrmModule.forFeature([Node])],
   controllers: [NodeController],
   providers: [NodeService],
+  exports: [NodeService],
 })
 export class NodeModule {}

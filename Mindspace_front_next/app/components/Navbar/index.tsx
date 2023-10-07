@@ -31,15 +31,15 @@ const Navbar = () => {
   };
 
   useClearUserNicknameCache(isLoggedIn);
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsNavExpanded(false);
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNavExpanded(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -48,10 +48,9 @@ const Navbar = () => {
   }, []);
 
   if (!isClient) {
-    // 서버사이드 렌더링의 경우 기본 틀만 보여줌
+    // 서버사이드 렌더링 단계에서 보여줄 기본 틀
     return (
       <nav className={styles.navbar}>
-        13212
         <Link href="/" className={styles.navbar__title}>
           <Image
             src="/images/MindSpaceText.png"
@@ -60,6 +59,22 @@ const Navbar = () => {
             height={50}
           />
         </Link>
+        <div
+          className={
+            isNavExpanded
+              ? `${styles.navbar__menu} ${styles["navbar__menu--expanded"]}`
+              : styles.navbar__menu
+          }
+        >
+          <ul>
+            <li>
+              <span>{"-"}</span>
+            </li>
+            <li>
+              <span>{"-"}</span>
+            </li>
+          </ul>
+        </div>
       </nav>
     );
   }

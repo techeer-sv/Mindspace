@@ -1,4 +1,5 @@
 "use client";
+import Cookies from "js-cookie";
 
 import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
@@ -26,7 +27,7 @@ const Navbar = () => {
     setLoggedIn(false);
     alert("로그아웃 되었습니다");
     router.push("/");
-    localStorage.clear();
+    Cookies.remove("accessToken");
   };
 
   useClearUserNicknameCache(isLoggedIn);
@@ -42,16 +43,15 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsClient(true);
-    const isCurrentlyLoggedIn = localStorage.getItem("accessToken") !== null;
+    const isCurrentlyLoggedIn = Cookies.get("accessToken") !== undefined;
     setLoggedIn(isCurrentlyLoggedIn);
   }, []);
-
-  // useClearUserNicknameCache(isLoggedIn);
 
   if (!isClient) {
     // 서버사이드 렌더링의 경우 기본 틀만 보여줌
     return (
       <nav className={styles.navbar}>
+        13212
         <Link href="/" className={styles.navbar__title}>
           <Image
             src="/images/MindSpaceText.png"

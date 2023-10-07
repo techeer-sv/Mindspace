@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.4",
+    "js-cookie": "^3.0.5",
     "next": "latest",
     "prettier": "^3.0.3",
     "react": "latest",

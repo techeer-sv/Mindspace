@@ -1,9 +1,7 @@
 import { atom } from "recoil";
+import Cookies from "js-cookie";
 
-const checkLoggedIn =
-  typeof window !== "undefined"
-    ? localStorage.getItem("accessToken") !== null
-    : false;
+const checkLoggedIn = Cookies.get("accessToken") !== undefined;
 
 export const isLoggedInAtom = atom({
   key: "isLoggedInAtom",

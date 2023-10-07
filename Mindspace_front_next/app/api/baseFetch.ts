@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const VERSION = "api/v1/";
 const BASEURL = `${process.env.NEXT_PUBLIC_API_URL}${VERSION}`;
 
@@ -9,7 +11,7 @@ export async function baseFetch<T = any>(
   endpoint: string,
   options?: RequestInit,
 ) {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
 
   const authHeader: Record<string, string> = {};
   if (accessToken) {

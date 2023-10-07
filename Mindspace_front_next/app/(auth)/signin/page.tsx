@@ -11,6 +11,8 @@ import { isLoggedInAtom } from "@/recoil/state/authAtom";
 
 import { useSignInMutation } from "@/hooks/queries/user";
 
+import Cookies from "js-cookie";
+
 export default function SignInPage() {
   const router = useRouter();
 
@@ -22,7 +24,7 @@ export default function SignInPage() {
   const setLoggedIn = useSetRecoilState(isLoggedInAtom);
 
   const handleLoginSuccess = (token: string) => {
-    localStorage.setItem("accessToken", token);
+    Cookies.set("accessToken", token, { expires: 1 });
     setLoggedIn(true);
     router.push("/");
   };

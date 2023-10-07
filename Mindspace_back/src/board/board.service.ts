@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -140,6 +141,9 @@ export class BoardService {
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
     const convertedUserId = parseInt(userId); // userId를 숫자로 변환
+    if (isNaN(convertedUserId)) {
+      throw new BadRequestException('Invalid user ID.');
+    }
 
     // 해당 노드와 사용자 ID로 게시글 조회
     const board = await this.boardRepository.findOne({
@@ -181,5 +185,15 @@ export class BoardService {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);
     }
     return BoardMapper.toBoardDetailDto(board);
+  }
+
+  async findBoardById(boardId: number): Promise<Board> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new Error(`Board with ID ${boardId} not found`);
+    }
+    return board;
   }
 }

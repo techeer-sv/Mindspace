@@ -5,9 +5,9 @@ import { NodeController } from './node.controller';
 import { NodeService } from './node.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Node])],
-    controllers: [NodeController],
-    providers: [NodeService],
-    exports: [NodeService],  // NodeService를 내보냅니다.
+  imports: [TypeOrmModule.forFeature([Node])],
+  controllers: [NodeController],
+  providers: [NodeService],
+  exports: [NodeService],
 })
 export class NodeModule {}

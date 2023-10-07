@@ -15,5 +15,6 @@ import { NodeModule } from '../node/node.module';  // Import NodeModule
   ],
   providers: [BoardService, BoardMapper],
   controllers: [BoardController],
+  exports: [BoardService],
 })
 export class BoardModule {}

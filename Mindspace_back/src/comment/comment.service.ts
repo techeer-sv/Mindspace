@@ -31,6 +31,7 @@ export class CommentService {
     boardId: number,
     userId: string,
     createCommentDto: CreateCommentDto,
+    parentId?: number,
   ): Promise<Comment> {
     const convertedUserId = Number(userId);
     const user = await this.userService.findUserById(convertedUserId);
@@ -51,6 +52,17 @@ export class CommentService {
       board,
       user.nickname,
     );
+
+    if (parentId) {
+      const parentComment = await this.commentRepository.findOne({
+        where: { id: parentId },
+      });
+      if (!parentComment) {
+        throw new NotFoundException('부모 댓글을 찾을 수 없습니다.');
+      }
+      comment.parent = parentComment;
+    }
+
     return await this.commentRepository.save(comment);
   }
 

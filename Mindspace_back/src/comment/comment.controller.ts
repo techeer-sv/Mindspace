@@ -33,6 +33,7 @@ export class CommentController {
 
   @ApiOperation({ summary: '댓글 생성' })
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
+  @ApiQuery({ name: 'parent_id', description: '대댓글을 작성할 부모의 ID' })
   @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -40,8 +41,16 @@ export class CommentController {
     @Query('board_id') boardId: number,
     @Headers('user_id') userId: string,
     @Body() createCommentDto: CreateCommentDto,
+    @Query('parent_id') parentId?: number,
   ): Promise<{ message: string }> {
-    await this.commentService.createComment(boardId, userId, createCommentDto);
+    const userId = userIdHeader;
+    await this.commentService.createComment(
+      boardId,
+      userId,
+      createCommentDto,
+      parentId,
+    );
+
     return { message: '댓글이 성공적으로 작성되었습니다.' };
   }
 

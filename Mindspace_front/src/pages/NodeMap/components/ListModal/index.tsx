@@ -20,12 +20,21 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
       nickname: '작성자1',
       content: '댓글 내용1',
       date: '5분전',
+      replies: [
+        {
+          id: 3,
+          nickname: '작성자3',
+          content: '대댓글 내용1',
+          date: '15분전',
+        },
+      ],
     },
     {
       id: 2,
       nickname: '작성자2',
       content: '댓글 내용2',
       date: '10분전',
+      replies: [], // 대댓글이 없더라도 빈 배열을 포함시켜 데이터의 일관성을 유지합니다.
     },
   ];
   const toggleCommentModal = () => {

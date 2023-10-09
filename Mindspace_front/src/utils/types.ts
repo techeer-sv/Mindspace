@@ -94,12 +94,21 @@ export interface CustomModalProps {
   style?: React.CSSProperties;
 }
 
+// Replies
+interface Replies {
+  id: number;
+  nickname: string;
+  content: string;
+  date: string;
+}
+
 // Comment
 interface Comment {
   id: number;
   nickname: string;
   content: string;
   date: string;
+  replies: Replies [];
 }
 
 // CommentModal

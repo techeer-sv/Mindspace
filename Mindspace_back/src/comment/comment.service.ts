@@ -54,8 +54,12 @@ export class CommentService {
     return await this.commentRepository.save(comment);
   }
 
-  /** 댓글 조회 */
-  async getCommentsByBoardId(boardId: number, pagingParams: PagingParams) {
+  /** 댓글 목록 조회 */
+  async getCommentsByBoardId(
+    boardId: number,
+    userId: string,
+    pagingParams: PagingParams,
+  ) {
     const comments = await this.customCommentRepository.paginate(
       boardId,
       pagingParams,
@@ -63,7 +67,7 @@ export class CommentService {
 
     const transformedComments: CommentResponseDto[] = comments.data.map(
       (comment) => {
-        return CommentMapper.commentToResponseDto(comment);
+        return CommentMapper.commentToResponseDto(comment, userId);
       },
     );
 

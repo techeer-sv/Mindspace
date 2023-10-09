@@ -46,6 +46,7 @@ export class CommentController {
   }
 
   @ApiOperation({ summary: '댓글 조회' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @ApiQuery({ name: 'board_id', description: '댓글을 조회할 게시글의 ID' })
   @ApiQuery({
     name: 'beforeCursor',
@@ -66,10 +67,12 @@ export class CommentController {
   @Get()
   async getComments(
     @Query('board_id') boardId: number,
+    @Headers('user_id') userId: string,
     @Query() pagingParams: PagingParams,
   ): Promise<PaginatedCommentResponseDto> {
     return await this.commentService.getCommentsByBoardId(
       boardId,
+      userId,
       pagingParams,
     );
   }

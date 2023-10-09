@@ -6,12 +6,10 @@ import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserMapper } from './dto/user.mapper';
 import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
-import {
-  UserEmailDuplicatedException,
-  UserInvalidPasswordException,
-  UserNicknameDuplicatedException,
-  UserNotFoundException,
-} from './exception/errorResponse';
+import { UserEmailDuplicatedException } from './exception/UserEmailDuplicatedException';
+import { UserNicknameDuplicatedException } from './exception/UserNicknameDuplicatedException';
+import { UserNotFoundException } from './exception/UserNotFoundException';
+import { UserInvalidPasswordException } from './exception/UserInvalidPasswordException';
 
 @Injectable()
 export class UserService {

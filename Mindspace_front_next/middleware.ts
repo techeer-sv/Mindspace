@@ -1,24 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
+import { ROUTES } from "@/constants/common";
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|fonts|images).*)"],
 };
-
-const protectedRoutes = ["/map"]; // 로그인이 필요한 페이지 목록
-const publicRoutes = ["/signin", "/signup"]; // 로그인이 되면 접근할 수 없는 페이지 목록
 
 export function middleware(request: NextRequest) {
   const token = getTokenFromCookies(request);
   const currentPath = request.nextUrl.pathname;
 
-  if (!token && protectedRoutes.includes(currentPath)) {
+  if (!token && ROUTES.AUTH_REQUIRED.includes(currentPath)) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
   }
 
-  if (token && publicRoutes.includes(currentPath)) {
+  if (token && ROUTES.NON_AUTH_ACCESSIBLE.includes(currentPath)) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);

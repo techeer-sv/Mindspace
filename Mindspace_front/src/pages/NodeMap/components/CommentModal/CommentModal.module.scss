@@ -8,6 +8,7 @@
   border-radius: 10px;
   margin-left: 0.5rem;
   transform: translateX(0);
+  overflow-y: auto;
 
   &__header {
     display: flex;
@@ -70,6 +71,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.5rem;
 
       &__nickname {
         &__text {
@@ -82,7 +84,7 @@
         display: flex;
         gap: 10px;
 
-        &__edit, &__remove {
+        &__edit, &__remove, &__replies {
           border: none;
           background-color: white;
           padding: 5px 10px;
@@ -111,7 +113,8 @@
       margin-bottom: 0.5rem;
 
       &__text {
-        font-size: 12px;
+        font-size: 11px;
+        color: #999;
       }
     }
   }
@@ -122,3 +125,130 @@
   overflow-y: hidden;
   flex: 0;
 }
+
+.reply {
+  background-color: #F7F7F7;
+  border-radius: 10px;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  margin-bottom: 1rem;
+
+
+  &__content {
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      &__nickname {
+        &__text {
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
+      &__action {
+        display: flex;
+        gap: 10px;
+
+        &__edit, &__remove {
+          border: none;
+          background-color: #F7F7F7;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: navy;
+            color: white;
+          }
+        }
+      }
+    }
+
+    &__box {
+      margin-bottom: 0.5rem;
+
+      &__text {
+        font-size: 14px;
+        font-weight: normal;
+      }
+    }
+
+    &__time {
+      margin-top: 0.5rem;
+
+      &__text {
+        font-size: 11px;
+        color: #999;
+      }
+    }
+  }
+
+    &__input {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+
+      &__button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          border: 1px solid navy;
+          background-color: navy;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          width: 100%;
+        }
+      }
+      input {
+        padding: 10px 15px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+
+        input {
+          padding: 10px 15px;
+          border: 2px solid #ccc;
+          border-radius: 5px;
+          width: 60%;
+        }
+
+        input:focus {
+          border-color: #007BFF;
+          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        input::placeholder {
+          color: #888;
+          font-style: italic;
+        }
+      }
+
+      &__icon {
+        margin: 1rem;
+
+        button {
+          border: none;
+          padding: 0;
+          background-color: transparent;
+          cursor: pointer;
+          overflow: hidden;
+        }
+
+        button:hover img {
+          opacity: 0.5;
+        }
+      }
+    }
+  }

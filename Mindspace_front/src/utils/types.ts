@@ -100,6 +100,7 @@ interface Replies {
   nickname: string;
   content: string;
   date: string;
+  editable: boolean;
 }
 
 // Comment
@@ -108,6 +109,7 @@ interface Comment {
   nickname: string;
   content: string;
   date: string;
+  editable: boolean;
   replies: Replies [];
 }
 

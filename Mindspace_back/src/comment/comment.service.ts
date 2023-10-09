@@ -60,6 +60,19 @@ export class CommentService {
     userId: string,
     pagingParams: PagingParams,
   ) {
+    const convertedUserId = Number(userId);
+    const user = await this.userService.findUserById(convertedUserId);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    const board = await this.boardService.findBoardById(boardId);
+
+    if (!board) {
+      throw new BoardNotFoundException();
+    }
+
     const comments = await this.customCommentRepository.paginate(
       boardId,
       pagingParams,
@@ -83,6 +96,13 @@ export class CommentService {
     userId: string,
     updateCommentDto: UpdateCommentDto,
   ): Promise<UpdateCommentDto> {
+    const convertedUserId = Number(userId);
+    const user = await this.userService.findUserById(convertedUserId);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
     const comment = await this.commentRepository.findOne({
       where: { id: comment_id },
       relations: ['user'],
@@ -102,6 +122,13 @@ export class CommentService {
 
   /** 댓글 삭제 */
   async deleteComment(comment_id: number, userId: string): Promise<void> {
+    const convertedUserId = Number(userId);
+    const user = await this.userService.findUserById(convertedUserId);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
     const comment = await this.commentRepository.findOne({
       where: { id: comment_id },
       relations: ['user'],

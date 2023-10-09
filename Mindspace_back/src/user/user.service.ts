@@ -63,7 +63,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ where: { id: userId } }); // `where` 키워드 추가
 
     if (!user) {
-      throw new Error('유저를 찾을 수 없음');
+      throw new UserNotFoundException();
     }
     return user;
   }

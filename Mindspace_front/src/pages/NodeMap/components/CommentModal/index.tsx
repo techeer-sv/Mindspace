@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './CommentModal.module.scss';
 import CommentIcon from '@/assets/icons/Comment.svg';
 import SendCommentIcon from '@/assets/icons/SendComment.svg';
@@ -8,13 +8,27 @@ const CommentModal = ({
   isOpen,
   initialValue,
 }: CommentModalProps) => {
+  const [editing, setEditing] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState<string>('');
+
+  const handleEditClick = (id: number, content: string) => {
+    setEditing(id);
+    setEditedContent(content);
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedContent(e.target.value);
+  };
+    
   return (
         <div className={isOpen ? styles.comment : styles.hiddencomment}>
             <div className={styles.comment__header}>
                 <div className={styles.comment__header__icon}>
                     <img src={CommentIcon} alt="Comment Icon" />
                 </div>
-                <span className={styles.comment__header__text}>댓글 {initialValue.length}</span>
+                <span className={styles.comment__header__text}>
+                    댓글 {initialValue.length}
+                </span>
             </div>
             <div className={styles.comment__input}>
                 <input type="text" placeholder="Enter your comment" />
@@ -28,12 +42,15 @@ const CommentModal = ({
                 <div key={comment.id} className={styles.comment__content}>
                     <div className={styles.comment__content__header}>
                         <div className={styles.comment__content__nickname}>
-                            <span className={styles.comment__content__nickname__text}>
-                                {comment.nickname}
-                            </span>
+                          <span className={styles.comment__content__nickname__text}>
+                            {comment.nickname}
+                          </span>
                         </div>
                         <div className={styles.comment__content__header__action}>
-                            <button className={styles.comment__content__header__action__edit}>
+                            <button
+                                className={styles.comment__content__header__action__edit}
+                                onClick={() => handleEditClick(comment.id, comment.content)}
+                            >
                                 수정
                             </button>
                             <button className={styles.comment__content__header__action__remove}>
@@ -42,13 +59,21 @@ const CommentModal = ({
                         </div>
                     </div>
                     <div className={styles.comment__content__box}>
-                        <span className={styles.comment__content__box__text}>
-                            {comment.content}
-                        </span>
+                        {editing === comment.id ? (
+                            <input
+                                type="text"
+                                value={editedContent}
+                                onChange={handleContentChange}
+                            />
+                        ) : (
+                            <span className={styles.comment__content__box__text}>
+                                {comment.content}
+                            </span>
+                        )}
                     </div>
                     <div className={styles.comment__content__time}>
                         <span className={styles.comment__content__time__text}>
-                            {comment.date}
+                          {comment.date}
                         </span>
                     </div>
                 </div>

@@ -22,16 +22,28 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
+import { ImageUploadDto } from './dto/image-upload.dto';
+import { UtilsService } from '../utils/utils.service';
+import { AwsService } from '../aws/aws.service';
+import * as fs from 'fs';
+import * as path from 'path';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { ConfigService } from '@nestjs/config';
+import { Express } from 'express';
 
 @Injectable()
 export class BoardService {
   private readonly DEFAULT_NODE_ID = 1;
+
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
+    private readonly utilsService: UtilsService,
+    private readonly awsService: AwsService,
+    private configService: ConfigService,
   ) {}
 
   async getAllBoardsByNodeId(nodeId: number): Promise<BoardNodeResponseDto[]> {
@@ -195,5 +207,19 @@ export class BoardService {
       throw new Error(`Board with ID ${boardId} not found`);
     }
     return board;
+  }
+
+  async imageUpload(file: Express.Multer.File, imageUploadDto: ImageUploadDto) {
+    const imageName = this.utilsService.getUUID();
+    const tempBoardId = JSON.parse(JSON.stringify(imageUploadDto)).tempBoardId;
+    console.log(file);
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.awsService.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+    return { imageUrl };
   }
 }

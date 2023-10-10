@@ -19,6 +19,7 @@ import { BoardModule } from './board/board.module';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/entities/comment.entity';
 import { CustomCommentRepository } from './comment/repository/comment.repository';
+import { UtilsModule } from './utils/utils.module';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -63,6 +64,7 @@ export class LoggerMiddleware implements NestMiddleware {
     UserModule,
     BoardModule,
     CommentModule,
+    UtilsModule,
   ],
   controllers: [],
   providers: [],

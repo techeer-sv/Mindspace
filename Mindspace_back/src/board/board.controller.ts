@@ -4,10 +4,13 @@ import {
   Delete,
   Get,
   Headers,
+  HttpCode,
   Param,
   Post,
   Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import {
@@ -17,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './entities/board.entity';
 import { BoardResponseDto } from './dto/board-response.dto';
@@ -24,6 +28,7 @@ import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
+import { ImageUploadDto } from './dto/image-upload.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -124,5 +129,28 @@ export class BoardController {
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
   async getBoardDetail(@Param('id') id: number): Promise<BoardDetailDto> {
     return this.boardService.getBoardDetailById(id);
+  }
+
+  // @Post('upload') // 이미지 업로드 API 엔드포인트
+  // async uploadImage(@Body() body: any) {
+  //   return uploadFile(body);
+  // }
+
+  /**
+   * [POST] /boards/image - 게시글 작성/수정시 이미지 업로드 API
+   * @param file - 업로드한 이미지 파일
+   * @param imageUploadDto - 사진 업로드시 포함된 게시글 아이디
+   * @returns 업로드된 이미지의 URL 반환
+   */
+  // @ApiImageUpload('게시글 작성/수정시 이미지 업로드 API')
+  @HttpCode(200)
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('image')
+  async imageUpload(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() imageUploadDto: ImageUploadDto,
+  ) {
+    const imageUrl = await this.boardService.imageUpload(file, imageUploadDto);
+    return imageUrl;
   }
 }

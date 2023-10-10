@@ -25,7 +25,7 @@ import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenExcep
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
 import { ConfigService } from '@nestjs/config';
-import { ImageUploadDto } from "./dto/image-upload.dto";
+import { ImageUploadDto } from './dto/image-upload.dto';
 
 @Injectable()
 export class BoardService {
@@ -206,7 +206,23 @@ export class BoardService {
   }
 
   async saveImage(file: Express.Multer.File, imageUploadDto: ImageUploadDto) {
-    return this.imageUpload(file);
+    // 이미지 업로드하고 URL을 가져온다.
+    const { imageUrl } = await this.imageUpload(file);
+
+    // boardId를 number 타입으로 변환한다.
+    const boardId: number = imageUploadDto.boardId;
+
+    if (isNaN(boardId)) {
+      throw new BadRequestException('Invalid board ID.');
+    }
+
+    // Board 엔터티를 찾아서 imageURL을 업데이트한다.
+    const board: Board = await this.findBoardById(boardId);
+
+    board.imageUrl = imageUrl;
+    await this.boardRepository.save(board);
+
+    return await this.imageUpload(file);
   }
 
   // S3 이미지 업로드

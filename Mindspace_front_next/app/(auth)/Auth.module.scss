@@ -35,11 +35,10 @@
     align-items: center;
     flex-direction: column;
     width: 70%;
-    height: 45%;
     max-width: 40rem;
     border-radius: 1rem;
     border: none;
-    padding: 1%;
+    padding: 1rem;
     background-color: rgba(166, 166, 200, 0.5);
   }
 }
@@ -52,6 +51,7 @@
 
 .error {
   display: flex;
+  height: 20px;
   color: rgb(212, 212, 212);
   margin: 1% auto 0 13%;
 }

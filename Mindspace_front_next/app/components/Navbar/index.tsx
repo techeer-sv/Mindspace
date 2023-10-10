@@ -1,48 +1,83 @@
 "use client";
+import Cookies from "js-cookie";
 
 import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/link";
 import Image from "next/image";
-
-// import { useRecoilState } from 'recoil';
-// import { isLoggedInAtom } from '@/recoil/state/authAtom';
-// import {
-//   useUserNicknameQuery,
-//   useClearUserNicknameCache,
-// } from '@/hooks/queries/user';
+import { useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
+import { isLoggedInAtom } from "@/recoil/state/authAtom";
+import {
+  useUserNicknameQuery,
+  useClearUserNicknameCache,
+} from "@/hooks/queries/user";
 
 const Navbar = () => {
-  // const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
-  const isLoggedIn = false; // TODO : 임시로 true로 설정
+  const [isClient, setIsClient] = useState(false);
 
+  const router = useRouter();
+
+  const [isLoggedIn, setLoggedIn] = useRecoilState(isLoggedInAtom);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  // const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
+  const { data: userNickname } = useUserNicknameQuery(isLoggedIn);
 
-  // const logout = () => {
-  //   setLoggedIn(false);
-  //   alert('로그아웃 되었습니다');
-  //   navigate('/');
-  //   localStorage.clear();
-  // };
+  const logout = () => {
+    setLoggedIn(false);
+    alert("로그아웃 되었습니다");
+    router.push("/");
+    Cookies.remove("accessToken");
+  };
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsNavExpanded(false);
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
+  useClearUserNicknameCache(isLoggedIn);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNavExpanded(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   const isCurrentlyLoggedIn = localStorage.getItem('accessToken') !== null;
-  //   setLoggedIn(isCurrentlyLoggedIn);
-  // }, []);
+  useEffect(() => {
+    setIsClient(true);
+    const isCurrentlyLoggedIn = Cookies.get("accessToken") !== undefined;
+    setLoggedIn(isCurrentlyLoggedIn);
+  }, []);
 
-  // useClearUserNicknameCache(isLoggedIn);
+  if (!isClient) {
+    // 서버사이드 렌더링 단계에서 보여줄 기본 틀
+    return (
+      <nav className={styles.navbar}>
+        <Link href="/" className={styles.navbar__title}>
+          <Image
+            src="/images/MindSpaceText.png"
+            alt="logo"
+            width={250}
+            height={50}
+          />
+        </Link>
+        <div
+          className={
+            isNavExpanded
+              ? `${styles.navbar__menu} ${styles["navbar__menu--expanded"]}`
+              : styles.navbar__menu
+          }
+        >
+          <ul>
+            <li>
+              <span>{"-"}</span>
+            </li>
+            <li>
+              <span>{"-"}</span>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className={styles.navbar}>
@@ -85,16 +120,10 @@ const Navbar = () => {
                     : styles.navbar__menu__text
                 }
               >
-                <span>{"사용자 이름"}</span>
+                <span>{userNickname}</span>
               </li>
               <li>
-                <span
-                  onClick={() => {
-                    console.log("로그아웃 클릭");
-                  }}
-                >
-                  logout
-                </span>
+                <span onClick={logout}>logout</span>
               </li>
             </>
           ) : (

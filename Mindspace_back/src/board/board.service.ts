@@ -22,14 +22,10 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
-import { ImageUploadDto } from './dto/image-upload.dto';
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
-import * as fs from 'fs';
-import * as path from 'path';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
-import { Express } from 'express';
+import { ImageUploadDto } from "./dto/image-upload.dto";
 
 @Injectable()
 export class BoardService {
@@ -209,10 +205,13 @@ export class BoardService {
     return board;
   }
 
-  async imageUpload(file: Express.Multer.File, imageUploadDto: ImageUploadDto) {
+  async saveImage(file: Express.Multer.File, imageUploadDto: ImageUploadDto) {
+    return this.imageUpload(file);
+  }
+
+  // S3 이미지 업로드
+  async imageUpload(file: Express.Multer.File) {
     const imageName = this.utilsService.getUUID();
-    const tempBoardId = JSON.parse(JSON.stringify(imageUploadDto)).tempBoardId;
-    console.log(file);
     const ext = file.originalname.split('.').pop();
 
     const imageUrl = await this.awsService.imageUploadToS3(
@@ -220,6 +219,7 @@ export class BoardService {
       file,
       ext,
     );
+
     return { imageUrl };
   }
 }

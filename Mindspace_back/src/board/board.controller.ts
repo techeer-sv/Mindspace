@@ -150,7 +150,7 @@ export class BoardController {
     @UploadedFile() file: Express.Multer.File,
     @Body() imageUploadDto: ImageUploadDto,
   ) {
-    const imageUrl = await this.boardService.imageUpload(file, imageUploadDto);
+    const imageUrl = await this.boardService.saveImage(file, imageUploadDto);
     return imageUrl;
   }
 }

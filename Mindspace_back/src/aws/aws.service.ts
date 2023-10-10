@@ -5,7 +5,6 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 @Injectable()
 export class AwsService {
   s3Client: S3Client;
-  bucketName: string;
 
   constructor(private configService: ConfigService) {
     this.s3Client = new S3Client({
@@ -15,7 +14,6 @@ export class AwsService {
         secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
       },
     });
-    this.bucketName = this.configService.get('AWS_S3_BUCKET_NAME');
   }
 
   async imageUploadToS3(
@@ -24,7 +22,7 @@ export class AwsService {
     ext: string,
   ) {
     const command = new PutObjectCommand({
-      Bucket: this.bucketName,
+      Bucket: this.configService.get('AWS_S3_BUCKET_NAME'),
       Key: fileName,
       Body: file.buffer,
       ACL: 'public-read',
@@ -32,8 +30,6 @@ export class AwsService {
     });
 
     await this.s3Client.send(command);
-    return `https://s3.${this.configService.get('AWS_REGION')}.amazonaws.com/${
-      this.bucketName
-    }/${fileName}`;
+    return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${fileName}`;
   }
 }

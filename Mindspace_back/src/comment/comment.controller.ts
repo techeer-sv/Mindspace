@@ -31,9 +31,13 @@ import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.d
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @ApiOperation({ summary: '댓글 생성' })
+  @ApiOperation({ summary: '댓글 또는 대댓글 생성' })
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
-  @ApiQuery({ name: 'parent_id', description: '대댓글을 작성할 부모의 ID' })
+  @ApiQuery({
+    name: 'comment_id',
+    required: false,
+    description: '대댓글을 작성할 부모의 ID',
+  })
   @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -41,9 +45,8 @@ export class CommentController {
     @Query('board_id') boardId: number,
     @Headers('user_id') userId: string,
     @Body() createCommentDto: CreateCommentDto,
-    @Query('parent_id') parentId?: number,
+    @Query('comment_id') parentId?: number,
   ): Promise<{ message: string }> {
-    const userId = userIdHeader;
     await this.commentService.createComment(
       boardId,
       userId,

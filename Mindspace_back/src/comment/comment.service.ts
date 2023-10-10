@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PagingParams } from '../global/common/type';
@@ -90,10 +90,20 @@ export class CommentService {
       pagingParams,
     );
 
-    const transformedComments: CommentResponseDto[] = comments.data.map(
-      (comment) => {
-        return CommentMapper.commentToResponseDto(comment, userId);
-      },
+    const transformedComments: CommentResponseDto[] = await Promise.all(
+      comments.data.map(async (comment) => {
+        const replies = await this.customCommentRepository.findReplies(
+          comment.id,
+        );
+        const transformedReplies = replies.map((reply) =>
+          CommentMapper.commentToResponseDto(reply, userId),
+        );
+
+        return {
+          ...CommentMapper.commentToResponseDto(comment, userId),
+          replies: transformedReplies,
+        };
+      }),
     );
 
     return {

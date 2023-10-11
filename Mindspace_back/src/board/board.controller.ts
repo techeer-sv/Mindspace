@@ -133,15 +133,12 @@ export class BoardController {
   /**
    * [POST] /boards/image - 게시글 작성/수정시 이미지 업로드 API
    * @param file - 업로드한 이미지 파일
-   * @param imageUploadDto - 사진 업로드시 포함된 게시글 아이디
    * @returns 업로드된 이미지의 URL 반환
    */
-  // @ApiImageUpload('게시글 작성/수정시 이미지 업로드 API')
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
   @Post('image')
   async imageUpload(@UploadedFile() file: Express.Multer.File) {
-    const imageUrl = await this.boardService.saveImage(file);
-    return imageUrl;
+    return await this.boardService.imageUpload(file);
   }
 }

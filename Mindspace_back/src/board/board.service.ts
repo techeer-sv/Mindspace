@@ -204,11 +204,9 @@ export class BoardService {
     return board;
   }
 
-  async saveImage(file: Express.Multer.File) {
-    // 이미지 업로드하고 URL을 가져온다.
-    const imageUrl = await this.imageUpload(file);
-    return imageUrl;
-  }
+  // async saveImage(file: Express.Multer.File) {
+  //   return await this.imageUpload(file);
+  // }
 
   // S3 이미지 업로드
   async imageUpload(file: Express.Multer.File) {

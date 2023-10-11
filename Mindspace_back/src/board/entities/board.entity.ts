@@ -42,7 +42,7 @@ export class Board extends Timestamp {
   @Column({ name: 'user_id', type: 'int', nullable: false })
   userId: number;
 
-  @Column({ name: 'image', type: 'varchar', nullable: true })
+  @Column({ name: 'image_url', type: 'varchar', nullable: true })
   @ApiProperty({ description: '이미지 업로드' })
   imageUrl: string;
 }

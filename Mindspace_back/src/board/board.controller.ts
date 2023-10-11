@@ -28,7 +28,6 @@ import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
-import { ImageUploadDto } from './dto/image-upload.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -131,11 +130,6 @@ export class BoardController {
     return this.boardService.getBoardDetailById(id);
   }
 
-  // @Post('upload') // 이미지 업로드 API 엔드포인트
-  // async uploadImage(@Body() body: any) {
-  //   return uploadFile(body);
-  // }
-
   /**
    * [POST] /boards/image - 게시글 작성/수정시 이미지 업로드 API
    * @param file - 업로드한 이미지 파일
@@ -146,11 +140,8 @@ export class BoardController {
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
   @Post('image')
-  async imageUpload(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() imageUploadDto: ImageUploadDto,
-  ) {
-    const imageUrl = await this.boardService.saveImage(file, imageUploadDto);
+  async imageUpload(@UploadedFile() file: Express.Multer.File) {
+    const imageUrl = await this.boardService.saveImage(file);
     return imageUrl;
   }
 }

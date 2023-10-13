@@ -1,9 +1,9 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ForceGraph2D } from "react-force-graph";
 import { NodeObject, Node, Context, GraphData } from "@/constants/types";
 import { useNodeListQuery } from "@/hooks/queries/node";
+import Loading from "@/components/Loading";
 
 export default function MapPage() {
   const [nodeData, setNodeData] = useState<any>(null);
@@ -159,27 +159,26 @@ export default function MapPage() {
     }
   }, [data, status]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
-      {isLoading ? (
-        // <Loading />
-        <div>loading...</div>
-      ) : (
-        <>
-          {nodeData && (
-            <ForceGraph2D
-              ref={fgRef}
-              nodeRelSize={nodeRelSize}
-              nodeVal={nodeVal}
-              nodeCanvasObject={nodeCanvasObject}
-              //onNodeClick={handleClick}
-              graphData={nodeData}
-              linkColor={() => "white"}
-              enableNodeDrag={false}
-            />
-          )}
+      {nodeData && (
+        <ForceGraph2D
+          ref={fgRef}
+          nodeRelSize={nodeRelSize}
+          nodeVal={nodeVal}
+          nodeCanvasObject={nodeCanvasObject}
+          //onNodeClick={handleClick}
+          graphData={nodeData}
+          linkColor={() => "white"}
+          enableNodeDrag={false}
+        />
+      )}
 
-          {/* {nodeInfo && (
+      {/* {nodeInfo && (
             <>
               <NodeModal
                 isOpen={modalIsOpen}
@@ -188,8 +187,6 @@ export default function MapPage() {
               />
             </>
           )} */}
-        </>
-      )}
     </div>
   );
 }

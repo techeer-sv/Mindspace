@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getNodeList } from "@/api/node";
 import { NODE_QUERIES } from "@/constants/queryKeys";
 

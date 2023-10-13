@@ -26,3 +26,38 @@ export interface SignInRequest {
 export interface NicknameResponse {
   nickname: string;
 }
+
+// NodeMap
+
+export type NodeObject = object & {
+  id?: number;
+  name?: string;
+  x?: number;
+  y?: number;
+  isWritten?: boolean;
+  vx?: number;
+  vy?: number;
+  fx?: number;
+  fy?: number;
+};
+
+export interface Node extends NodeObject {
+  name?: string;
+  connectCount?: number;
+  isWritten?: boolean;
+}
+
+interface Link {
+  source: Node | number;
+  target: Node | number;
+  __indexColor?: string;
+  __controlPoints?: null;
+  index?: number;
+}
+
+export interface GraphData {
+  nodes: Node[];
+  links: Link[];
+}
+
+export type Context = CanvasRenderingContext2D;

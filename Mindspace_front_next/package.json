@@ -15,6 +15,7 @@
     "prettier": "^3.0.3",
     "react": "latest",
     "react-dom": "latest",
+    "react-force-graph": "^1.43.2",
     "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "sass": "^1.68.0"

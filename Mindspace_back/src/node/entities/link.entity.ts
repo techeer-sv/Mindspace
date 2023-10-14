@@ -30,12 +30,12 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Link {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    source: number;
+  @Column()
+  source: number;
 
-    @Column()
-    target: number;
+  @Column()
+  target: number;
 }

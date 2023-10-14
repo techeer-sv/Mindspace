@@ -22,24 +22,28 @@
 //     link: Link[];
 // }
 
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Relation } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  Relation,
+} from 'typeorm';
 import { Link } from './link.entity';
 
 @Entity()
 export class Neo4jNode {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    // @OneToMany(() => Link, (link) => link.neo4jNode)
-    // @JoinTable()
-    // links: Link[];
+  // @OneToMany(() => Link, (link) => link.neo4jNode)
+  // @JoinTable()
+  // links: Link[];
 
-    // @ManyToOne(() => Link, (link) => link.neo4jNode)
-    // @JoinColumn({ name: 'linkId' }) // 이 부분은 해당 엔티티 간 관계의 foreign key 이름을 설정합니다.
-    // link: Link;
+  // @ManyToOne(() => Link, (link) => link.neo4jNode)
+  // @JoinColumn({ name: 'linkId' }) // 이 부분은 해당 엔티티 간 관계의 foreign key 이름을 설정합니다.
+  // link: Link;
 
-    // @Relation(() => Link, 'LINKS_TO', { cascade: true })
-    // links: Link[];
-
-
+  // @Relation(() => Link, 'LINKS_TO', { cascade: true })
+  // links: Link[];
 }

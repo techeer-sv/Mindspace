@@ -31,7 +31,12 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @ApiOperation({ summary: '노드별 모든 게시글 조회' })
-  @ApiQuery({name: 'node_id', description: '조회하려는 노드의 ID', required: true, type: Number,})
+  @ApiQuery({
+    name: 'node_id',
+    description: '조회하려는 노드의 ID',
+    required: true,
+    type: Number,
+  })
   @Get()
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
@@ -81,8 +86,17 @@ export class BoardController {
   }
 
   @ApiOperation({ summary: '특정 노드의 사용자 게시글 조회' })
-  @ApiQuery({name: 'node_id', description: '조회하려는 노드의 ID', required: true, type: Number,})
-  @ApiHeader({ name: 'Authorization', description: '사용자 ID', required: true })
+  @ApiQuery({
+    name: 'node_id',
+    description: '조회하려는 노드의 ID',
+    required: true,
+    type: Number,
+  })
+  @ApiHeader({
+    name: 'Authorization',
+    description: '사용자 ID',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: '게시글 조회 성공',

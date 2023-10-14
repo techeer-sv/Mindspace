@@ -1,10 +1,10 @@
-import { csrFetch } from "./utils/csrFetch";
+import { ssrFetch } from "./utils/ssrFetch";
 import { GraphData } from "@/constants/types";
 
-export const getNodeList = async (): Promise<GraphData> => {
+export const getNodeListSSR = async (): Promise<GraphData> => {
   const endpoint = "node/check";
 
-  const response = await csrFetch<GraphData>(endpoint, {
+  const response = await ssrFetch<GraphData>(endpoint, {
     method: "GET",
   });
 

@@ -1,13 +1,13 @@
 import { dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/getQueryClient";
-import { getNodeList } from "@/api/node";
+import { getNodeListSSR } from "@/api/nodeServer";
 import { NODE_QUERIES } from "@/constants/queryKeys";
 import MapPage from "./map";
 import HydrateOnClient from "@/hydrateOnClient";
 
 export default async function HydratedNode() {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery([NODE_QUERIES.LIST], getNodeList);
+  await queryClient.prefetchQuery([NODE_QUERIES.LIST], getNodeListSSR);
 
   const dehydratedState = dehydrate(queryClient);
 

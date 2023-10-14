@@ -14,6 +14,8 @@ import {
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import {
+  ApiBody,
+  ApiConsumes,
   ApiHeader,
   ApiOperation,
   ApiQuery,
@@ -28,6 +30,7 @@ import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
+import { ImageUploadDto } from './dto/image-upload.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -56,11 +59,9 @@ export class BoardController {
   @Post()
   async createBoard(
     @Query('node_id') nodeId: number,
-    @Headers('user_id') userIdHeader: string,
+    @Headers('user_id') userId: string,
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-    // <-- 변경된 반환 타입
-    const userId = userIdHeader; // 문자열로 변환
     return this.boardService.createBoard(nodeId, userId, createBoardDto);
   }
 
@@ -118,7 +119,6 @@ export class BoardController {
     return await this.boardService.getBoardByNodeIdAndUserId(nodeId, userId);
   }
 
-  @Get(':id')
   @ApiOperation({ summary: '특정 게시글 조회' })
   @ApiResponse({
     status: 200,
@@ -126,6 +126,7 @@ export class BoardController {
     type: BoardDetailDto,
   })
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
+  @Get(':id')
   async getBoardDetail(@Param('id') id: number): Promise<BoardDetailDto> {
     return this.boardService.getBoardDetailById(id);
   }
@@ -135,8 +136,14 @@ export class BoardController {
    * @param file - 업로드한 이미지 파일
    * @returns 업로드된 이미지의 URL 반환
    */
-  @HttpCode(200)
+  @ApiOperation({ summary: '게시글 작성, 수정 시 이미지 업로드' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: '업로드할 파일',
+    type: ImageUploadDto,
+  })
   @UseInterceptors(FileInterceptor('file'))
+  @HttpCode(200)
   @Post('image')
   async imageUpload(@UploadedFile() file: Express.Multer.File) {
     return await this.boardService.imageUpload(file);

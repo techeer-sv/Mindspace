@@ -1,10 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
-// export class ImageUploadDto {
-//   @ApiProperty({
-//     example: 'string',
-//     description: '이미지 업로드를 위해 임시로 발급받는 게시글 아이디',
-//     required: true,
-//   })
-//   boardId: number;
-// }
+export class ImageUploadDto {
+  @ApiProperty({ type: 'string', format: 'binary' })
+  @IsNotEmpty()
+  file: any;
+}

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PagingParams } from '../global/common/type';
@@ -56,10 +60,17 @@ export class CommentService {
     if (parentId) {
       const parentComment = await this.commentRepository.findOne({
         where: { id: parentId },
+        relations: ['parent'],
       });
+
       if (!parentComment) {
         throw new NotFoundException('부모 댓글을 찾을 수 없습니다.');
       }
+
+      if (parentComment.parent) {
+        throw new BadRequestException('대댓글의 대댓글은 작성할 수 없습니다.');
+      }
+
       comment.parent = parentComment;
     }
 

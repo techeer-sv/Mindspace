@@ -3,7 +3,7 @@ import styles from "./Modal.module.scss";
 import CustomModal from "@/components/CustomModal";
 import WriteModal from "../WriteModal";
 import { ModalProps } from "@/constants/types";
-//import ListModal from '../ListModal';
+import ListModal from "../ListModal";
 import { useRecoilValue } from "recoil";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 
@@ -55,10 +55,10 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
         onRequestClose={() => setWriteModalIsOpen(false)}
       />
       {/* 글 목록 리스트 모달 */}
-      {/* <ListModal
+      <ListModal
         listModalOpen={listModalIsOpen}
         onListRequestClose={() => setListModalIsOpen(false)}
-      /> */}
+      />
     </>
   );
 }

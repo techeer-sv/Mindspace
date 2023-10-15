@@ -62,10 +62,14 @@ export const useUpdatePostMutation = (successAction: () => void) => {
   });
 };
 
-export const usePostListGetQuery = (id: number) => {
-  return useQuery(["postList", id], () => getPostListData(id));
+export const usePostListGetQuery = (id?: number) => {
+  return useQuery(["postList", id], () => getPostListData(id), {
+    enabled: id !== null,
+  });
 };
 
-export const usePostGetQuery = (id: number) => {
-  return useQuery(["postData", id], () => getPostData(id));
+export const usePostGetQuery = (id?: number) => {
+  return useQuery(["postData", id], () => getPostData(id), {
+    enabled: id !== null,
+  });
 };

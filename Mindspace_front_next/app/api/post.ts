@@ -50,7 +50,7 @@ export const updatePost = async ({ id, title, content }: PostParams) => {
   });
 };
 
-export const getPostListData = async (id: number) => {
+export const getPostListData = async (id?: number) => {
   const endpoint = `boards/all?node_id=${id}`;
 
   const data = await csrFetch(endpoint, {
@@ -60,7 +60,7 @@ export const getPostListData = async (id: number) => {
   return data;
 };
 
-export const getPostData = async (id: number) => {
+export const getPostData = async (id?: number) => {
   if (id !== null) {
     const endpoint = `boards/${id}`;
 

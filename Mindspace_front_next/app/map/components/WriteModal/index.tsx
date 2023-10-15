@@ -40,24 +40,12 @@ const WriteModal = ({
   const {
     data: postData,
     isLoading,
-    isError,
-    error,
     isInitialLoading,
-    isSuccess,
   } = useUserPostGetQuery(
     nodeInfo.id as number,
     isOpen,
     nodeInfo.isWritten ?? false,
   );
-
-  console.log("Query status: ", {
-    postData,
-    isLoading,
-    isError,
-    error,
-    isInitialLoading,
-    isSuccess,
-  });
 
   const handleClose = () => {
     setIsEditing(false);

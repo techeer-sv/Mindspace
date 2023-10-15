@@ -66,7 +66,7 @@ export type Context = CanvasRenderingContext2D;
 export interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
+  updateNodeInfo: (id: number | undefined, isWritten: boolean) => void;
 }
 
 // CustomModal
@@ -84,7 +84,7 @@ export interface CustomModalProps {
 export interface WriteModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
+  updateNodeInfo: (id: number | undefined, isWritten: boolean) => void;
 }
 
 export interface BoardResponseDto {

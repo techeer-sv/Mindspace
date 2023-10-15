@@ -386,6 +386,11 @@ aframe@^1.4:
     three-bmfont-text dmarcos/three-bmfont-text#21d017046216e318362c48abd1a48bddfb6e0733
     webvr-polyfill "^0.10.12"
 
+ag-grid-community@^30.2.0:
+  version "30.2.0"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-30.2.0.tgz#b831fc99df1bfee6f73669fd8b7d3e9bd4012e22"
+  integrity sha512-Gd6GXmtzEQSCDloBdRxxCDqnjTBRAOf/zzlaxxyyVBJgc+cePuNgGdplRUhT/rwIiDwvyuoynvxelVE/iYdXsA==
+
 ag-grid-react@^30.2.0:
   version "30.2.0"
   resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-30.2.0.tgz#3130baaf7a7e6c743bb06d9c7ce4f06ad48a10c1"

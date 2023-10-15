@@ -134,7 +134,7 @@ export default function MapPage() {
     ctx.fillText(node.name, node.x, node.y + nodeSize + 12);
   };
 
-  const handleNodeInfoUpdate = (id: number | string, isWritten: boolean) => {
+  const handleNodeInfoUpdate = (id: number | undefined, isWritten: boolean) => {
     const updatedNodeData = {
       nodes: nodeData.nodes.map((node: Node) =>
         node.id === id ? { ...node, isWritten: isWritten } : node,

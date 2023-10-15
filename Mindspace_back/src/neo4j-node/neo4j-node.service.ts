@@ -41,7 +41,7 @@ export class Neo4jNodeService implements OnModuleInit {
     'Material-UI',
   ];
 
-  dummyLinks = [
+  nodeLinks = [
     {
       source: 1,
       target: 2,
@@ -160,14 +160,6 @@ export class Neo4jNodeService implements OnModuleInit {
     },
   ];
 
-  async onModuleInit() {
-    await this.clearDatabase();
-
-    const createdNodes = await this.createNodes(this.nodeNames);
-    if (createdNodes.length > 0) {
-      await this.createLinks(this.dummyLinks);
-    }
-  }
   private async clearDatabase(): Promise<void> {
     await this.neo4jService.write('MATCH (n) DETACH DELETE n');
   }
@@ -186,6 +178,14 @@ export class Neo4jNodeService implements OnModuleInit {
     }
 
     return createdNodes;
+  }
+  async onModuleInit() {
+    await this.clearDatabase();
+
+    const createdNodes = await this.createNodes(this.nodeNames);
+    if (createdNodes.length > 0) {
+      await this.createLinks(this.nodeLinks);
+    }
   }
 
   async createLinks(

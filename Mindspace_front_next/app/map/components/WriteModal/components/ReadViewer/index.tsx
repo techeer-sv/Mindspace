@@ -9,7 +9,7 @@ import styles from "../../WriteModal.module.scss";
 
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { useRecoilValue } from "recoil";
-import { useDeletePostMutation } from "@/hooks/queries/board";
+import { useDeletePostMutation } from "@/api/hooks/queries/board";
 
 import { ReadViewerProps } from "@/constants/types";
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";

@@ -9,7 +9,7 @@ import styles from "./../Auth.module.scss";
 import { useSetRecoilState } from "recoil";
 import { isLoggedInAtom } from "@/recoil/state/authAtom";
 
-import { useSignInMutation } from "@/hooks/queries/user";
+import { useSignInMutation } from "@/api/hooks/queries/user";
 
 import Cookies from "js-cookie";
 

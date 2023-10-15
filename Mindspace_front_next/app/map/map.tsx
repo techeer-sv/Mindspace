@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ForceGraph2D } from "react-force-graph";
 import { NodeObject, Node, Context } from "@/constants/types";
-import { useNodeListQuery } from "@/hooks/queries/node";
+import { useNodeListQuery } from "@/api/hooks/queries/node";
 import Loading from "@/components/Loading";
 import NodeModal from "./components/Modal";
 

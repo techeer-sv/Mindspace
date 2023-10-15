@@ -5,7 +5,7 @@ import { CellClickedEvent } from "ag-grid-community";
 import { useRecoilValue } from "recoil";
 import { ModalWidthAtom, ModalHeightAtom } from "@/recoil/state/resizeAtom";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
-import { usePostListGetQuery } from "@/hooks/queries/board";
+import { usePostListGetQuery } from "@/api/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
 import { BoardResponseDto } from "@/constants/types";

@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import {
   useUpdatePostMutation,
   useCreatePostMutation,
-} from "@/hooks/queries/board";
+} from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
 

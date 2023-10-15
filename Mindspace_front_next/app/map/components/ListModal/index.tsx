@@ -4,7 +4,7 @@ import styles from "./ListModal.module.scss";
 import { ListModalProps } from "@/constants/types";
 import { Viewer } from "@toast-ui/react-editor";
 import CustomModal from "@/components/CustomModal";
-import { usePostGetQuery } from "@/hooks/queries/board";
+import { usePostGetQuery } from "@/api/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
 import CommentModal from "../CommentModal";

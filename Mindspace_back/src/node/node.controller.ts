@@ -14,6 +14,7 @@ export class NodeController {
     return this.nodeService.getAllNode();
   }
 
+  @ApiOperation({ summary: '노드 맵 정보 조회' })
   @Get('check')
   async getNodeInfoWithLinks(
     @Headers('user_id') userId: number,
@@ -21,4 +22,3 @@ export class NodeController {
     return await this.nodeService.getNodeInfoWithLinks(userId);
   }
 }
-

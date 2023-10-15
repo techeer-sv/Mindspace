@@ -79,3 +79,40 @@ export interface CustomModalProps {
   height?: string;
   style?: React.CSSProperties;
 }
+
+// WriteModal
+export interface WriteModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
+}
+
+export interface BoardResponseDto {
+  id: number;
+  userNickname: string;
+  title: string;
+  content: string;
+  updatedAt: string;
+}
+
+// WriteEditor || ReadViewer
+interface ViewEditProps {
+  nodeData?: BoardResponseDto;
+  onClose: () => void;
+  onEditToggle: () => void;
+  updateNodeInfo: (id: number | undefined, isWritten: boolean) => void;
+}
+
+export interface WriteEditorProps extends ViewEditProps {
+  nodeData?: BoardResponseDto;
+}
+
+export interface ReadViewerProps extends ViewEditProps {
+  nodeData: BoardResponseDto;
+}
+
+// ListModal
+export interface ListModalProps {
+  listModalOpen: boolean;
+  onListRequestClose: () => void;
+}

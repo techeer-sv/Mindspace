@@ -35,8 +35,10 @@ services:
       context: ./Mindspace_back
       dockerfile: Dockerfile
     restart: always
+    environment:
+      - TZ=Asia/Seoul
     ports:
-      - '8080:8080'
+      - '8000:8000'
     depends_on:
       - db
       - neo4j

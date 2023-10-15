@@ -10,5 +10,6 @@ import { Neo4jNodeService } from '../neo4j-node/neo4j-node.service';
   imports: [TypeOrmModule.forFeature([Node])],
   providers: [NodeService, NodeMapper, Neo4jNodeService],
   controllers: [NodeController],
+  exports: [NodeService],
 })
 export class NodeModule {}

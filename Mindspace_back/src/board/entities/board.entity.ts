@@ -9,6 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Node } from '../../node/entities/node.entity';
 import { User } from '../../user/entities/user.entity';
 import { Timestamp } from '../../global/common/timeStamp';
+import { Node } from '../../node/entities/node.entity';
 
 @Entity('boards')
 export class Board extends Timestamp {

@@ -7,34 +7,34 @@ import CustomModal from "@/components/CustomModal";
 import { usePostGetQuery } from "@/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
-// import CommentModal from "@/pages/NodeMap/components/CommentModal";
+import CommentModal from "../CommentModal";
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState<number>();
   const viewerRef = useRef<Viewer>(null);
   const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
-  // const [commentModalOpen, setCommentModalOpen] = useState(false);
-  // const commentData = [
-  //   {
-  //     id: 1,
-  //     nickname: "작성자1",
-  //     content: "댓글 내용1",
-  //     date: "5분전",
-  //   },
-  //   {
-  //     id: 2,
-  //     nickname: "작성자2",
-  //     content: "댓글 내용2",
-  //     date: "10분전",
-  //   },
-  // ];
-  // const toggleCommentModal = () => {
-  //   setCommentModalOpen((prev) => !prev);
-  // };
+  const [commentModalOpen, setCommentModalOpen] = useState(false);
+  const commentData = [
+    {
+      id: 1,
+      nickname: "작성자1",
+      content: "댓글 내용1",
+      date: "5분전",
+    },
+    {
+      id: 2,
+      nickname: "작성자2",
+      content: "댓글 내용2",
+      date: "10분전",
+    },
+  ];
+  const toggleCommentModal = () => {
+    setCommentModalOpen((prev) => !prev);
+  };
 
   const handleSelectBoard = (id: number) => {
     setIsSelectedTable(id);
-    // setCommentModalOpen(false);
+    setCommentModalOpen(false);
   };
 
   useEffect(() => {
@@ -101,7 +101,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                         }
                       >
                         <button
-                          // onClick={toggleCommentModal}
+                          onClick={toggleCommentModal}
                           className={
                             styles.post__wrapper__content__wrapper__info__box__button
                           }
@@ -137,10 +137,10 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   </div>
                 </div>
               </div>
-              {/* <CommentModal
+              <CommentModal
                 isOpen={commentModalOpen}
                 initialValue={commentData}
-              /> */}
+              />
             </div>
           </>
         )

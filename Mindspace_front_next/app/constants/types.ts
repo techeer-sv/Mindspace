@@ -116,3 +116,17 @@ export interface ListModalProps {
   listModalOpen: boolean;
   onListRequestClose: () => void;
 }
+
+// Comment
+interface Comment {
+  id: number;
+  nickname: string;
+  content: string;
+  date: string;
+}
+
+// CommentModal
+export interface CommentModalProps {
+  isOpen: boolean;
+  initialValue: Comment[];
+}

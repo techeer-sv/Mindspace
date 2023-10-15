@@ -68,4 +68,8 @@ export class NodeService {
       links,
     };
   }
+
+  async findById(nodeId: number): Promise<Node | undefined> {
+    return this.nodeRepository.findOne({ where: { id: nodeId } });
+  }
 }

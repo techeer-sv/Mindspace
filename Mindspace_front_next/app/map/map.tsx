@@ -1,28 +1,23 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { ForceGraph2D } from "react-force-graph";
-import { NodeObject, Node, Context, GraphData } from "@/constants/types";
+import { NodeObject, Node, Context } from "@/constants/types";
 import { useNodeListQuery } from "@/hooks/queries/node";
-import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
-import { getNodeList } from "@/api/node";
-import { NODE_QUERIES } from "@/constants/queryKeys";
 import NodeModal from "./components/Modal";
 
 import { useRecoilState } from "recoil";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 
+const NODE_REL_SIZE = 3;
+const NODE_VAL = 3;
+
 export default function MapPage() {
   const [nodeData, setNodeData] = useState<any>(null);
   const fgRef = useRef<any>();
-  const nodeRelSize = 3;
-  const nodeVal = 3;
 
-  // // modal
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  // Modal.setAppElement('#root');
 
-  // // recoil
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
   const { data, isLoading, status } = useNodeListQuery();
@@ -51,45 +46,6 @@ export default function MapPage() {
     ctx.fill();
   };
 
-  /**
-   * 작성자 : 정태원
-   * 날짜 : 4/2
-   * 내용 :  "초승달" 모양에 대한 focus조절 이슈로 인해 주석처리 하였습니다.
-   * @param ctx
-   * @param node
-   * @param nodeSize
-   */
-  const drawCrescent = (ctx: Context, node: Node, nodeSize: number) => {
-    node.x = node.x || 0;
-    node.y = node.y || 0;
-
-    ctx.beginPath();
-    const crescentSize = nodeSize;
-    const crescentWidth = crescentSize * 1.1;
-    const startAngle = Math.PI / 2.3;
-    const endAngle = (3 * Math.PI) / 1.9;
-    const centerXOffset = crescentWidth / 4;
-
-    ctx.arc(
-      node.x + centerXOffset,
-      node.y,
-      crescentSize,
-      startAngle,
-      endAngle,
-      false,
-    );
-    ctx.arc(
-      node.x - centerXOffset,
-      node.y,
-      crescentWidth,
-      endAngle,
-      startAngle,
-      true,
-    );
-    ctx.closePath();
-    ctx.fill();
-  };
-
   const drawCircle = (ctx: Context, node: Node, nodeSize: number) => {
     node.x = node.x || 0;
     node.y = node.y || 0;
@@ -106,7 +62,7 @@ export default function MapPage() {
     node.y = node.y || 0;
     node.name = node.name || "";
 
-    const nodeSize = nodeVal * nodeRelSize * (node.connectCount * 0.2 + 1);
+    const nodeSize = NODE_VAL * NODE_REL_SIZE * (node.connectCount * 0.2 + 1);
 
     if (node.isWritten) {
       ctx.fillStyle = "yellow";
@@ -175,8 +131,8 @@ export default function MapPage() {
       {nodeData && (
         <ForceGraph2D
           ref={fgRef}
-          nodeRelSize={nodeRelSize}
-          nodeVal={nodeVal}
+          nodeRelSize={NODE_REL_SIZE}
+          nodeVal={NODE_VAL}
           nodeCanvasObject={nodeCanvasObject}
           onNodeClick={handleClick}
           graphData={nodeData}

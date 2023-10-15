@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import styles from "./CustomModal.module.scss";

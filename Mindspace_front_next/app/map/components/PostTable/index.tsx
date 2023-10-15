@@ -2,7 +2,6 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react";
 import { CellClickedEvent } from "ag-grid-community";
-import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { ModalWidthAtom, ModalHeightAtom } from "@/recoil/state/resizeAtom";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
@@ -26,15 +25,15 @@ function PostTable({ onClickedId }: PostTableProps) {
     }));
   };
 
-  const [columnDefs] = useState([
-    { field: "title" },
-    { field: "userNickname" },
-    { field: "updatedAt" },
-  ]);
-
   const onRowDataClicked = (params: CellClickedEvent) => {
     onClickedId(params.data.id);
   };
+
+  const columnDefs = [
+    { field: "title" },
+    { field: "userNickname" },
+    { field: "updatedAt" },
+  ];
 
   const modalWidth = useRecoilValue(ModalWidthAtom);
   const modalHeight = useRecoilValue(ModalHeightAtom);

@@ -1,7 +1,7 @@
 import "./globals.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import LayoutProvider from "./LayoutProvider";
+import LayoutProvider from "@/components/LayoutProvider";
 import Recoil from "@/components/Recoil";
 import ReactQuery from "@/components/ReactQuery";
 

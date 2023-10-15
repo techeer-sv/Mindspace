@@ -1,8 +1,8 @@
 import { dehydrate } from "@tanstack/react-query";
-import getQueryClient from "@/getQueryClient";
+import getQueryClient from "@/api/utils/getQueryClient";
 import { getNodeListSSR } from "@/api/nodeServer";
 import { NODE_QUERIES } from "@/constants/queryKeys";
-import HydrateOnClient from "@/hydrateOnClient";
+import HydrateOnClient from "@/api/utils/hydrateOnClient";
 import dynamic from "next/dynamic";
 
 export default async function HydratedNode() {

@@ -61,3 +61,21 @@ export interface GraphData {
 }
 
 export type Context = CanvasRenderingContext2D;
+
+// Modal
+export interface ModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  updateNodeInfo: (id: number | string, isWritten: boolean) => void;
+}
+
+// CustomModal
+export interface CustomModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  children: React.ReactNode;
+  resizable?: boolean;
+  width?: string;
+  height?: string;
+  style?: React.CSSProperties;
+}

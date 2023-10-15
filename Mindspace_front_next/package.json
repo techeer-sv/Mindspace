@@ -12,6 +12,7 @@
     "@tanstack/react-query": "^4.36.1",
     "@types/js-cookie": "^3.0.4",
     "@types/react-lottie": "^1.2.7",
+    "@types/react-modal": "^3.16.1",
     "js-cookie": "^3.0.5",
     "next": "latest",
     "prettier": "^3.0.3",
@@ -19,6 +20,7 @@
     "react-dom": "latest",
     "react-force-graph": "^1.43.2",
     "react-lottie": "^1.2.3",
+    "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "sass": "^1.68.0"

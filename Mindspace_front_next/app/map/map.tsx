@@ -7,6 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { getNodeList } from "@/api/node";
 import { NODE_QUERIES } from "@/constants/queryKeys";
+import NodeModal from "./components/Modal";
+
+import { useRecoilState } from "recoil";
+import { nodeAtom } from "@/recoil/state/nodeAtom";
 
 export default function MapPage() {
   const [nodeData, setNodeData] = useState<any>(null);
@@ -15,19 +19,19 @@ export default function MapPage() {
   const nodeVal = 3;
 
   // // modal
-  // const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   // Modal.setAppElement('#root');
 
   // // recoil
-  // const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
+  const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
   const { data, isLoading, status } = useNodeListQuery();
 
-  // const handleClick = (node: NodeObject) => {
-  //   fgRef.current?.centerAt(node.x, node.y, 1000);
-  //   setNodeInfo({ id: node.id, isWritten: node.isWritten, name: node.name });
-  //   setModalIsOpen(true);
-  // };
+  const handleClick = (node: NodeObject) => {
+    fgRef.current?.centerAt(node.x, node.y, 1000);
+    setNodeInfo({ id: node.id, isWritten: node.isWritten, name: node.name });
+    setModalIsOpen(true);
+  };
 
   const drawStart = (ctx: Context, node: Node, nodeSize: number) => {
     node.x = node.x || 0;
@@ -138,7 +142,7 @@ export default function MapPage() {
       links: nodeData.links,
     };
     setNodeData(updatedNodeData);
-    // setNodeInfo({ ...nodeInfo, isWritten: isWritten });
+    setNodeInfo({ ...nodeInfo, isWritten: isWritten });
   };
 
   useEffect(() => {
@@ -174,22 +178,22 @@ export default function MapPage() {
           nodeRelSize={nodeRelSize}
           nodeVal={nodeVal}
           nodeCanvasObject={nodeCanvasObject}
-          //onNodeClick={handleClick}
+          onNodeClick={handleClick}
           graphData={nodeData}
           linkColor={() => "white"}
           enableNodeDrag={false}
         />
       )}
 
-      {/* {nodeInfo && (
-            <>
-              <NodeModal
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-                updateNodeInfo={handleNodeInfoUpdate}
-              />
-            </>
-          )} */}
+      {nodeInfo && (
+        <>
+          <NodeModal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            updateNodeInfo={handleNodeInfoUpdate}
+          />
+        </>
+      )}
     </div>
   );
 }

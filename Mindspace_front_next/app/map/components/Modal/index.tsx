@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./Modal.module.scss";
 import CustomModal from "@/components/CustomModal";
-//import WriteModal from '@/pages/NodeMap/components/WriteModal';
+import WriteModal from "../WriteModal";
 import { ModalProps } from "@/constants/types";
 //import ListModal from '../ListModal';
 import { useRecoilValue } from "recoil";
@@ -49,11 +49,11 @@ function NodeModal({ isOpen, onRequestClose, updateNodeInfo }: ModalProps) {
           </div>
         </div>
       </CustomModal>
-      {/* <WriteModal
+      <WriteModal
         isOpen={writeModalIsOpen}
         updateNodeInfo={updateNodeInfo}
         onRequestClose={() => setWriteModalIsOpen(false)}
-      /> */}
+      />
       {/* 글 목록 리스트 모달 */}
       {/* <ListModal
         listModalOpen={listModalIsOpen}

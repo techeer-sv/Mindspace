@@ -27,6 +27,14 @@ export interface NicknameResponse {
   nickname: string;
 }
 
+// Board
+
+export interface CreatePostRequest {
+  id: number;
+  title: string;
+  content: string;
+}
+
 // NodeMap
 
 export type NodeObject = object & {

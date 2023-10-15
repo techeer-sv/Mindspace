@@ -1,5 +1,5 @@
 import { csrFetch } from "./utils/csrFetch";
-
+import { CreatePostRequest } from "@/constants/types";
 export const getPost = async (id: number) => {
   const endpoint = `boards?node_id=${id}`;
 
@@ -18,13 +18,7 @@ export const deletePost = async (id: number) => {
   });
 };
 
-interface PostParams {
-  id: number;
-  title: string;
-  content: string;
-}
-
-export const createPost = async ({ id, title, content }: PostParams) => {
+export const createPost = async ({ id, title, content }: CreatePostRequest) => {
   const endpoint = `boards?node_id=${id}`;
   const body = JSON.stringify({
     title,
@@ -37,7 +31,7 @@ export const createPost = async ({ id, title, content }: PostParams) => {
   });
 };
 
-export const updatePost = async ({ id, title, content }: PostParams) => {
+export const updatePost = async ({ id, title, content }: CreatePostRequest) => {
   const endpoint = `boards?node_id=${id}`;
   const body = JSON.stringify({
     title,

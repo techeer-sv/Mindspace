@@ -9,12 +9,14 @@ import {
   getPostData,
 } from "@/api/post";
 
+import { BOARD_QUERIES } from "@/constants/queryKeys";
+
 export const useUserPostGetQuery = (
   id: number,
   isOpen: boolean,
   isActive: boolean,
 ) => {
-  return useQuery(["userPost", id], () => getPost(id), {
+  return useQuery([BOARD_QUERIES.USER_BOARD(id)], () => getPost(id), {
     enabled: isOpen && isActive,
     staleTime: 1000 * 60 * 5,
   });
@@ -38,11 +40,8 @@ export const useCreatePostMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
-  const queryClient = useQueryClient();
-
   return useMutation(createPost, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["userPost"]);
       successAction();
     },
     onError: (error: APIErrorResponse) => {
@@ -56,20 +55,28 @@ export const useUpdatePostMutation = (successAction: () => void) => {
 
   return useMutation(updatePost, {
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(["userPost", variables.id]);
+      queryClient.invalidateQueries([BOARD_QUERIES.USER_BOARD(variables.id)]);
       successAction();
     },
   });
 };
 
-export const usePostListGetQuery = (id?: number) => {
-  return useQuery(["postList", id], () => getPostListData(id), {
-    enabled: id !== null,
-  });
+export const usePostListGetQuery = (nodeId?: number) => {
+  return useQuery(
+    [BOARD_QUERIES.ALL_BOARD(nodeId!)],
+    () => getPostListData(nodeId),
+    {
+      enabled: nodeId !== null,
+    },
+  );
 };
 
-export const usePostGetQuery = (id?: number) => {
-  return useQuery(["postData", id], () => getPostData(id), {
-    enabled: id !== null,
-  });
+export const usePostGetQuery = (boardId?: number) => {
+  return useQuery(
+    [BOARD_QUERIES.SINGLE_BOARD(boardId!)],
+    () => getPostData(boardId),
+    {
+      enabled: boardId !== null,
+    },
+  );
 };

@@ -2,23 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Node } from './entities/node.entity';
-import { Neo4jNodeRepository } from './repository/neo4jNode.repository';
 import { NodeResponseDto } from './dto/node-response.dto';
 import { NodeMapper } from './dto/node.mapper';
-import { NodeInfoResponse } from './dto/node-info-response.dto';
-import { Board } from '../board/entities/board.entity';
-import { nodeBoardRepository } from './repository/nodeBoard.repository';
-import { Neo4jNode } from './entities/neo4jNode.entity';
+import { Neo4jNodeService } from '../neo4j-node/neo4j-node.service';
 
 @Injectable()
 export class NodeService {
   constructor(
     @InjectRepository(Node)
     private readonly nodeRepository: Repository<Node>,
-    @InjectRepository(Board)
-    private readonly nodeBoardRespository: nodeBoardRepository,
-    @InjectRepository(Neo4jNode)
-    private readonly neo4jNodeRepository: Neo4jNodeRepository,
+    private readonly neo4jNodeService: Neo4jNodeService,
     private readonly nodeMapper: NodeMapper,
   ) {}
 
@@ -27,30 +20,52 @@ export class NodeService {
     return nodes.map((node) => this.nodeMapper.DtoFromEntity(node));
   }
 
-  async getNodeInfoWithLinks(userId: number): Promise<NodeInfoResponse> {
-    const nodes = await this.nodeBoardRespository.getNodeListWithWriteStatus(
-      userId,
+  async isNodeWrittenByUser(
+    nodeName: string,
+    userId: number,
+  ): Promise<boolean> {
+    const count = await this.nodeRepository
+      .createQueryBuilder('node')
+      .innerJoin('node.boards', 'board')
+      .where('node.name = :nodeName', { nodeName })
+      .andWhere('board.userId = :userId', { userId })
+      .getCount();
+
+    return count > 0;
+  }
+
+  async getNodeInfoWithLinks(userId: number): Promise<any> {
+    // neo4j 노드와 링크를 가져옵니다.
+    const neo4jNodes = await this.neo4jNodeService.getNodes();
+    const neo4jLinks = await this.neo4jNodeService.getLinks();
+
+    const nodeInfoWithLinks = await Promise.all(
+      neo4jNodes.map(async (node) => {
+        const isWritten = await this.isNodeWrittenByUser(node.name, userId);
+
+        const pgNode = await this.nodeRepository.findOne({
+          where: { name: node.name },
+        });
+        const nodeId = pgNode ? pgNode.id : null;
+
+        const connectCount = neo4jLinks.filter(
+          (link) => link.source === node.id || link.target === node.id,
+        ).length; // 해당 노드에 연결된 링크의 수를 계산
+
+        return {
+          id: nodeId,
+          name: node.name,
+          isWritten,
+          connectCount, // 해당 노드에 연결된 노드의 수
+        };
+      }),
     );
-    const links = await this.neo4jNodeRepository.findAllLinks();
 
-    // connectCount 계산 및 추가
-    const connectCounts: Map<number, number> = new Map();
-    links.forEach((link) => {
-      connectCounts.set(link.source, (connectCounts.get(link.source) || 0) + 1);
-      connectCounts.set(link.target, (connectCounts.get(link.target) || 0) + 1);
-    });
-
-    for (const node of nodes) {
-      const nodeId = node.id;
-      const count = connectCounts.get(nodeId) || 0;
-      node['connectCount'] = count;
-    }
-
-    const linkDTOs = links.map((link) => this.nodeMapper.linkToDto(link));
+    const links = neo4jLinks.map((link) => this.nodeMapper.linkToDto(link));
 
     return {
-      nodes,
-      links: linkDTOs,
+      nodes: nodeInfoWithLinks,
+      links,
     };
   }
 }

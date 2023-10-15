@@ -6,15 +6,19 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Node } from '../../node/entities/node.entity';
 import { User } from '../../user/entities/user.entity';
-import { Timestamp } from '../../global/common/timeStamp'; // User 엔터티 임포트
-// swagger에서 본문 바디 얘사에 안 나오게 하고 싶으면 @ApiProperty를 지우면 안나옴
+import { Timestamp } from '../../global/common/timeStamp';
 
 @Entity('boards')
 export class Board extends Timestamp {
   @PrimaryGeneratedColumn('increment', { name: 'board_id' })
   @ApiProperty({ description: '게시글의 ID.' })
   id: number;
+
+  @ManyToOne(() => Node, (node) => node.boards, { eager: true })
+  @JoinColumn({ name: 'node_id' })
+  node: Node;
 
   @Column({ name: 'node_id', type: 'int', nullable: false })
   nodeId: number;

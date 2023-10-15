@@ -1,10 +1,11 @@
-export const getLottieOptions = (lottie: any) => {
+export const getLottieOptions = (path: string) => {
   return {
     loop: true,
     autoplay: true,
-    animationData: lottie,
+    path: path,
+    animationData: null,
     rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
+      preserveAspectRatio: "xMidYMid slice",
     },
   };
 };

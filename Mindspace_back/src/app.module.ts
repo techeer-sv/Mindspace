@@ -20,6 +20,7 @@ import { Neo4jNodeModule } from './neo4j-node/neo4j-node.module';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/entities/comment.entity';
 import { CustomCommentRepository } from './comment/repository/comment.repository';
+import { UtilsModule } from './utils/utils.module';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -65,6 +66,7 @@ export class LoggerMiddleware implements NestMiddleware {
     BoardModule,
     Neo4jNodeModule,
     CommentModule,
+    UtilsModule,
   ],
   controllers: [],
   providers: [],

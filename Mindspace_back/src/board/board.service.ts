@@ -199,7 +199,7 @@ export class BoardService {
       where: { id: boardId },
     });
     if (!board) {
-      throw new Error(`Board with ID ${boardId} not found`);
+      throw new BoardNotFoundException();
     }
     return board;
   }

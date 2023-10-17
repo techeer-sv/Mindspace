@@ -2,12 +2,12 @@ import { HttpStatus } from '@nestjs/common';
 import { CustomException } from '../../global/common/customException';
 import { ErrorCode } from '../../global/exception/ErrorCode';
 
-export class NodeNotFoundException extends CustomException {
+export class UserInvalidPasswordException extends CustomException {
   constructor() {
     super(
-      ErrorCode.NODE_NOT_FOUND,
-      '해당 노드를 찾을 수 없습니다.',
-      HttpStatus.NOT_FOUND,
+      ErrorCode.USER_INVALID_PASSWORD,
+      '비밀번호를 다시 확인해주세요.',
+      HttpStatus.BAD_REQUEST,
     );
   }
 }

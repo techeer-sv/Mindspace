@@ -23,7 +23,10 @@ export class CommentMapper {
     return comment;
   }
 
-  static commentToResponseDto(comment: Comment): CommentResponseDto {
+  static commentToResponseDto(
+    comment: Comment,
+    userId: string,
+  ): CommentResponseDto {
     return {
       id: comment.id,
       userNickname: comment.user.nickname,
@@ -32,6 +35,7 @@ export class CommentMapper {
         addSuffix: true,
         locale: ko,
       }),
+      editable: comment.user.id.toString() === userId,
     };
   }
 }

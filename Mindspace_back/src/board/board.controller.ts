@@ -145,7 +145,7 @@ export class BoardController {
   @UseInterceptors(FileInterceptor('file'))
   @HttpCode(200)
   @Post('image')
-  async imageUpload(@UploadedFile() file: Express.Multer.File) {
+  async saveImage(@UploadedFile() file: Express.Multer.File) {
     return await this.boardService.imageUpload(file);
   }
 }

@@ -204,9 +204,9 @@ export class BoardService {
     return board;
   }
 
-  // async saveImage(file: Express.Multer.File) {
-  //   return await this.imageUpload(file);
-  // }
+  async saveImage(file: Express.Multer.File) {
+    return await this.imageUpload(file);
+  }
 
   // S3 이미지 업로드
   async imageUpload(file: Express.Multer.File) {

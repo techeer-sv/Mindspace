@@ -16,6 +16,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { Board } from './board/entities/board.entity';
 import { BoardModule } from './board/board.module';
+import { Neo4jNodeModule } from './neo4j-node/neo4j-node.module';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/entities/comment.entity';
 import { CustomCommentRepository } from './comment/repository/comment.repository';
@@ -62,6 +63,7 @@ export class LoggerMiddleware implements NestMiddleware {
     NodeModule,
     UserModule,
     BoardModule,
+    Neo4jNodeModule,
     CommentModule,
   ],
   controllers: [],

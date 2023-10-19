@@ -69,7 +69,7 @@ export const usePostListGetQuery = (nodeId?: number) => {
     [BOARD_QUERIES.ALL_BOARD(nodeId!)],
     () => getPostListData(nodeId),
     {
-      enabled: nodeId !== null,
+      enabled: nodeId !== undefined,
     },
   );
 };
@@ -79,7 +79,7 @@ export const usePostGetQuery = (boardId?: number) => {
     [BOARD_QUERIES.SINGLE_BOARD(boardId!)],
     () => getPostData(boardId),
     {
-      enabled: boardId !== null,
+      enabled: boardId !== undefined,
     },
   );
 };

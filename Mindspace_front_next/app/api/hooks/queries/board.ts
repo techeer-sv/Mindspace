@@ -40,8 +40,11 @@ export const useCreatePostMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation(createPost, {
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries([BOARD_QUERIES.USER_BOARD(variables.id)]);
       successAction();
     },
     onError: (error: APIErrorResponse) => {
@@ -54,7 +57,7 @@ export const useUpdatePostMutation = (successAction: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation(updatePost, {
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries([BOARD_QUERIES.USER_BOARD(variables.id)]);
       successAction();
     },

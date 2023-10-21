@@ -19,6 +19,8 @@ import { BoardModule } from './board/board.module';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/entities/comment.entity';
 import { CustomCommentRepository } from './comment/repository/comment.repository';
+import { NotificationModule } from './notification/notificaton.module';
+import { Notification } from './notification/entities/notification.entity';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -49,7 +51,14 @@ export class LoggerMiddleware implements NestMiddleware {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Node, User, Board, Comment, CustomCommentRepository],
+      entities: [
+        Node,
+        User,
+        Board,
+        Comment,
+        CustomCommentRepository,
+        Notification,
+      ],
       synchronize: true,
     }),
     Neo4jModule.forRoot({
@@ -63,6 +72,7 @@ export class LoggerMiddleware implements NestMiddleware {
     UserModule,
     BoardModule,
     CommentModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [],

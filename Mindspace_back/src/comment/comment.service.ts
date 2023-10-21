@@ -14,6 +14,7 @@ import { CommentPermissionDeniedException } from './exception/CommentPermissionD
 import { CommentNotFoundException } from './exception/CommentNotFoundException';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 import { BoardNotFoundException } from '../board/exception/BoardNotFoundException';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class CommentService {
@@ -24,6 +25,7 @@ export class CommentService {
     private readonly commentMapper: CommentMapper,
     private readonly userService: UserService,
     private readonly boardService: BoardService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /** 댓글 생성 */
@@ -51,7 +53,20 @@ export class CommentService {
       board,
       user.nickname,
     );
-    return await this.commentRepository.save(comment);
+    const savedComment = await this.commentRepository.save(comment);
+
+    // 댓글이 성공적으로 생성된 후 알림 생성
+    const notificationData = {
+      board: board,
+      message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
+      commentId: savedComment.id,
+    };
+
+    await this.notificationService.createNotificationForBoardOwner(
+      notificationData,
+    );
+
+    return savedComment;
   }
 
   /** 댓글 목록 조회 */

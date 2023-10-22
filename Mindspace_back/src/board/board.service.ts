@@ -47,7 +47,7 @@ export class BoardService {
     });
 
     if (!boards || boards.length === 0) {
-      throw new NodeNotFoundException();
+      throw new BoardNotFoundException();
     }
 
     return boards.map((board) => BoardMapper.BoardNodeResponseDto(board));
@@ -75,7 +75,7 @@ export class BoardService {
     if (existingBoard) {
       throw new NodeAlreadyWrittenException();
     }
-  
+
     // userId를 숫자로 변환
     const convertedUserId = Number(userId);
 

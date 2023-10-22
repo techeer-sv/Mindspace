@@ -56,20 +56,29 @@ export class NotificationController {
     type: NotificationResponseDTO,
     isArray: true,
   })
-  async getNotifications(
-    @Param('userId') userId: number,
-  ): Promise<CustomNotification[]> {
-    return this.notificationService.getNotificationsForUser(userId);
+  async getNotifications(@Param('userId') userId: number): Promise<any[]> {
+    const notifications =
+      await this.notificationService.getNotificationsForUser(userId);
+
+    return notifications.map((notification) => ({
+      message: notification.message,
+      board_id: notification.board.id,
+      node_id: notification.nodeId,
+      notification_id: notification.id,
+    }));
   }
 
-  @Delete(':id')
+  @Delete(':notificationId')
   @ApiOperation({ summary: '알림 삭제' })
   @ApiResponse({
     status: 200,
     description: '성공적으로 알림이 삭제되었습니다.',
   })
   @ApiResponse({ status: 404, description: '알림을 찾을 수 없습니다.' })
-  async delete(@Param('id') id: number): Promise<void> {
-    return this.notificationService.deleteNotification(id);
+  async deleteNotification(
+    @Param('notificationId') notificationId: number,
+  ): Promise<{ message: string }> {
+    await this.notificationService.deleteNotification(notificationId);
+    return { message: '성공적으로 알림이 삭제되었습니다.' };
   }
 }

@@ -44,7 +44,7 @@ export class BoardController {
     required: true,
     type: Number,
   })
-  @Get()
+  @Get('/all')
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
   ): Promise<BoardNodeResponseDto[]> {

@@ -1,7 +1,13 @@
 import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { BoardService } from '../board/board.service';
 
 @ApiTags('notification')
@@ -13,8 +19,32 @@ export class NotificationController {
   ) {}
 
   @Get('longpoll/:userId')
+  @ApiOperation({ summary: '알림 대기' })
+  @ApiResponse({
+    status: 200,
+    description: '새로운 알림이 성공적으로 반환되었습니다.',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          board_id: { type: 'number' },
+          node_id: { type: 'number' },
+          notification_id: { type: 'number' },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: '사용자를 찾을 수 없습니다.' })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    type: 'integer',
+    description: '사용자 ID',
+  })
   async waitForNotification(@Param('userId') userId: number) {
-    return await this.notificationService.waitForNewNotifications(userId); // 'waitForNotificationByUserId'를 'waitForNewNotifications'로 변경
+    return await this.notificationService.waitForNewNotifications(userId);
   }
 
   @Delete(':id')

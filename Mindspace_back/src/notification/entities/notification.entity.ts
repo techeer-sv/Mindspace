@@ -15,16 +15,15 @@ export class Notification {
   @Column()
   message: string;
 
+  @Column({ type: 'int', nullable: true })
+  nodeId: number;
+
   @ManyToOne(() => Board, { eager: true }) // eager를 true로 설정하여 자동으로 관련된 Board 정보를 가져올 수 있게 합니다.
   @JoinColumn({ name: 'board_id' })
   board: Board;
 
   get userId(): number {
     return this.board.userId; // board 객체에서 userId를 가져옵니다.
-  }
-
-  get nodeId(): number {
-    return this.board.nodeId; // board 객체에서 nodeId를 가져옵니다.
   }
 
   get userNickname(): string {

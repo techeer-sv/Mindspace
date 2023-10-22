@@ -60,6 +60,7 @@ export class CommentService {
       board: board,
       message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
       commentId: savedComment.id,
+      nodeId: board.nodeId,
     };
 
     await this.notificationService.createNotificationForBoardOwner(

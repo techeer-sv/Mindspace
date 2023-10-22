@@ -39,10 +39,12 @@ export class NotificationService {
     board: Board;
     message: string;
     commentId: number;
+    nodeId: number;
   }): Promise<Notification> {
     const newNotification = new Notification();
     newNotification.message = data.message;
     newNotification.board = data.board; // Assigning the board directly since it's a ManyToOne relationship.
+    newNotification.nodeId = data.nodeId;
 
     const savedNotification = await this.notificationRepository.save(
       newNotification,

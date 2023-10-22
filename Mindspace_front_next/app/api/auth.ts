@@ -11,7 +11,7 @@ export const createUser = async ({
   email,
   password,
 }: SignUpReqeust) => {
-  const endpoint = "user/signup";
+  const endpoint = "users/signup";
   const body = JSON.stringify({
     nickname: userName,
     email: email,
@@ -30,7 +30,7 @@ export const getAccessToken = async ({
   email,
   password,
 }: SignInRequest): Promise<string> => {
-  const endpoint = "user/login";
+  const endpoint = "users/login";
   const body = JSON.stringify({
     email: email,
     password: password,
@@ -46,7 +46,7 @@ export const getAccessToken = async ({
 };
 
 export const getUserNickname = async (): Promise<string> => {
-  const endpoint = "user/nickname";
+  const endpoint = "users/nickname";
 
   const response = await csrFetch<NicknameResponse>(endpoint, {
     method: "GET",

@@ -21,9 +21,6 @@ export class Notification {
   @Column({ type: 'int', nullable: true })
   userId: number;
 
-  @Column({ type: 'boolean', nullable: true })
-  isRead: boolean;
-
   @ManyToOne(() => Board, { eager: true }) // eager를 true로 설정하여 자동으로 관련된 Board 정보를 가져올 수 있게 합니다.
   @JoinColumn({ name: 'board_id' })
   board: Board;

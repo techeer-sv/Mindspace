@@ -76,31 +76,6 @@ export class NotificationController {
     }));
   }
 
-  @Put(':notificationId/read')
-  @ApiOperation({ summary: '알림 읽음 상태로 업데이트' })
-  @ApiResponse({
-    status: 200,
-    description: '성공적으로 알림 상태가 업데이트되었습니다.',
-  })
-  @ApiResponse({ status: 404, description: '알림을 찾을 수 없습니다.' })
-  async markAsRead(
-    @Param('notificationId') notificationId: number,
-  ): Promise<void> {
-    await this.notificationService.markAsRead(notificationId);
-  }
-
-  @Get('user/:userId/unread')
-  @ApiOperation({ summary: '사용자의 읽지 않은 알림 가져오기' })
-  @ApiResponse({
-    status: 200,
-    description: '성공적으로 읽지 않은 알림을 가져왔습니다.',
-  })
-  @ApiResponse({ status: 404, description: '알림을 찾을 수 없습니다.' })
-  async getUnreadNotifications(
-    @Param('userId') userId: number,
-  ): Promise<Notification[]> {
-    return await this.notificationService.getUnreadNotifications(userId);
-  }
   @Delete(':notificationId')
   @ApiOperation({ summary: '알림 삭제' })
   @ApiResponse({

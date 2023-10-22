@@ -80,27 +80,6 @@ export class NotificationService {
       where: { userId: userId },
     });
   }
-
-  async markAsRead(notificationId: number): Promise<void> {
-    const notification = await this.notificationRepository.findOne({
-      where: { id: notificationId },
-    });
-
-    if (!notification) {
-      throw new Error('Notification not found');
-    }
-
-    // 알림 상태를 읽음으로 업데이트
-    notification.isRead = true;
-    await this.notificationRepository.save(notification);
-  }
-
-  async getUnreadNotifications(userId: number): Promise<Notification[]> {
-    return await this.notificationRepository.find({
-      where: { userId: userId, isRead: false },
-    });
-  }
-
   async deleteNotification(id: number): Promise<void> {
     const result = await this.notificationRepository.delete(id);
     if (result.affected === 0) {

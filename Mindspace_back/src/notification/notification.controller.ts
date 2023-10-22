@@ -9,6 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BoardService } from '../board/board.service';
+import { Notification as CustomNotification } from './entities/notification.entity';
 
 @ApiTags('notification')
 @Controller('notifications')
@@ -45,6 +46,20 @@ export class NotificationController {
   })
   async waitForNotification(@Param('userId') userId: number) {
     return await this.notificationService.waitForNewNotifications(userId);
+  }
+
+  @Get(':userId')
+  @ApiOperation({ summary: '사용자의 모든 알림 가져오기' })
+  @ApiResponse({
+    status: 200,
+    description: '알림 목록이 성공적으로 반환되었습니다.',
+    type: NotificationResponseDTO,
+    isArray: true,
+  })
+  async getNotifications(
+    @Param('userId') userId: number,
+  ): Promise<CustomNotification[]> {
+    return this.notificationService.getNotificationsForUser(userId);
   }
 
   @Delete(':id')

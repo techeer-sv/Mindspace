@@ -40,11 +40,13 @@ export class NotificationService {
     message: string;
     commentId: number;
     nodeId: number;
+    userId: number;
   }): Promise<Notification> {
     const newNotification = new Notification();
     newNotification.message = data.message;
     newNotification.board = data.board; // Assigning the board directly since it's a ManyToOne relationship.
     newNotification.nodeId = data.nodeId;
+    newNotification.userId = data.userId;
 
     const savedNotification = await this.notificationRepository.save(
       newNotification,
@@ -71,6 +73,12 @@ export class NotificationService {
   }) {
     const notification = this.notificationRepository.create(data);
     await this.notificationRepository.save(notification);
+  }
+
+  async getNotificationsForUser(userId: number): Promise<Notification[]> {
+    return await this.notificationRepository.find({
+      where: { userId: userId },
+    });
   }
 
   async deleteNotification(id: number): Promise<void> {

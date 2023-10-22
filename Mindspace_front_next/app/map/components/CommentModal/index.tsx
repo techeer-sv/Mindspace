@@ -1,15 +1,14 @@
-import React from 'react';
-import styles from './CommentModal.module.scss';
-import CommentIcon from '@/assets/icons/Comment.svg';
-import SendCommentIcon from '@/assets/icons/SendComment.svg';
-import { CommentModalProps } from '@/utils/types';
+"use client";
+import React from "react";
+import styles from "./CommentModal.module.scss";
+import { CommentModalProps } from "@/constants/types";
 
 const CommentModal = ({ isOpen, initialValue }: CommentModalProps) => {
   return (
     <div className={isOpen ? styles.comment : styles.hiddencomment}>
       <div className={styles.comment__header}>
         <div className={styles.comment__header__icon}>
-          <img src={CommentIcon} alt="Comment Icon" />
+          <img src={"icons/Comment.svg"} alt="Comment Icon" />
         </div>
         <span className={styles.comment__header__text}>
           댓글 {initialValue.length}
@@ -19,7 +18,7 @@ const CommentModal = ({ isOpen, initialValue }: CommentModalProps) => {
         <input type="text" placeholder="Enter your comment" />
         <div className={styles.comment__input__icon}>
           <button>
-            <img src={SendCommentIcon} alt="Comment Icon" />
+            <img src={"/icons/SendComment.svg"} alt="Comment Icon" />
           </button>
         </div>
       </div>

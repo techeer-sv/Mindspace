@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./../Auth.module.scss";
 import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
-import { useSignUpMutation } from "@/hooks/queries/user";
+import { useSignUpMutation } from "@/api/hooks/queries/user";
 
 export default function SignUpPage() {
   const router = useRouter();

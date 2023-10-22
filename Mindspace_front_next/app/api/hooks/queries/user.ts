@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useQueryClient, useQuery, useMutation } from "react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { createUser, getAccessToken, getUserNickname } from "@/api/auth";
 import { USER_QUERIES } from "@/constants/queryKeys";
 import { FIVE_MINUTES_IN_MILLISECONDS } from "@/constants/common";
@@ -17,7 +17,7 @@ export const useClearUserNicknameCache = (isLoggedIn: boolean) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      queryClient.invalidateQueries(USER_QUERIES.NICKNAME);
+      queryClient.invalidateQueries({ queryKey: [USER_QUERIES.NICKNAME] });
     }
   }, [isLoggedIn, queryClient]);
 };

@@ -1,4 +1,4 @@
-import { baseFetch } from "./baseFetch";
+import { csrFetch } from "./utils/csrFetch";
 import {
   NicknameResponse,
   SignInResponse,
@@ -18,7 +18,7 @@ export const createUser = async ({
     password: password,
   });
 
-  await baseFetch(endpoint, {
+  await csrFetch(endpoint, {
     method: "POST",
     body: body,
   });
@@ -36,7 +36,7 @@ export const getAccessToken = async ({
     password: password,
   });
 
-  const response = await baseFetch<SignInResponse>(endpoint, {
+  const response = await csrFetch<SignInResponse>(endpoint, {
     method: "POST",
     body: body,
   });
@@ -48,7 +48,7 @@ export const getAccessToken = async ({
 export const getUserNickname = async (): Promise<string> => {
   const endpoint = "user/nickname";
 
-  const response = await baseFetch<NicknameResponse>(endpoint, {
+  const response = await csrFetch<NicknameResponse>(endpoint, {
     method: "GET",
   });
 

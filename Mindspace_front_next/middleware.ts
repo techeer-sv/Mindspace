@@ -8,15 +8,14 @@ export const config = {
 export function middleware(request: NextRequest) {
   const token = getTokenFromCookies(request);
   const currentPath = request.nextUrl.pathname;
+  const url = request.nextUrl.clone();
 
   if (!token && ROUTES.AUTH_REQUIRED.includes(currentPath)) {
-    const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
   }
 
   if (token && ROUTES.NON_AUTH_ACCESSIBLE.includes(currentPath)) {
-    const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
   }

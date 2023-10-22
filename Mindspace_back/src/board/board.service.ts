@@ -69,13 +69,13 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId },
+      where: { nodeId: nodeId, userId: Number(userId) },
     });
 
     if (existingBoard) {
       throw new NodeAlreadyWrittenException();
     }
-
+  
     // userId를 숫자로 변환
     const convertedUserId = Number(userId);
 

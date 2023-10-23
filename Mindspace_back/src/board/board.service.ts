@@ -11,7 +11,6 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserService } from '../user/user.service';
 import { BoardResponseDto } from './dto/board-response.dto';
-import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
@@ -25,8 +24,8 @@ import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenExcep
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
 import { ConfigService } from '@nestjs/config';
-import { CustomBoardRepository } from "./repository/board.repository";
-import {PagingParams} from "../global/common/type";
+import { CustomBoardRepository } from './repository/board.repository';
+import { PagingParams } from '../global/common/type';
 
 @Injectable()
 export class BoardService {
@@ -45,10 +44,15 @@ export class BoardService {
   ) {}
 
   /** 게시글 목록 조회 + 페이지네이션 */
-  async getAllBoardsByNodeId(nodeId: number, pagingParams: PagingParams){
-   const paginationResult = await this.customBoardRepository.paginate(nodeId, pagingParams);
+  async getAllBoardsByNodeId(nodeId: number, pagingParams: PagingParams) {
+    const paginationResult = await this.customBoardRepository.paginate(
+      nodeId,
+      pagingParams,
+    );
 
-    const data = paginationResult.data.map(board => BoardMapper.BoardNodeResponseDto(board));
+    const data = paginationResult.data.map((board) =>
+      BoardMapper.BoardNodeResponseDto(board),
+    );
 
     const cursor = {
       count: paginationResult.data.length,

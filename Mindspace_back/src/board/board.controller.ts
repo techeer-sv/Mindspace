@@ -26,14 +26,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './entities/board.entity';
 import { BoardResponseDto } from './dto/board-response.dto';
-import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
-import {PagingParams} from "../global/common/type";
-import { PaginatedBoardResponseDto } from "./dto/board-pagination-response.dto";
-import {PaginatedCommentResponseDto} from "../comment/dto/comment-pagination-response.dto";
+import { PagingParams } from '../global/common/type';
+import { PaginatedBoardResponseDto } from './dto/board-pagination-response.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -69,7 +67,7 @@ export class BoardController {
     @Query('node_id') nodeId: number,
     @Query() pagingParams: PagingParams,
   ): Promise<PaginatedBoardResponseDto> {
-    return await this.boardService.getAllBoardsByNodeId(nodeId,pagingParams);
+    return await this.boardService.getAllBoardsByNodeId(nodeId, pagingParams);
   }
 
   @ApiOperation({ summary: '게시글 생성' })

@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
 import { NodeModule } from '../node/node.module';
 import { UtilsModule } from '../utils/utils.module';
 import { AwsModule } from '../aws/aws.module';
-import {CustomBoardRepository} from "./repository/board.repository";
+import { CustomBoardRepository } from './repository/board.repository';
 
 @Module({
   imports: [

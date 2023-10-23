@@ -5,12 +5,12 @@ import { Editor } from "@toast-ui/react-editor";
 import styles from "../../WriteModal.module.scss";
 import { useRecoilValue } from "recoil";
 import {
-  useUpdatePostMutation,
-  useCreatePostMutation,
+  useUpdateBoardMutation,
+  useCreateBoardMutation,
 } from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
-import { uploadImage } from "@/api/post";
+import { uploadImage } from "@/api/board";
 
 const WriteEditor = ({
   nodeData,
@@ -28,27 +28,27 @@ const WriteEditor = ({
     setEditedContent(editorRef?.current?.getInstance().getMarkdown());
   };
 
-  const { mutate: updatePostMutation } = useUpdatePostMutation(() => {
+  const { mutate: updateBoardMutation } = useUpdateBoardMutation(() => {
     onEditToggle();
   });
-  const [createPostErrorMessage, setCreatePostErrorMessage] =
+  const [createBoardErrorMessage, setCreateBoardErrorMessage] =
     useState<string>("");
 
-  const { mutate: createPostMutation } = useCreatePostMutation(() => {
+  const { mutate: createBoardMutation } = useCreateBoardMutation(() => {
     updateNodeInfo(nodeInfo?.id, true);
     onEditToggle();
-  }, setCreatePostErrorMessage);
+  }, setCreateBoardErrorMessage);
 
   const handleSubmit = () => {
     if (nodeInfo.isWritten) {
-      updatePostMutation({
+      updateBoardMutation({
         id: nodeInfo.id as number,
         title: edtedTitle ?? "",
         content: editedContent ?? "",
       });
       updateNodeInfo(nodeInfo?.id, true);
     } else {
-      createPostMutation({
+      createBoardMutation({
         id: nodeInfo.id as number,
         title: edtedTitle ?? "",
         content: editedContent ?? "",
@@ -58,11 +58,11 @@ const WriteEditor = ({
   };
 
   useEffect(() => {
-    if (createPostErrorMessage) {
-      alert(createPostErrorMessage);
-      setCreatePostErrorMessage("");
+    if (createBoardErrorMessage) {
+      alert(createBoardErrorMessage);
+      setCreateBoardErrorMessage("");
     }
-  }, [createPostErrorMessage]);
+  }, [createBoardErrorMessage]);
 
   const onUploadImage = async (blob: any, callback: any) => {
     await uploadImage(blob).then((imagePath) => {

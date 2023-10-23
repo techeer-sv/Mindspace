@@ -9,7 +9,7 @@ import styles from "../../WriteModal.module.scss";
 
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { useRecoilValue } from "recoil";
-import { useDeletePostMutation } from "@/api/hooks/queries/board";
+import { useDeleteBoardMutation } from "@/api/hooks/queries/board";
 
 import { ReadViewerProps } from "@/constants/types";
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
@@ -23,32 +23,32 @@ const ReadViewer = ({
   const nodeInfo = useRecoilValue(nodeAtom);
   const viewerRef = useRef<any>(null);
 
-  const [createPostErrorMessage, setCreatePostErrorMessage] =
+  const [createBoardErrorMessage, setCreateBoardErrorMessage] =
     useState<string>("");
 
-  const [deletePostErrorMessage, setDeletePostErrorMessage] =
+  const [deleteBoardErrorMessage, setDeleteBoardErrorMessage] =
     useState<string>("");
 
-  const { mutate: deletePostMutation } = useDeletePostMutation(() => {
+  const { mutate: deleteBoardMutation } = useDeleteBoardMutation(() => {
     updateNodeInfo(nodeInfo?.id, false);
     onEditToggle();
     onClose();
-  }, setDeletePostErrorMessage);
+  }, setDeleteBoardErrorMessage);
 
   const handleDelete = () => {
-    deletePostMutation(nodeInfo.id as number);
+    deleteBoardMutation(nodeInfo.id as number);
   };
 
   useEffect(() => {
-    if (createPostErrorMessage) {
-      alert(createPostErrorMessage);
-      setCreatePostErrorMessage("");
+    if (createBoardErrorMessage) {
+      alert(createBoardErrorMessage);
+      setCreateBoardErrorMessage("");
     }
-    if (deletePostErrorMessage) {
-      alert(deletePostErrorMessage);
-      setDeletePostErrorMessage("");
+    if (deleteBoardErrorMessage) {
+      alert(deleteBoardErrorMessage);
+      setDeleteBoardErrorMessage("");
     }
-  }, [createPostErrorMessage, deletePostErrorMessage]);
+  }, [createBoardErrorMessage, deleteBoardErrorMessage]);
 
   useEffect(() => {
     if (viewerRef.current) {

@@ -1,32 +1,32 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { APIErrorResponse } from "@/constants/types";
 import {
-  createPost,
-  updatePost,
-  deletePost,
-  getPost,
-  getPostListData,
-  getPostData,
-} from "@/api/post";
+  createBoard,
+  updateBoard,
+  deleteBoard,
+  getBoard,
+  getBoardListData,
+  getBoardData,
+} from "@/api/board";
 
 import { BOARD_QUERIES } from "@/constants/queryKeys";
 
-export const useUserPostGetQuery = (
+export const useUserBoardGetQuery = (
   id: number,
   isOpen: boolean,
   isActive: boolean,
 ) => {
-  return useQuery([BOARD_QUERIES.USER_BOARD(id)], () => getPost(id), {
+  return useQuery([BOARD_QUERIES.USER_BOARD(id)], () => getBoard(id), {
     enabled: isOpen && isActive,
     staleTime: 1000 * 60 * 5,
   });
 };
 
-export const useDeletePostMutation = (
+export const useDeleteBoardMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
-  return useMutation(deletePost, {
+  return useMutation(deleteBoard, {
     onSuccess: () => {
       successAction();
     },
@@ -36,13 +36,13 @@ export const useDeletePostMutation = (
   });
 };
 
-export const useCreatePostMutation = (
+export const useCreateBoardMutation = (
   successAction: () => void,
   errorAction: (message: string) => void,
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation(createPost, {
+  return useMutation(createBoard, {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries([BOARD_QUERIES.USER_BOARD(variables.id)]);
       successAction();
@@ -53,10 +53,10 @@ export const useCreatePostMutation = (
   });
 };
 
-export const useUpdatePostMutation = (successAction: () => void) => {
+export const useUpdateBoardMutation = (successAction: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation(updatePost, {
+  return useMutation(updateBoard, {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries([BOARD_QUERIES.USER_BOARD(variables.id)]);
       successAction();
@@ -64,20 +64,20 @@ export const useUpdatePostMutation = (successAction: () => void) => {
   });
 };
 
-export const usePostListGetQuery = (nodeId?: number) => {
+export const useBoardListGetQuery = (nodeId?: number) => {
   return useQuery(
     [BOARD_QUERIES.ALL_BOARD(nodeId!)],
-    () => getPostListData(nodeId),
+    () => getBoardListData(nodeId),
     {
       enabled: nodeId !== undefined,
     },
   );
 };
 
-export const usePostGetQuery = (boardId?: number) => {
+export const useBoardGetQuery = (boardId?: number) => {
   return useQuery(
     [BOARD_QUERIES.SINGLE_BOARD(boardId!)],
-    () => getPostData(boardId),
+    () => getBoardData(boardId),
     {
       enabled: boardId !== undefined,
     },

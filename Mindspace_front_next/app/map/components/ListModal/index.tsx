@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import PostTable from "../PostTable";
+import BoardTable from "../BoardTable";
 import styles from "./ListModal.module.scss";
 import { ListModalProps } from "@/constants/types";
 import { Viewer } from "@toast-ui/react-editor";
 import CustomModal from "@/components/CustomModal";
-import { usePostGetQuery } from "@/api/hooks/queries/board";
+import { useBoardGetQuery } from "@/api/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
 import CommentModal from "../CommentModal";
@@ -12,7 +12,7 @@ import CommentModal from "../CommentModal";
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState<number>();
   const viewerRef = useRef<Viewer>(null);
-  const { data: postData, isLoading } = usePostGetQuery(isSelectedTable);
+  const { data: boardData, isLoading } = useBoardGetQuery(isSelectedTable);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
   const commentData = [
     {
@@ -39,9 +39,9 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
 
   useEffect(() => {
     if (viewerRef.current) {
-      viewerRef.current.getInstance().setMarkdown(postData?.content);
+      viewerRef.current.getInstance().setMarkdown(boardData?.content);
     }
-  }, [postData?.content]);
+  }, [boardData?.content]);
 
   return (
     <CustomModal
@@ -60,7 +60,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           >
             <span className={styles.header__span}>x</span>
           </button>
-          <PostTable onClickedId={handleSelectBoard} />
+          <BoardTable onClickedId={handleSelectBoard} />
         </>
       ) : (
         !isLoading && (
@@ -89,7 +89,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                           styles.post__wrapper__content__wrapper__header__text__title
                         }
                       >
-                        {postData?.title}
+                        {boardData?.title}
                       </span>
                     </div>
                     <div
@@ -114,7 +114,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                           styles.post__wrapper__content__wrapper__info__name
                         }
                       >
-                        {postData.userNickname}
+                        {boardData.userNickname}
                       </span>
                       <span
                         className={
@@ -122,7 +122,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                         }
                       >
                         {formatDateTime(
-                          postData.updatedAt,
+                          boardData.updatedAt,
                           DateTimeFormat.Date,
                         )}
                       </span>
@@ -131,7 +131,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                   <div className={styles.post__wrapper__viewer}>
                     <Viewer
                       ref={viewerRef}
-                      initialValue={postData?.content}
+                      initialValue={boardData?.content}
                       usageStatistics={false}
                     />
                   </div>

@@ -25,6 +25,8 @@ import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenExcep
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
 import { ConfigService } from '@nestjs/config';
+import { CustomBoardRepository } from "./repository/board.repository";
+import {PagingParams} from "../global/common/type";
 
 @Injectable()
 export class BoardService {
@@ -33,6 +35,7 @@ export class BoardService {
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    private readonly customBoardRepository: CustomBoardRepository,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
@@ -41,16 +44,18 @@ export class BoardService {
     private configService: ConfigService,
   ) {}
 
-  async getAllBoardsByNodeId(nodeId: number): Promise<BoardNodeResponseDto[]> {
-    const boards = await this.boardRepository.find({
-      where: { nodeId: nodeId },
-    });
+  /** 게시글 목록 조회 + 페이지네이션 */
+  async getAllBoardsByNodeId(nodeId: number, pagingParams: PagingParams){
+   const paginationResult = await this.customBoardRepository.paginate(nodeId, pagingParams);
 
-    if (!boards || boards.length === 0) {
-      throw new NodeNotFoundException();
-    }
+    const data = paginationResult.data.map(board => BoardMapper.BoardNodeResponseDto(board));
 
-    return boards.map((board) => BoardMapper.BoardNodeResponseDto(board));
+    const cursor = {
+      count: paginationResult.data.length,
+      ...paginationResult.cursor,
+    };
+
+    return { data, cursor };
   }
 
   async createBoard(

@@ -31,6 +31,8 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
+import {PagingParams} from "../global/common/type";
+import { PaginatedBoardResponseDto } from "./dto/board-pagination-response.dto";
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -44,11 +46,12 @@ export class BoardController {
     required: true,
     type: Number,
   })
-  @Get()
+  @Get('all')
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
-  ): Promise<BoardNodeResponseDto[]> {
-    return await this.boardService.getAllBoardsByNodeId(nodeId);
+    @Query() pagingParams: PagingParams,
+  ): Promise<PaginatedBoardResponseDto> {
+    return await this.boardService.getAllBoardsByNodeId(nodeId,pagingParams);
   }
 
   @ApiOperation({ summary: '게시글 생성' })

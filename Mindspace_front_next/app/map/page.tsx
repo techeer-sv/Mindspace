@@ -1,19 +1,13 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Loading from "@/components/Loading";
+import HydratedNode from "./hydratedNode";
+import { Suspense } from "react";
 
-export default function MapPage() {
-  console.log("map 페이지 접속 시 실행하는 api호출테스트(임시)");
-
+export default function Page() {
   return (
-    <>
-      <h1
-        style={{
-          color: "white",
-        }}
-      >
-        map 임시 페이지
-      </h1>
-    </>
+    <main className="flex w-full">
+      <Suspense fallback={<Loading />}>
+        <HydratedNode />
+      </Suspense>
+    </main>
   );
 }

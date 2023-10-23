@@ -11,7 +11,7 @@ import { isLoggedInAtom } from "@/recoil/state/authAtom";
 import {
   useUserNicknameQuery,
   useClearUserNicknameCache,
-} from "@/hooks/queries/user";
+} from "@/api/hooks/queries/user";
 
 const Navbar = () => {
   const [isClient, setIsClient] = useState(false);

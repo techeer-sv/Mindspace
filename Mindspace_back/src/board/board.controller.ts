@@ -15,7 +15,7 @@ import {
 import { BoardService } from './board.service';
 import {
   ApiBody,
-  ApiConsumes, ApiCreatedResponse,
+  ApiConsumes,
   ApiHeader,
   ApiOperation,
   ApiQuery,
@@ -59,11 +59,12 @@ export class BoardController {
     type: String,
     description: '다음 커서 값',
   })
-  @ApiCreatedResponse({
+  @ApiResponse({
+    code: 200,
     description: '게시글 목록 조회 성공',
     type: PaginatedBoardResponseDto,
   })
-  @Get('all')
+  @Get('/all')
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
     @Query() pagingParams: PagingParams,

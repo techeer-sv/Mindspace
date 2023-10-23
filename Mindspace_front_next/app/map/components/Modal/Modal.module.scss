@@ -1,0 +1,42 @@
+.header {
+  &__button {
+    border: none;
+    background-color: transparent;
+    margin-left: 0.1rem;
+    cursor: pointer;
+  }
+
+  &__span {
+    color: white;
+    font-size: 2rem;
+    z-index: 900;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 70%;
+
+  &__title {
+    font-size: 5rem;
+    color: white;
+    margin: 1rem;
+    white-space: normal;
+    text-align: center;
+  }
+
+  &__button {
+    border: none;
+    border-radius: 1rem;
+    background-color: #a6a6c8;
+    color: white;
+    font-size: 1.5rem;
+    width: 8rem;
+    height: 3rem;
+    margin: 1rem 2rem 2rem 1rem;
+    cursor: pointer;
+  }
+}

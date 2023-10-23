@@ -74,7 +74,7 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId },
+      where: { nodeId: nodeId, userId: Number(userId) },
     });
 
     if (existingBoard) {

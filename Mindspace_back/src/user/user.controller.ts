@@ -57,7 +57,7 @@ export class UserController {
   @ApiOperation({ summary: '닉네임 반환' })
   @Get('/nickname')
   async getUserNickname(
-    @Headers('authorization') userId: number,
+    @Headers('user_id') userId: number,
   ): Promise<UserNicknameResponseDto> {
     return this.userService.getUserNickname(userId);
   }

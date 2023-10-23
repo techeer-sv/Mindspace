@@ -1,6 +1,6 @@
 "use client";
 
-import "./globals.scss";
+import "@/globals.scss";
 import Navbar from "@/components/Navbar";
 import { usePathname } from "next/navigation";
 

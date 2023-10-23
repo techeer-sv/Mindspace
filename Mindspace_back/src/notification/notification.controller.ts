@@ -27,8 +27,8 @@ export class NotificationController {
     private readonly boardService: BoardService,
   ) {}
 
-  @Get('longpoll/:userId')
-  @ApiOperation({ summary: '알림 대기' })
+  @Get('longpoll/new/:userId')
+  @ApiOperation({ summary: '새로운 알림 대기' })
   @ApiResponse({
     status: 200,
     description: '새로운 알림이 성공적으로 반환되었습니다.',
@@ -52,8 +52,15 @@ export class NotificationController {
     type: 'integer',
     description: '사용자 ID',
   })
-  async waitForNotification(@Param('userId') userId: number) {
-    return await this.notificationService.waitForNewNotifications(userId);
+  async waitForNewNotifications(
+    @Param('userId') userId: number,
+  ): Promise<Notification> {
+    // 게시판 ID로 사용자 ID를 가져옵니다.
+    const boardId = await this.boardService.getBoardIdByUserId(userId);
+    const boardUserId = await this.boardService.getUserIdByBoardId(boardId);
+
+    // 얻은 사용자 ID를 이용하여 "새로운 알림 대기 API"에 전달합니다.
+    return this.notificationService.waitForNewNotifications(boardUserId);
   }
 
   @Get(':userId')

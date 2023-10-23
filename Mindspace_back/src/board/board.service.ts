@@ -211,4 +211,25 @@ export class BoardService {
     }
     return board.user;
   }
+
+  async getUserIdByBoardId(boardId: number): Promise<number> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new NotFoundException(`Board with ID ${boardId} not found`);
+    }
+    return board.userId;
+  }
+
+  async getBoardIdByUserId(userId: number): Promise<number> {
+    const board = await this.boardRepository.findOne({
+      where: { userId: userId },
+      // 필요하다면 다른 조건을 추가하세요.
+    });
+    if (!board) {
+      throw new NotFoundException(`Board for user ID ${userId} not found`);
+    }
+    return board.id;
+  }
 }

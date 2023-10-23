@@ -15,6 +15,7 @@ import { CommentNotFoundException } from './exception/CommentNotFoundException';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 import { BoardNotFoundException } from '../board/exception/BoardNotFoundException';
 import { NotificationService } from '../notification/notification.service';
+import { nodeId } from 'nest-neo4j/dist/test';
 
 @Injectable()
 export class CommentService {
@@ -28,12 +29,14 @@ export class CommentService {
     private readonly notificationService: NotificationService,
   ) {}
 
-  /** 댓글 생성 */
   async createComment(
     boardId: number,
     userId: string,
     createCommentDto: CreateCommentDto,
   ): Promise<Comment> {
+    console.log(
+      `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
+    );
     const convertedUserId = Number(userId);
     const user = await this.userService.findUserById(convertedUserId);
 
@@ -55,19 +58,35 @@ export class CommentService {
     );
     const savedComment = await this.commentRepository.save(comment);
 
-    // 댓글이 성공적으로 생성된 후 알림 생성
-    const notificationData = {
+    // 알림 서비스의 createNotificationForBoardOwner 메서드를 호출하여 알림 생성 및 전송
+    await this.notificationService.createNotificationForBoardOwner({
       board: board,
       message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
       commentId: savedComment.id,
       nodeId: board.nodeId,
       userId: board.userId,
-    };
+    });
 
-    await this.notificationService.createNotificationForBoardOwner(
-      notificationData,
+    // 댓글을 생성한 사용자의 userId를 확인하고, 해당 사용자를 기반으로 알림 대기 중인 사용자를 찾습니다.
+    const commentUserId = convertedUserId;
+    const waitingUser = this.notificationService.waitingClients.find(
+      (client) => client.userId === commentUserId,
     );
 
+    if (waitingUser) {
+      // 알림을 대기하고 있는 사용자에게 알림을 전송합니다.
+      await this.notificationService.createNotificationForBoardOwner({
+        board: board,
+        message: `새로운 댓글이 작성되었습니다.`,
+        commentId: savedComment.id,
+        nodeId: board.nodeId,
+        userId: commentUserId,
+      });
+    }
+
+    console.log(
+      `[createComment] Finished comment creation for board ${boardId} by user ${userId}`,
+    );
     return savedComment;
   }
 

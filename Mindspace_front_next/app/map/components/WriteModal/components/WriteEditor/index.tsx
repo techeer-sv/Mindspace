@@ -64,9 +64,16 @@ const WriteEditor = ({
     }
   }, [createBoardErrorMessage]);
 
-  const { mutate: uploadImageMutation } = useUploadImageMutation();
+  const {
+    mutate: uploadImageMutation,
+    isLoading: isImageUploading,
+    isError: isImageUploadError,
+  } = useUploadImageMutation();
 
-  const onUploadImage = async (blob: any, callback: any) => {
+  const onUploadImage = async (
+    blob: File,
+    callback: (imageUrl: string, fileName: string) => void,
+  ) => {
     uploadImageMutation(blob, {
       onSuccess: (data) => {
         callback(data.imageUrl, blob.name);
@@ -126,6 +133,19 @@ const WriteEditor = ({
               usageStatistics={false}
             />
           </div>
+        </div>
+
+        <div className={styles.content__editor__message}>
+          {isImageUploading && (
+            <span className={styles.content__editor__message__loading}>
+              이미지 업로드 중...
+            </span>
+          )}
+          {isImageUploadError && (
+            <span className={styles.content__editor__message__error}>
+              이미지 업로드에 실패하였습니다.
+            </span>
+          )}
         </div>
       </div>
     </>

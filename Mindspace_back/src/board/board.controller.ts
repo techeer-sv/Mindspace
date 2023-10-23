@@ -60,7 +60,7 @@ export class BoardController {
     description: '다음 커서 값',
   })
   @ApiResponse({
-    code: 200,
+    status: 200,
     description: '게시글 목록 조회 성공',
     type: PaginatedBoardResponseDto,
   })

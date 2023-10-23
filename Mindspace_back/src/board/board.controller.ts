@@ -15,7 +15,7 @@ import {
 import { BoardService } from './board.service';
 import {
   ApiBody,
-  ApiConsumes,
+  ApiConsumes, ApiCreatedResponse,
   ApiHeader,
   ApiOperation,
   ApiQuery,
@@ -33,6 +33,7 @@ import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
 import {PagingParams} from "../global/common/type";
 import { PaginatedBoardResponseDto } from "./dto/board-pagination-response.dto";
+import {PaginatedCommentResponseDto} from "../comment/dto/comment-pagination-response.dto";
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -45,6 +46,22 @@ export class BoardController {
     description: '조회하려는 노드의 ID',
     required: true,
     type: Number,
+  })
+  @ApiQuery({
+    name: 'beforeCursor',
+    required: false,
+    type: String,
+    description: '이전 커서 값',
+  })
+  @ApiQuery({
+    name: 'afterCursor',
+    required: false,
+    type: String,
+    description: '다음 커서 값',
+  })
+  @ApiCreatedResponse({
+    description: '게시글 목록 조회 성공',
+    type: PaginatedBoardResponseDto,
   })
   @Get('all')
   async getAllBoardsByNodeId(

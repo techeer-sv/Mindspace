@@ -106,6 +106,41 @@
     position: relative;
     background-color: white;
     border-radius: 0 0 10px 10px;
+
+    &__message {
+      @keyframes ellipsis {
+        25% {
+          content: ".";
+        }
+        50% {
+          content: "..";
+        }
+        75% {
+          content: "...";
+        }
+        100% {
+          content: "....";
+        }
+      }
+
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      font-size: 0.8rem;
+
+      &__error {
+        color: red;
+      }
+
+      &__loading {
+        color: #423e3e42;
+      }
+
+      &__loading::after {
+        content: "....";
+        animation: ellipsis 4s infinite;
+      }
+    }
   }
 
   .editor__header {

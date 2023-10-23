@@ -5,20 +5,20 @@ import { CellClickedEvent } from "ag-grid-community";
 import { useRecoilValue } from "recoil";
 import { ModalWidthAtom, ModalHeightAtom } from "@/recoil/state/resizeAtom";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
-import { usePostListGetQuery } from "@/api/hooks/queries/board";
+import { useBoardListGetQuery } from "@/api/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
 import { BoardResponseDto } from "@/constants/types";
-interface PostTableProps {
+interface BoardTableProps {
   onClickedId: (id: number) => void;
 }
 
-function PostTable({ onClickedId }: PostTableProps) {
+function BoardTable({ onClickedId }: BoardTableProps) {
   const selectedNodeInfo = useRecoilValue(nodeAtom);
 
-  const { data: postListData } = usePostListGetQuery(selectedNodeInfo.id);
+  const { data: boardListData } = useBoardListGetQuery(selectedNodeInfo.id);
 
-  const formatPostListData = (dataList: BoardResponseDto[]) => {
+  const formatBoardListData = (dataList: BoardResponseDto[]) => {
     return dataList?.map((data: BoardResponseDto) => ({
       ...data,
       updatedAt: formatDateTime(data.updatedAt, DateTimeFormat.Date),
@@ -50,7 +50,7 @@ function PostTable({ onClickedId }: PostTableProps) {
       }}
     >
       <AgGridReact
-        rowData={formatPostListData(postListData)}
+        rowData={formatBoardListData(boardListData)}
         columnDefs={columnDefs}
         defaultColDef={{
           sortable: true,
@@ -64,4 +64,4 @@ function PostTable({ onClickedId }: PostTableProps) {
   );
 }
 
-export default PostTable;
+export default BoardTable;

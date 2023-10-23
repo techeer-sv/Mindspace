@@ -1,6 +1,6 @@
 import { csrFetch } from "./utils/csrFetch";
-import { CreatePostRequest } from "@/constants/types";
-export const getPost = async (id: number) => {
+import { CreateBoardRequest } from "@/constants/types";
+export const getBoard = async (id: number) => {
   const endpoint = `boards?node_id=${id}`;
 
   const data = await csrFetch(endpoint, {
@@ -10,7 +10,7 @@ export const getPost = async (id: number) => {
   return data;
 };
 
-export const deletePost = async (id: number) => {
+export const deleteBoard = async (id: number) => {
   const endpoint = `boards?node_id=${id}`;
 
   await csrFetch(endpoint, {
@@ -18,7 +18,11 @@ export const deletePost = async (id: number) => {
   });
 };
 
-export const createPost = async ({ id, title, content }: CreatePostRequest) => {
+export const createBoard = async ({
+  id,
+  title,
+  content,
+}: CreateBoardRequest) => {
   const endpoint = `boards?node_id=${id}`;
   const body = JSON.stringify({
     title,
@@ -31,7 +35,11 @@ export const createPost = async ({ id, title, content }: CreatePostRequest) => {
   });
 };
 
-export const updatePost = async ({ id, title, content }: CreatePostRequest) => {
+export const updateBoard = async ({
+  id,
+  title,
+  content,
+}: CreateBoardRequest) => {
   const endpoint = `boards?node_id=${id}`;
   const body = JSON.stringify({
     title,
@@ -44,7 +52,7 @@ export const updatePost = async ({ id, title, content }: CreatePostRequest) => {
   });
 };
 
-export const getPostListData = async (id?: number) => {
+export const getBoardListData = async (id?: number) => {
   const endpoint = `boards/all?node_id=${id}`;
 
   const data = await csrFetch(endpoint, {
@@ -54,7 +62,7 @@ export const getPostListData = async (id?: number) => {
   return data;
 };
 
-export const getPostData = async (id?: number) => {
+export const getBoardData = async (id?: number) => {
   if (id !== null) {
     const endpoint = `boards/${id}`;
 
@@ -66,4 +74,18 @@ export const getPostData = async (id?: number) => {
   } else {
     return;
   }
+};
+
+export const uploadImage = async (file: File) => {
+  const endpoint = `boards/image`;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const data = await csrFetch(endpoint, {
+    method: "POST",
+    body: formData,
+  });
+
+  return data;
 };

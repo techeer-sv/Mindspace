@@ -5,8 +5,9 @@ import { Editor } from "@toast-ui/react-editor";
 import styles from "../../WriteModal.module.scss";
 import { useRecoilValue } from "recoil";
 import {
-  useUpdatePostMutation,
-  useCreatePostMutation,
+  useUpdateBoardMutation,
+  useCreateBoardMutation,
+  useUploadImageMutation,
 } from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
@@ -27,27 +28,27 @@ const WriteEditor = ({
     setEditedContent(editorRef?.current?.getInstance().getMarkdown());
   };
 
-  const { mutate: updatePostMutation } = useUpdatePostMutation(() => {
+  const { mutate: updateBoardMutation } = useUpdateBoardMutation(() => {
     onEditToggle();
   });
-  const [createPostErrorMessage, setCreatePostErrorMessage] =
+  const [createBoardErrorMessage, setCreateBoardErrorMessage] =
     useState<string>("");
 
-  const { mutate: createPostMutation } = useCreatePostMutation(() => {
+  const { mutate: createBoardMutation } = useCreateBoardMutation(() => {
     updateNodeInfo(nodeInfo?.id, true);
     onEditToggle();
-  }, setCreatePostErrorMessage);
+  }, setCreateBoardErrorMessage);
 
   const handleSubmit = () => {
     if (nodeInfo.isWritten) {
-      updatePostMutation({
+      updateBoardMutation({
         id: nodeInfo.id as number,
         title: edtedTitle ?? "",
         content: editedContent ?? "",
       });
       updateNodeInfo(nodeInfo?.id, true);
     } else {
-      createPostMutation({
+      createBoardMutation({
         id: nodeInfo.id as number,
         title: edtedTitle ?? "",
         content: editedContent ?? "",
@@ -57,12 +58,29 @@ const WriteEditor = ({
   };
 
   useEffect(() => {
-    if (createPostErrorMessage) {
-      alert(createPostErrorMessage);
-      setCreatePostErrorMessage("");
+    if (createBoardErrorMessage) {
+      alert(createBoardErrorMessage);
+      setCreateBoardErrorMessage("");
     }
-  }, [createPostErrorMessage]);
+  }, [createBoardErrorMessage]);
 
+  const {
+    mutate: uploadImageMutation,
+    isLoading: isImageUploading,
+    isError: isImageUploadError,
+  } = useUploadImageMutation();
+
+  const onUploadImage = async (
+    blob: File,
+    callback: (imageUrl: string, fileName: string) => void,
+  ) => {
+    uploadImageMutation(blob, {
+      onSuccess: (data) => {
+        callback(data.imageUrl, blob.name);
+      },
+    });
+    return false;
+  };
   return (
     <>
       <div className={styles.header}>
@@ -104,6 +122,9 @@ const WriteEditor = ({
             <Editor
               ref={editorRef}
               initialValue={nodeData?.content ?? " "}
+              hooks={{
+                addImageBlobHook: onUploadImage,
+              }}
               placeholder="내용을 입력해 주세요"
               onChange={handleEditorChange}
               previewStyle="tab"
@@ -112,6 +133,19 @@ const WriteEditor = ({
               usageStatistics={false}
             />
           </div>
+        </div>
+
+        <div className={styles.content__editor__message}>
+          {isImageUploading && (
+            <span className={styles.content__editor__message__loading}>
+              이미지 업로드 중...
+            </span>
+          )}
+          {isImageUploadError && (
+            <span className={styles.content__editor__message__error}>
+              이미지 업로드에 실패하였습니다.
+            </span>
+          )}
         </div>
       </div>
     </>

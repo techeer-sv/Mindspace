@@ -8,7 +8,7 @@ import { WriteModalProps } from "@/constants/types";
 import CustomModal from "@/components/CustomModal";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { useRecoilValue } from "recoil";
-import { useUserPostGetQuery } from "@/api/hooks/queries/board";
+import { useUserBoardGetQuery } from "@/api/hooks/queries/board";
 import WriteEditor from "./components/WriteEditor";
 import ReadViewer from "./components/ReadViewer";
 
@@ -20,28 +20,28 @@ const WriteModal = ({
   const nodeInfo = useRecoilValue(nodeAtom);
   const [isEditing, setIsEditing] = useState(false);
 
-  const [createPostErrorMessage, setCreatePostErrorMessage] =
+  const [createBoardErrorMessage, setCreateBoardErrorMessage] =
     useState<string>("");
 
-  const [deletePostErrorMessage, setDeletePostErrorMessage] =
+  const [deleteBoardErrorMessage, setDeleteBoardErrorMessage] =
     useState<string>("");
 
   useEffect(() => {
-    if (createPostErrorMessage) {
-      alert(createPostErrorMessage);
-      setCreatePostErrorMessage("");
+    if (createBoardErrorMessage) {
+      alert(createBoardErrorMessage);
+      setCreateBoardErrorMessage("");
     }
-    if (deletePostErrorMessage) {
-      alert(deletePostErrorMessage);
-      setDeletePostErrorMessage("");
+    if (deleteBoardErrorMessage) {
+      alert(deleteBoardErrorMessage);
+      setDeleteBoardErrorMessage("");
     }
-  }, [createPostErrorMessage, deletePostErrorMessage]);
+  }, [createBoardErrorMessage, deleteBoardErrorMessage]);
 
   const {
-    data: postData,
+    data: boardData,
     isLoading,
     isInitialLoading,
-  } = useUserPostGetQuery(
+  } = useUserBoardGetQuery(
     nodeInfo.id as number,
     isOpen,
     nodeInfo.isWritten ?? false,
@@ -70,10 +70,10 @@ const WriteModal = ({
       {(!isInitialLoading || (isInitialLoading && !isLoading)) && (
         <>
           {nodeInfo.isWritten && !isEditing ? (
-            <ReadViewer nodeData={postData} {...commonProps} />
+            <ReadViewer nodeData={boardData} {...commonProps} />
           ) : (
             <WriteEditor
-              nodeData={isEditing ? postData : undefined}
+              nodeData={isEditing ? boardData : undefined}
               {...commonProps}
             />
           )}

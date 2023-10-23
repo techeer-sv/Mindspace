@@ -13,5 +13,12 @@ export const csrFetch = async <T = any>(
     authHeader.user_id = `${accessToken}`;
   }
 
-  return baseFetch<T>(endpoint, authHeader, options);
+  let headers: Record<string, any> = {
+    ...authHeader,
+    ...options?.headers,
+  };
+
+  const skipDefaultHeaders = options?.body instanceof FormData;
+
+  return baseFetch<T>(endpoint, headers, options, skipDefaultHeaders);
 };

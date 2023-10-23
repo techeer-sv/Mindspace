@@ -29,7 +29,7 @@ export interface NicknameResponse {
 
 // Board
 
-export interface CreatePostRequest {
+export interface CreateBoardRequest {
   id: number;
   title: string;
   content: string;

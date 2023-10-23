@@ -10,6 +10,7 @@ import {
 } from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
+import { uploadImage } from "@/api/post";
 
 const WriteEditor = ({
   nodeData,
@@ -63,6 +64,13 @@ const WriteEditor = ({
     }
   }, [createPostErrorMessage]);
 
+  const onUploadImage = async (blob: any, callback: any) => {
+    await uploadImage(blob).then((imagePath) => {
+      callback(imagePath.imageUrl, blob.name);
+    });
+
+    return false;
+  };
   return (
     <>
       <div className={styles.header}>
@@ -104,6 +112,9 @@ const WriteEditor = ({
             <Editor
               ref={editorRef}
               initialValue={nodeData?.content ?? " "}
+              hooks={{
+                addImageBlobHook: onUploadImage,
+              }}
               placeholder="내용을 입력해 주세요"
               onChange={handleEditorChange}
               previewStyle="tab"

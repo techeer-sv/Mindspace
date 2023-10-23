@@ -67,3 +67,17 @@ export const getPostData = async (id?: number) => {
     return;
   }
 };
+
+export const uploadImage = async (file: File) => {
+  const endpoint = `boards/image`;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const data = await csrFetch(endpoint, {
+    method: "POST",
+    body: formData,
+  });
+
+  return data;
+};

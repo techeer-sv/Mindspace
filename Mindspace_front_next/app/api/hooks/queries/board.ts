@@ -7,6 +7,7 @@ import {
   getBoard,
   getBoardListData,
   getBoardData,
+  uploadImage,
 } from "@/api/board";
 
 import { BOARD_QUERIES } from "@/constants/queryKeys";
@@ -82,4 +83,8 @@ export const useBoardGetQuery = (boardId?: number) => {
       enabled: boardId !== undefined,
     },
   );
+};
+
+export const useUploadImageMutation = () => {
+  return useMutation(uploadImage);
 };

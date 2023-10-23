@@ -7,10 +7,10 @@ import { useRecoilValue } from "recoil";
 import {
   useUpdateBoardMutation,
   useCreateBoardMutation,
+  useUploadImageMutation,
 } from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
-import { uploadImage } from "@/api/board";
 
 const WriteEditor = ({
   nodeData,
@@ -64,11 +64,14 @@ const WriteEditor = ({
     }
   }, [createBoardErrorMessage]);
 
-  const onUploadImage = async (blob: any, callback: any) => {
-    await uploadImage(blob).then((imagePath) => {
-      callback(imagePath.imageUrl, blob.name);
-    });
+  const { mutate: uploadImageMutation } = useUploadImageMutation();
 
+  const onUploadImage = async (blob: any, callback: any) => {
+    uploadImageMutation(blob, {
+      onSuccess: (data) => {
+        callback(data.imageUrl, blob.name);
+      },
+    });
     return false;
   };
   return (

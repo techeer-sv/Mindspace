@@ -24,11 +24,12 @@ export const baseFetch = async <T = any>(
   endpoint: string,
   headers: HeadersInit,
   options?: RequestInit,
+  skipDefaultHeaders?: boolean,
 ): Promise<T> => {
   const response = await fetch(`${BASEURL}${endpoint}`, {
     ...options,
     headers: new Headers({
-      ...defaultHeaders,
+      ...(skipDefaultHeaders ? {} : defaultHeaders),
       ...headers,
       ...options?.headers,
     }),

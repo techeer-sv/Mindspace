@@ -25,11 +25,17 @@ import { Comment } from './entities/comment.entity';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PagingParams } from '../global/common/type';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
+import { NotificationService } from '../notification/notification.service';
+import { BoardService } from '../board/board.service';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly notificationService: NotificationService,
+    private readonly boardService: BoardService,
+  ) {}
 
   @ApiOperation({ summary: '댓글 또는 대댓글 생성' })
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })

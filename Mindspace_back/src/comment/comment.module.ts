@@ -7,9 +7,15 @@ import { CommentMapper } from './dto/comment.mapper.dto';
 import { UserModule } from '../user/user.module';
 import { BoardModule } from '../board/board.module';
 import { CustomCommentRepository } from './repository/comment.repository';
+import { NotificationModule } from '../notification/notificaton.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment]), UserModule, BoardModule],
+  imports: [
+    TypeOrmModule.forFeature([Comment]),
+    UserModule,
+    BoardModule,
+    NotificationModule,
+  ],
   providers: [CommentService, CommentMapper, CustomCommentRepository],
   controllers: [CommentController],
 })

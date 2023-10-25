@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
@@ -6,6 +6,7 @@ import { Board } from './entities/board.entity';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserModule } from '../user/user.module';
 import { NodeModule } from '../node/node.module';
+import { NotificationModule } from '../notification/notificaton.module';
 import { UtilsModule } from '../utils/utils.module';
 import { AwsModule } from '../aws/aws.module';
 import { CustomBoardRepository } from './repository/board.repository';
@@ -15,6 +16,7 @@ import { CustomBoardRepository } from './repository/board.repository';
     TypeOrmModule.forFeature([Board]),
     UserModule,
     NodeModule,
+    forwardRef(() => NotificationModule),
     UtilsModule,
     AwsModule,
   ],

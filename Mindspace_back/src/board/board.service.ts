@@ -21,6 +21,9 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
+import { NotificationResponseDTO } from '../notification/dto/notification-response.dto';
+import { NotificationService } from '../notification/notification.service';
+import { User } from '../user/entities/user.entity';
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
 import { ConfigService } from '@nestjs/config';
@@ -38,6 +41,7 @@ export class BoardService {
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
+    private readonly notificationService: NotificationService,
     private readonly utilsService: UtilsService,
     private readonly awsService: AwsService,
     private configService: ConfigService,
@@ -211,6 +215,38 @@ export class BoardService {
       throw new BoardNotFoundException();
     }
     return board;
+  }
+
+  async getOwnerByBoardId(boardId: number): Promise<User> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ['user'],
+    });
+    if (!board) {
+      throw new BoardNotFoundException();
+    }
+    return board.user;
+  }
+
+  async getUserIdByBoardId(boardId: number): Promise<number> {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    if (!board) {
+      throw new NotFoundException(`Board with ID ${boardId} not found`);
+    }
+    return board.userId;
+  }
+
+  async getBoardIdByUserId(userId: number): Promise<number> {
+    const board = await this.boardRepository.findOne({
+      where: { userId: userId },
+      // 필요하다면 다른 조건을 추가하세요.
+    });
+    if (!board) {
+      throw new NotFoundException(`Board for user ID ${userId} not found`);
+    }
+    return board.id;
   }
 
   async saveImage(file: Express.Multer.File) {

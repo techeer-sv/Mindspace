@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Put,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
@@ -32,18 +33,7 @@ export class NotificationController {
   @ApiResponse({
     status: 200,
     description: '새로운 알림이 성공적으로 반환되었습니다.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          message: { type: 'string' },
-          board_id: { type: 'number' },
-          node_id: { type: 'number' },
-          notification_id: { type: 'number' },
-        },
-      },
-    },
+    type: NotificationResponseDTO,
   })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없습니다.' })
   @ApiParam({
@@ -53,14 +43,17 @@ export class NotificationController {
     description: '사용자 ID',
   })
   async waitForNewNotifications(
-    @Param('userId') userId: number,
-  ): Promise<Notification> {
-    // 게시판 ID로 사용자 ID를 가져옵니다.
-    const boardId = await this.boardService.getBoardIdByUserId(userId);
-    const boardUserId = await this.boardService.getUserIdByBoardId(boardId);
-
-    // 얻은 사용자 ID를 이용하여 "새로운 알림 대기 API"에 전달합니다.
-    return this.notificationService.waitForNewNotifications(boardUserId);
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<NotificationResponseDTO> {
+    const notification = await this.notificationService.waitForNewNotifications(
+      userId,
+    );
+    return new NotificationResponseDTO(
+      notification.message,
+      notification.board.id, // 게시판 ID
+      notification.nodeId,
+      notification.id,
+    );
   }
 
   @Get(':userId')

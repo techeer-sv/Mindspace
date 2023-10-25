@@ -12,6 +12,6 @@ import { BoardModule } from '../board/board.module';
   ],
   controllers: [NotificationController],
   providers: [NotificationService],
-  exports: [NotificationService], // 다른 모듈에서 NotificationService를 사용하려면 이를 export해야 합니다.
+  exports: [NotificationService],
 })
 export class NotificationModule {}

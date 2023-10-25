@@ -50,7 +50,7 @@ export class NotificationController {
     );
     return new NotificationResponseDTO(
       notification.message,
-      notification.board.id, // 게시판 ID
+      notification.board.id,
       notification.nodeId,
       notification.id,
     );
@@ -64,9 +64,9 @@ export class NotificationController {
     type: NotificationResponseDTO,
     isArray: true,
   })
-  async getNotifications(@Param('userId') userId: number): Promise<any[]> {
+  async ggetNotifications(@Param('userId') userId: number): Promise<any[]> {
     const notifications =
-      await this.notificationService.getNotificationsForUser(userId);
+      await this.notificationService.ggetNotificationsForUser(userId);
 
     return notifications.map((notification) => ({
       message: notification.message,

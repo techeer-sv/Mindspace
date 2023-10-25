@@ -72,6 +72,13 @@ export class NotificationService {
     });
   }
 
+  async ggetNotificationsForUser(userId: number): Promise<Notification[]> {
+    return await this.notificationRepository.find({
+      where: { userId: userId },
+      order: { id: 'DESC' },
+    });
+  }
+
   async deleteNotification(id: number): Promise<void> {
     const result = await this.notificationRepository.delete(id);
     if (result.affected === 0) {

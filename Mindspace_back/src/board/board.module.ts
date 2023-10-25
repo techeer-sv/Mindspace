@@ -6,7 +6,7 @@ import { Board } from './entities/board.entity';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserModule } from '../user/user.module';
 import { NodeModule } from '../node/node.module';
-import { NotificationModule } from '../notification/notificaton.module'; // Import NodeModule
+import { NotificationModule } from '../notification/notificaton.module';
 
 @Module({
   imports: [

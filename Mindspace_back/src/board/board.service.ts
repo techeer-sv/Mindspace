@@ -11,7 +11,6 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserService } from '../user/user.service';
 import { BoardResponseDto } from './dto/board-response.dto';
-import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
@@ -25,29 +24,46 @@ import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenExcep
 import { NotificationResponseDTO } from '../notification/dto/notification-response.dto';
 import { NotificationService } from '../notification/notification.service';
 import { User } from '../user/entities/user.entity';
+import { UtilsService } from '../utils/utils.service';
+import { AwsService } from '../aws/aws.service';
+import { ConfigService } from '@nestjs/config';
+import { CustomBoardRepository } from './repository/board.repository';
+import { PagingParams } from '../global/common/type';
 
 @Injectable()
 export class BoardService {
   private readonly DEFAULT_NODE_ID = 1;
+
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    private readonly customBoardRepository: CustomBoardRepository,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
     private readonly notificationService: NotificationService,
+    private readonly utilsService: UtilsService,
+    private readonly awsService: AwsService,
+    private configService: ConfigService,
   ) {}
 
-  async getAllBoardsByNodeId(nodeId: number): Promise<BoardNodeResponseDto[]> {
-    const boards = await this.boardRepository.find({
-      where: { nodeId: nodeId },
-    });
+  /** 게시글 목록 조회 + 페이지네이션 */
+  async getAllBoardsByNodeId(nodeId: number, pagingParams: PagingParams) {
+    const paginationResult = await this.customBoardRepository.paginate(
+      nodeId,
+      pagingParams,
+    );
 
-    if (!boards || boards.length === 0) {
-      throw new NodeNotFoundException();
-    }
+    const data = paginationResult.data.map((board) =>
+      BoardMapper.BoardNodeResponseDto(board),
+    );
 
-    return boards.map((board) => BoardMapper.BoardNodeResponseDto(board));
+    const cursor = {
+      count: paginationResult.data.length,
+      ...paginationResult.cursor,
+    };
+
+    return { data, cursor };
   }
 
   async createBoard(
@@ -66,7 +82,7 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId },
+      where: { nodeId: nodeId, userId: Number(userId) },
     });
 
     if (existingBoard) {
@@ -231,5 +247,23 @@ export class BoardService {
       throw new NotFoundException(`Board for user ID ${userId} not found`);
     }
     return board.id;
+  }
+
+  async saveImage(file: Express.Multer.File) {
+    return await this.imageUpload(file);
+  }
+
+  // S3 이미지 업로드
+  async imageUpload(file: Express.Multer.File) {
+    const imageName = this.utilsService.getUUID();
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.awsService.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+
+    return { imageUrl };
   }
 }

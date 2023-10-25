@@ -15,4 +15,7 @@ export class CommentResponseDto {
 
   @ApiProperty({ description: '본인이 작성한 댓글인지' })
   editable: boolean;
+
+  @ApiProperty({ description: '대댓글 목록' })
+  replies?: CommentResponseDto[];
 }

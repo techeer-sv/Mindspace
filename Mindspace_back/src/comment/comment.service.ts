@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PagingParams } from '../global/common/type';
@@ -33,6 +37,7 @@ export class CommentService {
     boardId: number,
     userId: string,
     createCommentDto: CreateCommentDto,
+    parentId?: number,
   ): Promise<Comment> {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
@@ -87,7 +92,25 @@ export class CommentService {
     console.log(
       `[createComment] Finished comment creation for board ${boardId} by user ${userId}`,
     );
-    return savedComment;
+
+    if (parentId) {
+      const parentComment = await this.commentRepository.findOne({
+        where: { id: parentId },
+        relations: ['parent'],
+      });
+
+      if (!parentComment) {
+        throw new NotFoundException('부모 댓글을 찾을 수 없습니다.');
+      }
+
+      if (parentComment.parent) {
+        throw new BadRequestException('대댓글의 대댓글은 작성할 수 없습니다.');
+      }
+
+      comment.parent = parentComment;
+    }
+
+    return await this.commentRepository.save(comment);
   }
 
   /** 댓글 목록 조회 */
@@ -114,10 +137,20 @@ export class CommentService {
       pagingParams,
     );
 
-    const transformedComments: CommentResponseDto[] = comments.data.map(
-      (comment) => {
-        return CommentMapper.commentToResponseDto(comment, userId);
-      },
+    const transformedComments: CommentResponseDto[] = await Promise.all(
+      comments.data.map(async (comment) => {
+        const replies = await this.customCommentRepository.findReplies(
+          comment.id,
+        );
+        const transformedReplies = replies.map((reply) =>
+          CommentMapper.commentToResponseDto(reply, userId),
+        );
+
+        return {
+          ...CommentMapper.commentToResponseDto(comment, userId),
+          replies: transformedReplies,
+        };
+      }),
     );
 
     return {

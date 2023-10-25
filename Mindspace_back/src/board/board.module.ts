@@ -7,6 +7,9 @@ import { BoardMapper } from './dto/board.mapper.dto';
 import { UserModule } from '../user/user.module';
 import { NodeModule } from '../node/node.module';
 import { NotificationModule } from '../notification/notificaton.module';
+import { UtilsModule } from '../utils/utils.module';
+import { AwsModule } from '../aws/aws.module';
+import { CustomBoardRepository } from './repository/board.repository';
 
 @Module({
   imports: [
@@ -14,8 +17,10 @@ import { NotificationModule } from '../notification/notificaton.module';
     UserModule,
     NodeModule,
     forwardRef(() => NotificationModule),
+    UtilsModule,
+    AwsModule,
   ],
-  providers: [BoardService, BoardMapper],
+  providers: [BoardService, BoardMapper, CustomBoardRepository],
   controllers: [BoardController],
   exports: [BoardService],
 })

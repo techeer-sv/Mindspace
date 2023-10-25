@@ -1,4 +1,7 @@
 export enum ErrorCode {
+  // Global
+  INTERNAL_SERVER_ERROR = 'G001', // 서버오류
+
   // User
   USER_NOT_FOUND = 'U001',
   USER_INVALID_PASSWORD = 'U002',

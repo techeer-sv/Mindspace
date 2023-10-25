@@ -1,10 +1,4 @@
-import {
-  render,
-  fireEvent,
-  screen,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from '.';
 import { QueryClient, QueryClientProvider } from 'react-query';

@@ -6,9 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Node } from '../../node/entities/node.entity';
 import { User } from '../../user/entities/user.entity';
 import { Timestamp } from '../../global/common/timeStamp';
-import { Node } from '../../node/entities/node.entity';
 
 @Entity('boards')
 export class Board extends Timestamp {
@@ -16,7 +16,7 @@ export class Board extends Timestamp {
   @ApiProperty({ description: '게시글의 ID.' })
   id: number;
 
-  @ManyToOne(() => Node)
+  @ManyToOne(() => Node, (node) => node.boards, { eager: true })
   @JoinColumn({ name: 'node_id' })
   node: Node;
 

@@ -26,11 +26,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './entities/board.entity';
 import { BoardResponseDto } from './dto/board-response.dto';
-import { BoardNodeResponseDto } from './dto/board-node-response.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
+import { PagingParams } from '../global/common/type';
+import { PaginatedBoardResponseDto } from './dto/board-pagination-response.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -44,11 +45,29 @@ export class BoardController {
     required: true,
     type: Number,
   })
+  @ApiQuery({
+    name: 'beforeCursor',
+    required: false,
+    type: String,
+    description: '이전 커서 값',
+  })
+  @ApiQuery({
+    name: 'afterCursor',
+    required: false,
+    type: String,
+    description: '다음 커서 값',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '게시글 목록 조회 성공',
+    type: PaginatedBoardResponseDto,
+  })
   @Get('/all')
   async getAllBoardsByNodeId(
     @Query('node_id') nodeId: number,
-  ): Promise<BoardNodeResponseDto[]> {
-    return await this.boardService.getAllBoardsByNodeId(nodeId);
+    @Query() pagingParams: PagingParams,
+  ): Promise<PaginatedBoardResponseDto> {
+    return await this.boardService.getAllBoardsByNodeId(nodeId, pagingParams);
   }
 
   @ApiOperation({ summary: '게시글 생성' })

@@ -14,6 +14,11 @@ const Alarm = () => {
     console.log(`Notification ${index} closed`);
   };
 
+  const renderNotificationCount = () => {
+    const count = notifications.length;
+    return count > 9 ? "+9" : count.toString();
+  };
+
   const notifications = [
     { id: 1, text: "알람1" },
     { id: 2, text: "알람2" },
@@ -32,6 +37,11 @@ const Alarm = () => {
         >
           <path d="M12 2C8.1 2 5 5.1 5 9v6l-1 2v1h18v-1l-1-2V9c0-3.9-3.1-7-7-7zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z"></path>
         </svg>
+        {notifications.length > 0 && (
+          <div className={styles.alarm__notification}>
+            {renderNotificationCount()}
+          </div>
+        )}
       </button>
       {isVisible && (
         <div className={styles.alarm__list}>

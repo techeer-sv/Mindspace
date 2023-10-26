@@ -1,6 +1,23 @@
 // Alarm.module.scss
 
 .alarm {
+  position: relative;
+
+  &__notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-size: 5px;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   &__button {
     background-color: transparent;
     border: none;

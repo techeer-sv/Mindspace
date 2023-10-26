@@ -1,16 +1,14 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./../Auth.module.scss";
 import FormBox from "../components/FormBox";
 import FormButton from "../components/FormButton";
-// import Navbar from '@/components/Navbar';
-
-// import { useSignUpMutation } from '@/hooks/queries/user';
-
-//TODO: recoil 및 api연결 로직에 대한 처리가 필요합니다. (일단 주석처리)
+import { useSignUpMutation } from "@/api/hooks/queries/user";
 
 export default function SignUpPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -18,9 +16,14 @@ export default function SignUpPage() {
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // const { mutate: signupMutation } = useSignUpMutation(() => {
-  //   navigate('/signin');
-  // }, setErrorMessage);
+  const handleLoginSuccess = () => {
+    router.push("/signin");
+  };
+
+  const { mutate: signupMutation } = useSignUpMutation(
+    handleLoginSuccess,
+    setErrorMessage,
+  );
 
   const checkIsValid = () => {
     if (email === "") {
@@ -51,15 +54,14 @@ export default function SignUpPage() {
     return true;
   };
 
-  // const submitForm = () => {
-  //   if (checkIsValid()) {
-  //     signupMutation({ userName, email, password });
-  //   }
-  // };
+  const submitForm = async () => {
+    if (checkIsValid()) {
+      signupMutation({ userName, email, password });
+    }
+  };
 
   return (
     <>
-      {/* <Navbar /> */}
       <div className={styles.content}>
         <div className={styles.content__signup__box}>
           <span className={styles.content__title}>Create Account</span>
@@ -97,10 +99,7 @@ export default function SignUpPage() {
           />
           <div className={styles.error}>{errorMessage}</div>
           <div className={styles.button_wapper}>
-            <FormButton
-              text="SIGN UP"
-              clickAction={() => console.log("SIGN UP 클릭")}
-            />
+            <FormButton text="SIGN UP" clickAction={submitForm} />
           </div>
         </div>
       </div>

@@ -22,16 +22,23 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
+import { UtilsService } from '../utils/utils.service';
+import { AwsService } from '../aws/aws.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BoardService {
   private readonly DEFAULT_NODE_ID = 1;
+
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
+    private readonly utilsService: UtilsService,
+    private readonly awsService: AwsService,
+    private configService: ConfigService,
   ) {}
 
   async getAllBoardsByNodeId(nodeId: number): Promise<BoardNodeResponseDto[]> {
@@ -40,7 +47,7 @@ export class BoardService {
     });
 
     if (!boards || boards.length === 0) {
-      throw new NodeNotFoundException();
+      throw new BoardNotFoundException();
     }
 
     return boards.map((board) => BoardMapper.BoardNodeResponseDto(board));
@@ -62,7 +69,7 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId },
+      where: { nodeId: nodeId, userId: Number(userId) },
     });
 
     if (existingBoard) {
@@ -192,8 +199,26 @@ export class BoardService {
       where: { id: boardId },
     });
     if (!board) {
-      throw new Error(`Board with ID ${boardId} not found`);
+      throw new BoardNotFoundException();
     }
     return board;
+  }
+
+  async saveImage(file: Express.Multer.File) {
+    return await this.imageUpload(file);
+  }
+
+  // S3 이미지 업로드
+  async imageUpload(file: Express.Multer.File) {
+    const imageName = this.utilsService.getUUID();
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.awsService.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+
+    return { imageUrl };
   }
 }

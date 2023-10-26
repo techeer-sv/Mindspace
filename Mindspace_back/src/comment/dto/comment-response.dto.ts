@@ -12,4 +12,10 @@ export class CommentResponseDto {
 
   @ApiProperty({ description: '댓글의 마지막 업데이트 시간' })
   updatedAt: string;
+
+  @ApiProperty({ description: '본인이 작성한 댓글인지' })
+  editable: boolean;
+
+  @ApiProperty({ description: '대댓글 목록' })
+  replies?: CommentResponseDto[];
 }

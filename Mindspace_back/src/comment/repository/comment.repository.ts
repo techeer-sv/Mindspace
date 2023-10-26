@@ -16,6 +16,7 @@ export class CustomCommentRepository {
     const queryBuilder = this.CommentRepository.createQueryBuilder('comment')
       .innerJoinAndSelect('comment.user', 'user')
       .where('comment.board_id = :boardId', { boardId })
+      .andWhere('comment.parent_id IS NULL')
       .orderBy('comment.id', 'DESC');
 
     const paginator = buildPaginator({
@@ -38,5 +39,13 @@ export class CustomCommentRepository {
         ...paginationResult.cursor,
       },
     };
+  }
+
+  async findReplies(parentCommentId: number): Promise<Comment[]> {
+    return this.CommentRepository.createQueryBuilder('comment')
+      .innerJoinAndSelect('comment.user', 'user')
+      .where('comment.parent_id = :parentCommentId', { parentCommentId })
+      .orderBy('comment.id', 'DESC')
+      .getMany();
   }
 }

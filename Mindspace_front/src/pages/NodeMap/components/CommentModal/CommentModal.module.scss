@@ -31,14 +31,14 @@
 
     input {
       padding: 10px 15px;
-      border: 2px solid #ccc;
+      border: 0.3px solid #ccc;
       border-radius: 5px;
       width: 60%;
+      outline: none;
     }
 
     input:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      border: 0.3px solid #ccc;
     }
 
     input::placeholder {
@@ -75,22 +75,22 @@
 
       &__nickname {
         &__text {
-          font-size: 15px;
+          font-size: 12px;
           font-weight: bold;
         }
       }
 
       &__action {
         display: flex;
-        gap: 10px;
 
         &__edit, &__remove, &__replies {
           border: none;
           background-color: white;
-          padding: 5px 10px;
+          padding: 5px 7px;
           border-radius: 4px;
           cursor: pointer;
           transition: background-color 0.3s;
+          font-size: 12px;
 
           &:hover {
             background-color: navy;
@@ -102,9 +102,14 @@
 
     &__box {
       margin-bottom: 0.5rem;
+      font-size: 12px;
+
+      input {
+        font-size: 12px;
+      }
 
       &__text {
-        font-size: 15px;
+        font-size: 12px;
         font-weight: bold;
       }
     }
@@ -117,6 +122,23 @@
         color: #999;
       }
     }
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0)
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #888888;
   }
 }
 
@@ -131,6 +153,7 @@
   border-radius: 10px;
   padding: 1rem 0.5rem 1rem 0.5rem;
   margin-bottom: 1rem;
+  font-size: 14px;
 
 
   &__content {
@@ -145,22 +168,22 @@
 
       &__nickname {
         &__text {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: bold;
         }
       }
 
       &__action {
         display: flex;
-        gap: 10px;
 
         &__edit, &__remove {
           border: none;
           background-color: #F7F7F7;
-          padding: 5px 10px;
+          padding: 5px 7px;
           border-radius: 4px;
           cursor: pointer;
           transition: background-color 0.3s;
+          font-size: 10px;
 
           &:hover {
             background-color: navy;
@@ -173,8 +196,12 @@
     &__box {
       margin-bottom: 0.5rem;
 
+      input {
+        font-size: 10px;
+      }
+
       &__text {
-        font-size: 14px;
+        font-size: 10px;
         font-weight: normal;
       }
     }
@@ -189,66 +216,60 @@
     }
   }
 
-    &__input {
+  &__input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+
+    &__button {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1rem;
 
-      &__button{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        button {
-          border: 1px solid navy;
-          background-color: navy;
-          color: white;
-          padding: 5px 10px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          width: 100%;
-        }
+      button {
+        border: 1px solid navy;
+        background-color: navy;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        font-size: 12px;
       }
+    }
+
+    input {
+      padding: 10px 15px;
+      border: 0.3px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      outline: none;
+
+
       input {
         padding: 10px 15px;
         border: 2px solid #ccc;
         border-radius: 5px;
-        width: 100%;
+        width: 60%;
+      }
+    }
 
-        input {
-          padding: 10px 15px;
-          border: 2px solid #ccc;
-          border-radius: 5px;
-          width: 60%;
-        }
+    &__icon {
+      margin: 1rem;
 
-        input:focus {
-          border-color: #007BFF;
-          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        input::placeholder {
-          color: #888;
-          font-style: italic;
-        }
+      button {
+        border: none;
+        padding: 0;
+        background-color: transparent;
+        cursor: pointer;
+        overflow: hidden;
       }
 
-      &__icon {
-        margin: 1rem;
-
-        button {
-          border: none;
-          padding: 0;
-          background-color: transparent;
-          cursor: pointer;
-          overflow: hidden;
-        }
-
-        button:hover img {
-          opacity: 0.5;
-        }
+      button:hover img {
+        opacity: 0.5;
       }
     }
   }
+}

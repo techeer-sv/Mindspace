@@ -1,6 +1,6 @@
 "use client";
 import Cookies from "js-cookie";
-
+import Alarm from "../Alarm";
 import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/link";
@@ -124,6 +124,9 @@ const Navbar = () => {
               </li>
               <li>
                 <span onClick={logout}>logout</span>
+              </li>
+              <li>
+                <Alarm />
               </li>
             </>
           ) : (

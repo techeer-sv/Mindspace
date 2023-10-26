@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import styles from "./Alarm.module.scss";
-import { useRouter } from "next/navigation";
 
 const Alarm = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,7 +23,15 @@ const Alarm = () => {
   return (
     <div className={styles.alarm}>
       <button className={styles.alarm__button} onClick={handleToggle}>
-        알림 버튼
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="yellow"
+          width="24px"
+          height="24px"
+        >
+          <path d="M12 2C8.1 2 5 5.1 5 9v6l-1 2v1h18v-1l-1-2V9c0-3.9-3.1-7-7-7zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z"></path>
+        </svg>
       </button>
       {isVisible && (
         <div className={styles.alarm__list}>

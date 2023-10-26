@@ -2,6 +2,12 @@
 
 .alarm {
   &__button {
+    background-color: transparent;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__list {
@@ -31,6 +37,7 @@
     }
 
     &__text {
+      color: black;
     }
 
     &__close {

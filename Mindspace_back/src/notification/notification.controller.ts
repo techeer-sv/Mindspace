@@ -7,11 +7,14 @@ import {
   Param,
   Put,
   ParseIntPipe,
+  Headers,
+  BadRequestException,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
 import {
   ApiBody,
+  ApiHeader,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -21,14 +24,14 @@ import { BoardService } from '../board/board.service';
 import { Notification } from './entities/notification.entity';
 
 @ApiTags('notification')
-@Controller('notifications')
+@Controller('api/v1/notifications')
 export class NotificationController {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly boardService: BoardService,
   ) {}
 
-  @Get('longpoll/new/:userId')
+  @Get('longpoll/new')
   @ApiOperation({ summary: '새로운 알림 대기' })
   @ApiResponse({
     status: 200,
@@ -36,15 +39,18 @@ export class NotificationController {
     type: NotificationResponseDTO,
   })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없습니다.' })
-  @ApiParam({
+  @ApiHeader({
     name: 'userId',
     required: true,
-    type: 'integer',
     description: '사용자 ID',
   })
   async waitForNewNotifications(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Headers('userId') userIdHeader: string,
   ): Promise<NotificationResponseDTO> {
+    const userId = parseInt(userIdHeader, 10);
+    if (isNaN(userId)) {
+      throw new BadRequestException('userId must be a number');
+    }
     const notification = await this.notificationService.waitForNewNotifications(
       userId,
     );
@@ -56,7 +62,7 @@ export class NotificationController {
     );
   }
 
-  @Get(':userId')
+  @Get()
   @ApiOperation({ summary: '사용자의 모든 알림 가져오기' })
   @ApiResponse({
     status: 200,
@@ -64,7 +70,19 @@ export class NotificationController {
     type: NotificationResponseDTO,
     isArray: true,
   })
-  async ggetNotifications(@Param('userId') userId: number): Promise<any[]> {
+  @ApiHeader({
+    name: 'userId',
+    required: true,
+    description: '사용자 ID',
+  })
+  async ggetNotifications(
+    @Headers('userId') userIdHeader: string,
+  ): Promise<any[]> {
+    const userId = parseInt(userIdHeader, 10);
+    if (isNaN(userId)) {
+      throw new BadRequestException('userId must be a number');
+    }
+
     const notifications =
       await this.notificationService.ggetNotificationsForUser(userId);
 

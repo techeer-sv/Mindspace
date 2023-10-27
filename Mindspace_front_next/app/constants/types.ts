@@ -138,3 +138,10 @@ export interface CommentModalProps {
   isOpen: boolean;
   initialValue: Comment[];
 }
+
+// Notification
+
+export interface Notification {
+  notification_id: number;
+  message: string;
+}

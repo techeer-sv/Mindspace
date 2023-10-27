@@ -6,11 +6,7 @@ import {
   getNewNotification,
 } from "@/api/notification";
 import { NOTIFICATION_QUERIES } from "@/constants/queryKeys";
-
-interface Notification {
-  notification_id: number;
-  message: string;
-}
+import { Notification } from "@/constants/types";
 
 export const useAllNotificationQuery = () => {
   return useQuery<Notification[]>(

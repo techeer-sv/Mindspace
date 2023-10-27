@@ -1,9 +1,5 @@
 import { csrFetch } from "./utils/csrFetch";
-
-interface Notification {
-  notification_id: number;
-  message: string;
-}
+import { Notification } from "@/constants/types";
 
 export const getAllNotification = async (): Promise<Notification[]> => {
   const endpoint = "notifications";

@@ -36,19 +36,28 @@ export const useNewNotificationPolling = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchNewNotification = async () => {
       try {
         await getNewNotification();
         queryClient.invalidateQueries([NOTIFICATION_QUERIES.ALL_NOTIFICATION]);
       } catch (error: any) {
+        // TODO - 에러 핸들링 작업 추가 필요
         if (error.statusCode !== 404) {
           console.error("에러발생", error);
         }
       } finally {
-        fetchNewNotification();
+        if (isMounted) {
+          fetchNewNotification();
+        }
       }
     };
 
     fetchNewNotification();
+
+    return () => {
+      isMounted = false;
+    };
   }, [queryClient]);
 };

@@ -71,7 +71,9 @@ const Alarm = () => {
             </>
           ) : (
             <>
-              <div>현재 표현할 알림 정보가 없습니다</div>
+              <div className={styles.alarm__item__text}>
+                현재 표현할 알림 정보가 없습니다
+              </div>
             </>
           )}
         </div>

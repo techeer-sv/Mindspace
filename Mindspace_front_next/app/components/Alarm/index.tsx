@@ -5,6 +5,7 @@ import styles from "./Alarm.module.scss";
 import {
   useAllNotificationQuery,
   useDeleteNotificationMutation,
+  useNewNotificationPolling,
 } from "@/api/hooks/queries/notification";
 
 const Alarm = () => {
@@ -23,8 +24,8 @@ const Alarm = () => {
     return count > 9 ? "+9" : count.toString();
   };
 
+  useNewNotificationPolling();
   const { data: notificationList = [] } = useAllNotificationQuery();
-
   const { mutate: deleteNotification } = useDeleteNotificationMutation();
 
   return (

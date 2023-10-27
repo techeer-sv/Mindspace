@@ -20,3 +20,12 @@ export const deleteNotification = async (notification_id: number) => {
     method: "delete",
   });
 };
+
+export const getNewNotification = async () => {
+  const endpoint = "notifications/longpoll/new";
+  const response = await csrFetch(endpoint, {
+    method: "get",
+  });
+
+  return response;
+};

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { getAllNotification, deleteNotification } from "@/api/notification";
+import {
+  getAllNotification,
+  deleteNotification,
+  getNewNotification,
+} from "@/api/notification";
 import { NOTIFICATION_QUERIES } from "@/constants/queryKeys";
-
-import { APIErrorResponse } from "@/constants/types";
 
 interface Notification {
   notification_id: number;
@@ -28,4 +30,25 @@ export const useDeleteNotificationMutation = () => {
       },
     },
   );
+};
+
+export const useNewNotificationPolling = () => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const fetchNewNotification = async () => {
+      try {
+        await getNewNotification();
+        queryClient.invalidateQueries([NOTIFICATION_QUERIES.ALL_NOTIFICATION]);
+      } catch (error: any) {
+        if (error.statusCode !== 404) {
+          console.error("에러발생", error);
+        }
+      } finally {
+        fetchNewNotification();
+      }
+    };
+
+    fetchNewNotification();
+  }, [queryClient]);
 };

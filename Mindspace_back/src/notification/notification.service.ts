@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  Param,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification } from './entities/notification.entity';
@@ -66,15 +61,9 @@ export class NotificationService {
     });
   }
 
-  async getNotificationsForUser(userId: number): Promise<Notification[]> {
+  async getNotificationsForUser(user_id: number): Promise<Notification[]> {
     return await this.notificationRepository.find({
-      where: { userId: userId },
-    });
-  }
-
-  async ggetNotificationsForUser(userId: number): Promise<Notification[]> {
-    return await this.notificationRepository.find({
-      where: { userId: userId },
+      where: { user_id: user_id },
       order: { id: 'DESC' },
     });
   }
@@ -97,7 +86,7 @@ export class NotificationService {
     newNotification.message = data.message;
     newNotification.board = data.board;
     newNotification.nodeId = data.nodeId;
-    newNotification.userId = data.userId;
+    newNotification.user_id = data.userId;
 
     const savedNotification = await this.notificationRepository.save(
       newNotification,

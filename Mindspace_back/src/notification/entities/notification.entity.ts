@@ -19,7 +19,7 @@ export class Notification {
   nodeId: number;
 
   @Column({ type: 'int', nullable: true })
-  userId: number;
+  user_id: number;
 
   @ManyToOne(() => Board, { eager: true }) // eager를 true로 설정하여 자동으로 관련된 Board 정보를 가져올 수 있게 합니다.
   @JoinColumn({ name: 'board_id' })

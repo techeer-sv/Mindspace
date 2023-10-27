@@ -1,12 +1,8 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Delete,
   Param,
-  Put,
-  ParseIntPipe,
   Headers,
   BadRequestException,
 } from '@nestjs/common';
@@ -16,12 +12,10 @@ import {
   ApiBody,
   ApiHeader,
   ApiOperation,
-  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { BoardService } from '../board/board.service';
-import { Notification } from './entities/notification.entity';
 
 @ApiTags('notification')
 @Controller('api/v1/notifications')
@@ -40,19 +34,19 @@ export class NotificationController {
   })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없습니다.' })
   @ApiHeader({
-    name: 'userId',
+    name: 'user_id',
     required: true,
     description: '사용자 ID',
   })
   async waitForNewNotifications(
-    @Headers('userId') userIdHeader: string,
+    @Headers('user_id') userIdHeader: string,
   ): Promise<NotificationResponseDTO> {
-    const userId = parseInt(userIdHeader, 10);
-    if (isNaN(userId)) {
+    const user_id = parseInt(userIdHeader, 10);
+    if (isNaN(user_id)) {
       throw new BadRequestException('userId must be a number');
     }
     const notification = await this.notificationService.waitForNewNotifications(
-      userId,
+      user_id,
     );
     return new NotificationResponseDTO(
       notification.message,
@@ -71,20 +65,20 @@ export class NotificationController {
     isArray: true,
   })
   @ApiHeader({
-    name: 'userId',
+    name: 'user_id',
     required: true,
     description: '사용자 ID',
   })
-  async ggetNotifications(
-    @Headers('userId') userIdHeader: string,
+  async getNotifications(
+    @Headers('user_id') userIdHeader: string,
   ): Promise<any[]> {
-    const userId = parseInt(userIdHeader, 10);
-    if (isNaN(userId)) {
+    const user_id = parseInt(userIdHeader, 10);
+    if (isNaN(user_id)) {
       throw new BadRequestException('userId must be a number');
     }
 
     const notifications =
-      await this.notificationService.ggetNotificationsForUser(userId);
+      await this.notificationService.getNotificationsForUser(user_id);
 
     return notifications.map((notification) => ({
       message: notification.message,

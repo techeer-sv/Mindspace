@@ -12,8 +12,10 @@ import {
   useUserNicknameQuery,
   useClearUserNicknameCache,
 } from "@/api/hooks/queries/user";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Navbar = () => {
+  const queryClient = useQueryClient();
   const [isClient, setIsClient] = useState(false);
 
   const router = useRouter();
@@ -26,6 +28,7 @@ const Navbar = () => {
   const logout = () => {
     setLoggedIn(false);
     alert("로그아웃 되었습니다");
+    queryClient.clear();
     router.push("/");
     Cookies.remove("accessToken");
   };

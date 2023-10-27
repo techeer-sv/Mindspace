@@ -1,0 +1,76 @@
+// Alarm.module.scss
+
+.alarm {
+  position: relative;
+
+  &__notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-size: 5px;
+    width: 10px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__button {
+    background-color: transparent;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__list {
+    z-index: 900;
+    padding: 10px;
+    background-color: #f2f2f6;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 250px;
+    max-height: 600px;
+    overflow-y: auto;
+
+    @media (max-width: 550px) {
+      width: 100%;
+      top: 30px;
+    }
+  }
+
+  &__item {
+    padding: 10px;
+    border-bottom: 1px solid #f6f4f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover {
+      background-color: #dcd8d8;
+    }
+
+    &__text {
+      color: black;
+    }
+
+    &__close {
+      background: none;
+      border: none;
+      color: red;
+      cursor: pointer;
+
+      &:hover {
+        color: darkred;
+      }
+    }
+  }
+}

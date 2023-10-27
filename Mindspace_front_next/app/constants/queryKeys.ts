@@ -12,6 +12,10 @@ export const BOARD_QUERIES = {
   SINGLE_BOARD: (boardId: number) => ["SINGLE_BOARD", boardId],
 };
 
+export const NOTIFICATION_QUERIES = {
+  ALL_NOTIFICATION: "ALL_NOTIFICATION",
+};
+
 /** // TODO - 추가로 각 쿼리키는 아래처럼 도메인단위로 분리하고 사용할 것
  *
  * // key와 queryFunction을 명확하게 연결해주고,

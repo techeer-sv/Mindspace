@@ -1,6 +1,6 @@
 "use client";
 import Cookies from "js-cookie";
-
+import Alarm from "../Alarm";
 import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/link";
@@ -12,8 +12,10 @@ import {
   useUserNicknameQuery,
   useClearUserNicknameCache,
 } from "@/api/hooks/queries/user";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Navbar = () => {
+  const queryClient = useQueryClient();
   const [isClient, setIsClient] = useState(false);
 
   const router = useRouter();
@@ -26,6 +28,7 @@ const Navbar = () => {
   const logout = () => {
     setLoggedIn(false);
     alert("로그아웃 되었습니다");
+    queryClient.clear();
     router.push("/");
     Cookies.remove("accessToken");
   };
@@ -124,6 +127,9 @@ const Navbar = () => {
               </li>
               <li>
                 <span onClick={logout}>logout</span>
+              </li>
+              <li>
+                <Alarm />
               </li>
             </>
           ) : (

@@ -50,7 +50,7 @@ function BoardTable({ onClickedId }: BoardTableProps) {
       }}
     >
       <AgGridReact
-        rowData={formatBoardListData(boardListData)}
+        rowData={formatBoardListData(boardListData?.data)}
         columnDefs={columnDefs}
         defaultColDef={{
           sortable: true,

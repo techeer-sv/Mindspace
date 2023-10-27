@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import styles from "./Alarm.module.scss";
-import { useAllNotificationQuery } from "@/api/hooks/queries/notification";
+import {
+  useAllNotificationQuery,
+  useDeleteNotificationMutation,
+} from "@/api/hooks/queries/notification";
 
 const Alarm = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,8 +14,8 @@ const Alarm = () => {
     setIsVisible(!isVisible);
   };
 
-  const handleCloseNotification = (index: Number) => {
-    console.log(`Notification ${index} closed`);
+  const handleCloseNotification = (notification_id: number) => {
+    deleteNotification(notification_id);
   };
 
   const renderNotificationCount = () => {
@@ -21,6 +24,8 @@ const Alarm = () => {
   };
 
   const { data: notificationList = [] } = useAllNotificationQuery();
+
+  const { mutate: deleteNotification } = useDeleteNotificationMutation();
 
   return (
     <div className={styles.alarm}>

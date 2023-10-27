@@ -13,3 +13,10 @@ export const getAllNotification = async (): Promise<Notification[]> => {
 
   return response as Notification[];
 };
+
+export const deleteNotification = async (notification_id: number) => {
+  const endpoint = `notifications/${notification_id}`;
+  await csrFetch(endpoint, {
+    method: "delete",
+  });
+};

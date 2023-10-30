@@ -1,6 +1,6 @@
 export interface APIErrorResponse {
   errorCode: string;
-  errorMessage: string;
+  message: string;
 }
 
 // Auth

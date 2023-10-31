@@ -53,7 +53,17 @@ export const updateBoard = async ({
 };
 
 export const getBoardListData = async (id?: number, afterCursor?: string) => {
-  const endpoint = `boards/all?node_id=${id}&afterCursor=${afterCursor}`;
+  const params = new URLSearchParams();
+
+  if (id !== undefined && id !== null) {
+    params.append("node_id", id.toString());
+  }
+
+  if (afterCursor !== undefined && afterCursor !== null) {
+    params.append("afterCursor", afterCursor);
+  }
+
+  const endpoint = `boards/all?${params.toString()}`;
 
   const data = await csrFetch(endpoint, {
     method: "GET",

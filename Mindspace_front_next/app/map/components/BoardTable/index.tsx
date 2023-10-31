@@ -17,7 +17,8 @@ interface BoardTableProps {
   onClickedId: (id: number) => void;
 }
 
-const HAS_NEXT_DATA = -1;
+const NEXT_PAGE_EXISTS = -1;
+const MAX_POSTS_PER_LOAD = 10;
 
 function BoardTable({ onClickedId }: BoardTableProps) {
   const selectedNodeInfo = useRecoilValue(nodeAtom);
@@ -57,7 +58,7 @@ function BoardTable({ onClickedId }: BoardTableProps) {
           afterCursor = boardListData.cursor.afterCursor;
 
           const rowsThisPage = formatBoardListData(boardListData.data);
-          let lastRow = HAS_NEXT_DATA;
+          let lastRow = NEXT_PAGE_EXISTS;
           if (!afterCursor) {
             lastRow = params.startRow + boardListData.data.length;
           }
@@ -87,11 +88,11 @@ function BoardTable({ onClickedId }: BoardTableProps) {
         rowBuffer={0}
         rowSelection={"multiple"}
         rowModelType={"infinite"}
-        cacheBlockSize={10}
+        cacheBlockSize={MAX_POSTS_PER_LOAD}
         cacheOverflowSize={2}
         maxConcurrentDatasourceRequests={1}
-        infiniteInitialRowCount={10}
-        maxBlocksInCache={10}
+        infiniteInitialRowCount={MAX_POSTS_PER_LOAD}
+        maxBlocksInCache={MAX_POSTS_PER_LOAD}
         onGridReady={onGridReady}
         columnDefs={columnDefs}
         defaultColDef={{

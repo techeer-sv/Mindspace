@@ -17,6 +17,8 @@ interface BoardTableProps {
   onClickedId: (id: number) => void;
 }
 
+const HAS_NEXT_DATA = -1;
+
 function BoardTable({ onClickedId }: BoardTableProps) {
   const selectedNodeInfo = useRecoilValue(nodeAtom);
 
@@ -55,7 +57,7 @@ function BoardTable({ onClickedId }: BoardTableProps) {
           afterCursor = boardListData.cursor.afterCursor;
 
           const rowsThisPage = formatBoardListData(boardListData.data);
-          let lastRow = -1;
+          let lastRow = HAS_NEXT_DATA;
           if (!afterCursor) {
             lastRow = params.startRow + boardListData.data.length;
           }

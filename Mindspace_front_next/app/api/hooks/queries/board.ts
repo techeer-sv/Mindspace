@@ -32,7 +32,7 @@ export const useDeleteBoardMutation = (
       successAction();
     },
     onError: (error: APIErrorResponse) => {
-      errorAction(error.errorMessage);
+      errorAction(error.message);
     },
   });
 };
@@ -49,7 +49,7 @@ export const useCreateBoardMutation = (
       successAction();
     },
     onError: (error: APIErrorResponse) => {
-      errorAction(error.errorMessage);
+      errorAction(error.message);
     },
   });
 };
@@ -65,10 +65,10 @@ export const useUpdateBoardMutation = (successAction: () => void) => {
   });
 };
 
-export const useBoardListGetQuery = (nodeId?: number) => {
+export const useBoardListGetQuery = (nodeId?: number, afterCursor?: string) => {
   return useQuery(
     [BOARD_QUERIES.ALL_BOARD(nodeId!)],
-    () => getBoardListData(nodeId),
+    () => getBoardListData(nodeId, afterCursor),
     {
       enabled: nodeId !== undefined,
     },

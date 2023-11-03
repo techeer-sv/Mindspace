@@ -55,10 +55,15 @@
         background-color: transparent;
         cursor: pointer;
         overflow: hidden;
-      }
 
-      button:hover img {
-        opacity: 0.5;
+        img {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover img {
+          opacity: 0.5;
+        }
       }
     }
   }
@@ -246,14 +251,6 @@
       border-radius: 5px;
       width: 100%;
       outline: none;
-
-
-      input {
-        padding: 10px 15px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-        width: 60%;
-      }
     }
 
     &__icon {
@@ -265,10 +262,15 @@
         background-color: transparent;
         cursor: pointer;
         overflow: hidden;
-      }
 
-      button:hover img {
-        opacity: 0.5;
+        img {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover img {
+          opacity: 0.5;
+        }
       }
     }
   }

@@ -100,7 +100,7 @@ export class CommentController {
   @ApiParam({
     name: 'commentId',
     type: 'number',
-    description: '게시글의 ID',
+    description: '댓글의 ID',
   })
   @ApiCreatedResponse({
     description: '댓글 수정 성공',
@@ -124,7 +124,7 @@ export class CommentController {
   @ApiParam({
     name: 'commentId',
     type: 'number',
-    description: '게시글의 ID',
+    description: '댓글의 ID',
   })
   @Delete(':commentId')
   async deleteComment(

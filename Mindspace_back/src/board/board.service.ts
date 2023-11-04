@@ -21,19 +21,13 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
-import { NotificationResponseDTO } from '../notification/dto/notification-response.dto';
-import { NotificationService } from '../notification/notification.service';
-import { User } from '../user/entities/user.entity';
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
-import { ConfigService } from '@nestjs/config';
 import { CustomBoardRepository } from './repository/board.repository';
 import { PagingParams } from '../global/common/type';
 
 @Injectable()
 export class BoardService {
-  private readonly DEFAULT_NODE_ID = 1;
-
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
@@ -41,10 +35,8 @@ export class BoardService {
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
-    private readonly notificationService: NotificationService,
     private readonly utilsService: UtilsService,
     private readonly awsService: AwsService,
-    private configService: ConfigService,
   ) {}
 
   /** 게시글 목록 조회 + 페이지네이션 */
@@ -71,8 +63,8 @@ export class BoardService {
     userId: string,
     createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-    // nodeId가 없으면 DEFAULT_NODE_ID 사용
-    nodeId = nodeId ? nodeId : this.DEFAULT_NODE_ID;
+    // userId를 숫자로 변환
+    const convertedUserId = Number(userId);
 
     // 입력된 nodeId로 노드 조회
     const existingNode = await this.nodeService.findById(nodeId);
@@ -82,15 +74,12 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId, userId: Number(userId) },
+      where: { nodeId: nodeId, userId: convertedUserId },
     });
 
     if (existingBoard) {
       throw new NodeAlreadyWrittenException();
     }
-
-    // userId를 숫자로 변환
-    const convertedUserId = Number(userId);
 
     // 게시글 제목이 비어있는지 검사
     if (!createBoardDto.title || createBoardDto.title.trim() === '') {
@@ -121,7 +110,7 @@ export class BoardService {
 
   async updateBoard(
     nodeId: number,
-    userId: string, // userId의 타입을 string에서 number로 변경
+    userId: string,
     updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
     // 노드의 유효성 확인
@@ -160,7 +149,7 @@ export class BoardService {
   }
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
-    const convertedUserId = parseInt(userId); // userId를 숫자로 변환
+    const convertedUserId = Number(userId); // userId를 숫자로 변환
     if (isNaN(convertedUserId)) {
       throw new BadRequestException('Invalid user ID.');
     }
@@ -181,7 +170,7 @@ export class BoardService {
     }
 
     // 게시글 삭제
-    const deleteResult = await this.boardRepository.delete(board.id);
+    await this.boardRepository.delete(board.id);
   }
 
   async getBoardByNodeIdAndUserId(
@@ -215,38 +204,6 @@ export class BoardService {
       throw new BoardNotFoundException();
     }
     return board;
-  }
-
-  async getOwnerByBoardId(boardId: number): Promise<User> {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: ['user'],
-    });
-    if (!board) {
-      throw new BoardNotFoundException();
-    }
-    return board.user;
-  }
-
-  async getUserIdByBoardId(boardId: number): Promise<number> {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-    });
-    if (!board) {
-      throw new NotFoundException(`Board with ID ${boardId} not found`);
-    }
-    return board.userId;
-  }
-
-  async getBoardIdByUserId(userId: number): Promise<number> {
-    const board = await this.boardRepository.findOne({
-      where: { userId: userId },
-      // 필요하다면 다른 조건을 추가하세요.
-    });
-    if (!board) {
-      throw new NotFoundException(`Board for user ID ${userId} not found`);
-    }
-    return board.id;
   }
 
   async saveImage(file: Express.Multer.File) {

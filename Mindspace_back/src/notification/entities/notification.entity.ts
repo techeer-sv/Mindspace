@@ -21,7 +21,9 @@ export class Notification {
   @Column({ type: 'int', nullable: true })
   user_id: number;
 
-  @ManyToOne(() => Board, { eager: true }) // eager를 true로 설정하여 자동으로 관련된 Board 정보를 가져올 수 있게 합니다.
+  // eager를 true로 설정하여 자동으로 관련된 Board 정보를 가져올 수 있게 합니다.
+  // 외래키 제약 조건 수정
+  @ManyToOne(() => Board, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'board_id' })
   board: Board;
 

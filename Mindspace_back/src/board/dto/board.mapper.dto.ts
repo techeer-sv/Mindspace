@@ -4,7 +4,7 @@ import { CreateBoardDto } from './create-board.dto';
 import { BoardResponseDto } from './board-response.dto';
 import { BoardNodeResponseDto } from './board-node-response.dto';
 import { SpecificBoardNodeDto } from './specific-board-node.dto';
-import { BoardDetailDto } from './board-detail.dto'; // 필요한 import를 추가하세요.
+import { BoardDetailDto } from './board-detail.dto';
 
 @Injectable()
 export class BoardMapper {

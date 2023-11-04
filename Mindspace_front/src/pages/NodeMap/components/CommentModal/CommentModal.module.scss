@@ -8,6 +8,7 @@
   border-radius: 10px;
   margin-left: 0.5rem;
   transform: translateX(0);
+  overflow-y: auto;
 
   &__header {
     display: flex;
@@ -30,14 +31,14 @@
 
     input {
       padding: 10px 15px;
-      border: 2px solid #ccc;
+      border: 0.3px solid #ccc;
       border-radius: 5px;
       width: 60%;
+      outline: none;
     }
 
     input:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      border: 0.3px solid #ccc;
     }
 
     input::placeholder {
@@ -54,10 +55,15 @@
         background-color: transparent;
         cursor: pointer;
         overflow: hidden;
-      }
 
-      button:hover img {
-        opacity: 0.5;
+        img {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover img {
+          opacity: 0.5;
+        }
       }
     }
   }
@@ -66,20 +72,49 @@
     margin: 0 1.5rem 1rem 1.5rem;
     border-bottom: 1px #ebedf2 solid;
 
-    &__nickname {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 0.5rem;
 
-      &__text {
-        font-size: 15px;
-        font-weight: bold;
+      &__nickname {
+        &__text {
+          font-size: 12px;
+          font-weight: bold;
+        }
+      }
+
+      &__action {
+        display: flex;
+
+        &__edit, &__remove, &__replies {
+          border: none;
+          background-color: white;
+          padding: 5px 7px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          font-size: 12px;
+
+          &:hover {
+            background-color: navy;
+            color: white;
+          }
+        }
       }
     }
 
     &__box {
       margin-bottom: 0.5rem;
+      font-size: 12px;
+
+      input {
+        font-size: 12px;
+      }
 
       &__text {
-        font-size: 15px;
+        font-size: 12px;
         font-weight: bold;
       }
     }
@@ -88,9 +123,27 @@
       margin-bottom: 0.5rem;
 
       &__text {
-        font-size: 12px;
+        font-size: 11px;
+        color: #999;
       }
     }
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0)
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #888888;
   }
 }
 
@@ -98,4 +151,127 @@
   transform: translateX(100%);
   overflow-y: hidden;
   flex: 0;
+}
+
+.reply {
+  background-color: #F7F7F7;
+  border-radius: 10px;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 14px;
+
+
+  &__content {
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      &__nickname {
+        &__text {
+          font-size: 12px;
+          font-weight: bold;
+        }
+      }
+
+      &__action {
+        display: flex;
+
+        &__edit, &__remove {
+          border: none;
+          background-color: #F7F7F7;
+          padding: 5px 7px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          font-size: 10px;
+
+          &:hover {
+            background-color: navy;
+            color: white;
+          }
+        }
+      }
+    }
+
+    &__box {
+      margin-bottom: 0.5rem;
+
+      input {
+        font-size: 10px;
+      }
+
+      &__text {
+        font-size: 10px;
+        font-weight: normal;
+      }
+    }
+
+    &__time {
+      margin-top: 0.5rem;
+
+      &__text {
+        font-size: 11px;
+        color: #999;
+      }
+    }
+  }
+
+  &__input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        border: 1px solid navy;
+        background-color: navy;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        font-size: 12px;
+      }
+    }
+
+    input {
+      padding: 10px 15px;
+      border: 0.3px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      outline: none;
+    }
+
+    &__icon {
+      margin: 1rem;
+
+      button {
+        border: none;
+        padding: 0;
+        background-color: transparent;
+        cursor: pointer;
+        overflow: hidden;
+
+        img {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover img {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
 }

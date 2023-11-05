@@ -1,16 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { ForceGraph2D } from "react-force-graph";
 import { NodeObject, Node, Context } from "@/constants/types";
 import { useNodeListQuery } from "@/api/hooks/queries/node";
 import Loading from "@/components/MoonLoadSpinner";
-import NodeModal from "./components/Modal";
 
 import { useRecoilState } from "recoil";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 
 const NODE_REL_SIZE = 3;
 const NODE_VAL = 3;
+
+const NodeModalLazy = lazy(() => import("./components/Modal"));
 
 export default function MapPage() {
   const [nodeData, setNodeData] = useState<any>(null);
@@ -154,14 +155,14 @@ export default function MapPage() {
         />
       )}
 
-      {nodeInfo && (
-        <>
-          <NodeModal
+      {nodeData && isInitialSetupDone && (
+        <Suspense fallback={<div style={{ color: "red" }}>asdasdasd</div>}>
+          <NodeModalLazy
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
             updateNodeInfo={handleNodeInfoUpdate}
           />
-        </>
+        </Suspense>
       )}
     </div>
   );

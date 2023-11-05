@@ -60,6 +60,7 @@ const Navbar = () => {
             alt="logo"
             width={250}
             height={50}
+            loading="eager"
           />
         </Link>
         <div
@@ -90,6 +91,7 @@ const Navbar = () => {
           alt="logo"
           width={250}
           height={50}
+          loading="eager"
         />
       </Link>
       <button

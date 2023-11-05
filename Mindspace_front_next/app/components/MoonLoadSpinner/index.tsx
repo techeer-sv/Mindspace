@@ -1,9 +1,9 @@
 "use client";
 import { getLottieOptions } from "@/utils/lottie";
 import Lottie from "react-lottie";
-import styles from "./Loading.module.scss";
+import styles from "./MoonLoadSpinner.module.scss";
 
-const Loading = () => {
+const MoonLoadSpinner = () => {
   return (
     <>
       <div className={styles.wrapper}>
@@ -17,4 +17,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default MoonLoadSpinner;

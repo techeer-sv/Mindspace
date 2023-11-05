@@ -1,7 +1,7 @@
 html {
   height: 100vh;
   width: 100%;
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 body {
   margin: 0;
@@ -32,18 +32,18 @@ body {
 }
 
 /* 적용 예 */
-@include font-face("KCC-Chassam", "/fonts/KCC-Chassam.otf", 400, null, otf);
+@include font-face("NEXON Lv1 Gothic OTF", "/fonts/NEXON Lv1 Gothic OTF.otf", 400, null, otf);
 
 span {
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 
 button {
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 
 input {
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 
 input:-webkit-autofill {
@@ -51,11 +51,11 @@ input:-webkit-autofill {
 }
 
 p {
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 
 div {
-  font-family: "KCC-Chassam", sans-serif;
+  font-family: "NEXON Lv1 Gothic OTF", sans-serif;
 }
 
 // toast ui editor css

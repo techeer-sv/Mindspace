@@ -85,6 +85,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
       ) : (
         !isLoading && (
           <>
+          <div className={styles.header}>
             <button
               className={styles.header__button}
               onClick={() => {
@@ -97,8 +98,11 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                 className={styles.header__button}
                 onClick={toggleCommentModal}
             >
-              <span className={styles.post__comment}>댓글</span>
+              <span className={styles.post__button}>
+                {commentModalOpen ? '닫기' : '댓글'}
+              </span>
             </button>
+          </div>
             <div className={styles.post__wrapper}>
               <div className={styles.post__wrapper__content}>
                 <div className={styles.post__wrapper__content__wrapper}>
@@ -126,14 +130,6 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                           styles.post__wrapper__content__wrapper__info__box
                         }
                       >
-                        <button
-                          onClick={toggleCommentModal}
-                          className={
-                            styles.post__wrapper__content__wrapper__info__box__button
-                          }
-                        >
-                          댓글
-                        </button>
                       </div>
                       <span
                         className={

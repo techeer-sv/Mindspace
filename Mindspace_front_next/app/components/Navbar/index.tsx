@@ -56,7 +56,7 @@ const Navbar = () => {
       <nav className={styles.navbar}>
         <Link href="/" className={styles.navbar__title}>
           <Image
-            src="/images/MindSpaceText.png"
+            src="/images/MindSpaceText.webp"
             alt="logo"
             width={250}
             height={50}
@@ -86,7 +86,7 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       <Link href="/" className={styles.navbar__title}>
         <Image
-          src="/images/MindSpaceText.png"
+          src="/images/MindSpaceText.webp"
           alt="logo"
           width={250}
           height={50}

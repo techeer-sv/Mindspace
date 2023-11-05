@@ -8,7 +8,8 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  background-image: url("/images/BackGround.png");
+  background-image: url("/images/BackGround.webp"),
+    url("/images/BackGround.png");
   background-size: cover;
   overflow: hidden;
 }

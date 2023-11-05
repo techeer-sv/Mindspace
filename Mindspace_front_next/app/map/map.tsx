@@ -21,7 +21,7 @@ export default function MapPage() {
   const [isInitialSetupDone, setIsInitialSetupDone] = useState(false);
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
-  const { data, isLoading, status } = useNodeListQuery();
+  const { data, status } = useNodeListQuery();
 
   const handleClick = (node: NodeObject) => {
     fgRef.current?.centerAt(node.x, node.y, 1000);
@@ -156,7 +156,7 @@ export default function MapPage() {
       )}
 
       {nodeData && isInitialSetupDone && (
-        <Suspense fallback={<div style={{ color: "red" }}>asdasdasd</div>}>
+        <Suspense fallback={<Loading />}>
           <NodeModalLazy
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}

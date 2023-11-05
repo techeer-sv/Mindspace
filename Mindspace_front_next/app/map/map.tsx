@@ -17,7 +17,7 @@ export default function MapPage() {
   const fgRef = useRef<any>();
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-
+  const [isInitialSetupDone, setIsInitialSetupDone] = useState(false);
   const [nodeInfo, setNodeInfo] = useRecoilState(nodeAtom);
 
   const { data, isLoading, status } = useNodeListQuery();
@@ -102,29 +102,42 @@ export default function MapPage() {
   };
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    // charge : 노드간의 반발력
+    // link : 링크 사이의 거리 설정
+    const initNodeGraphSetting = () => {
+      fgRef.current.d3Force("charge").strength((node: Node) => {
+        return -1 * (10 + node.connectCount * 5);
+      });
+      fgRef.current.d3Force("link").distance(80);
+
+      timeoutId = setTimeout(() => {
+        nodeData.nodes.forEach((node: Node) => {
+          node.fx = node.x;
+          node.fy = node.y;
+        });
+        fgRef.current.zoomToFit(1000, 100);
+        setIsInitialSetupDone(true);
+      }, 500);
+    };
+
+    if (nodeData && !isInitialSetupDone) {
+      initNodeGraphSetting();
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [nodeData, isInitialSetupDone]);
+
+  useEffect(() => {
     if (status === "success") {
       setNodeData(data);
-
-      setTimeout(() => {
-        fgRef.current?.d3Force("charge").strength(-500).distanceMax(300);
-        fgRef.current?.d3Force("link").distance(70);
-      }, 100);
-
-      setTimeout(() => {
-        if (fgRef.current) {
-          fgRef.current.zoomToFit(1000);
-          data?.nodes.forEach((node: Node) => {
-            node.fx = node.x;
-            node.fy = node.y;
-          });
-        }
-      }, 500);
     }
-  }, [data, status]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  }, [status]);
 
   return (
     <div>

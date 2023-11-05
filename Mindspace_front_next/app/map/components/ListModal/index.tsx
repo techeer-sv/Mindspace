@@ -17,17 +17,37 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const commentData = [
     {
       id: 1,
-      nickname: "작성자1",
-      content: "댓글 내용1",
-      date: "5분전",
+      nickname: '작성자1',
+      content: '댓글 내용1',
+      date: '5분전',
+      editable: true,
+      replies: [
+        {
+          id: 3,
+          nickname: '작성자3',
+          content: '대댓글 내용1',
+          date: '15분전',
+          editable: false,
+        },
+        {
+          id: 4,
+          nickname: '작성자4',
+          content: '대댓글 내용1',
+          date: '15분전',
+          editable: true,
+        },
+      ],
     },
     {
       id: 2,
-      nickname: "작성자2",
-      content: "댓글 내용2",
-      date: "10분전",
+      nickname: '작성자2',
+      content: '댓글 내용2',
+      date: '10분전',
+      editable: false,
+      replies: [],
     },
   ];
+
   const toggleCommentModal = () => {
     setCommentModalOpen((prev) => !prev);
   };
@@ -72,6 +92,12 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
               }}
             >
               <span className={styles.post__button}>Back</span>
+            </button>
+            <button
+                className={styles.header__button}
+                onClick={toggleCommentModal}
+            >
+              <span className={styles.post__comment}>댓글</span>
             </button>
             <div className={styles.post__wrapper}>
               <div className={styles.post__wrapper__content}>

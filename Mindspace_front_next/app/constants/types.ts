@@ -125,12 +125,23 @@ export interface ListModalProps {
   onListRequestClose: () => void;
 }
 
+// Replies
+interface Replies {
+  id: number;
+  nickname: string;
+  content: string;
+  date: string;
+  editable: boolean;
+}
+
 // Comment
 interface Comment {
   id: number;
   nickname: string;
   content: string;
   date: string;
+  editable: boolean;
+  replies: Replies[];
 }
 
 // CommentModal

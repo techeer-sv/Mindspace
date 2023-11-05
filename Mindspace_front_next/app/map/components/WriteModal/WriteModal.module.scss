@@ -64,7 +64,7 @@
       background: none;
       border: none;
       font-size: 1.5rem;
-      margin-left: 5px;
+      margin-left: 1rem;
       color: black;
 
       &:focus {
@@ -78,24 +78,26 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-right: 1rem;
   }
 
   &__date {
     color: black;
-    font-size: 1rem;
+    font-size: 0.9rem;
     width: 5.5rem;
   }
 
   &__time {
     color: black;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   &__viewer {
     border-top: 1px #ebedf2 solid;
-    padding-left: 10px;
+    padding-left: 5px;
     overflow-y: auto;
     background: white;
+    margin: 0 1rem 0 1rem;
   }
 
   &__editor {

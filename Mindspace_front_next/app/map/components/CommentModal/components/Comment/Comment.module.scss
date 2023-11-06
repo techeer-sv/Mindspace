@@ -1,0 +1,41 @@
+.content {
+  margin: 0 1rem 0 1.5rem;
+  border-bottom: 1px #ebedf2 solid;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0 0.5rem 0;
+
+    &__nickname {
+      &__text {
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__box {
+    margin-bottom: 0.5rem;
+    font-size: 12px;
+
+    input {
+      font-size: 12px;
+    }
+
+    &__text {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  &__time {
+    margin-bottom: 0.5rem;
+
+    &__text {
+      font-size: 11px;
+      color: #999;
+    }
+  }
+}

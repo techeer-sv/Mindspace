@@ -28,6 +28,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           content: '대댓글 내용1',
           date: '15분전',
           editable: false,
+          replies: [],
         },
         {
           id: 4,
@@ -35,6 +36,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
           content: '대댓글 내용1',
           date: '15분전',
           editable: true,
+          replies: [],
         },
       ],
     },

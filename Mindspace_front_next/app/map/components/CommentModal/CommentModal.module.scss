@@ -13,7 +13,7 @@
   &__header {
     display: flex;
     align-items: center;
-    margin: 2rem 0 0 2rem;
+    margin: 2rem 0 0 1.5rem;
 
     &__icon {
       margin-right: 10px;
@@ -31,9 +31,10 @@
 
     input {
       padding: 10px 15px;
+      margin-left: 1rem;
       border: 0.3px solid #ccc;
       border-radius: 5px;
-      width: 60%;
+      width: 100%;
       outline: none;
     }
 
@@ -68,69 +69,9 @@
     }
   }
 
-  &__content {
-    margin: 0 1.5rem 1rem 1.5rem;
-    border-bottom: 1px #ebedf2 solid;
-
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-
-      &__nickname {
-        &__text {
-          font-size: 12px;
-          font-weight: bold;
-        }
-      }
-
-      &__action {
-        display: flex;
-
-        &__edit, &__remove, &__replies {
-          border: none;
-          background-color: white;
-          padding: 5px 7px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          font-size: 12px;
-
-          &:hover {
-            background-color: navy;
-            color: white;
-          }
-        }
-      }
-    }
-
-    &__box {
-      margin-bottom: 0.5rem;
-      font-size: 12px;
-
-      input {
-        font-size: 12px;
-      }
-
-      &__text {
-        font-size: 12px;
-        font-weight: bold;
-      }
-    }
-
-    &__time {
-      margin-bottom: 0.5rem;
-
-      &__text {
-        font-size: 11px;
-        color: #999;
-      }
-    }
-  }
-
   &::-webkit-scrollbar {
     width: 8px;
+    display: none;
   }
 
   &::-webkit-scrollbar-track {
@@ -154,72 +95,10 @@
 }
 
 .reply {
-  background-color: #F7F7F7;
   border-radius: 10px;
   padding: 1rem 0.5rem 1rem 0.5rem;
   margin-bottom: 1rem;
   font-size: 14px;
-
-
-  &__content {
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-
-      &__nickname {
-        &__text {
-          font-size: 12px;
-          font-weight: bold;
-        }
-      }
-
-      &__action {
-        display: flex;
-
-        &__edit, &__remove {
-          border: none;
-          background-color: #F7F7F7;
-          padding: 5px 7px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          font-size: 10px;
-
-          &:hover {
-            background-color: navy;
-            color: white;
-          }
-        }
-      }
-    }
-
-    &__box {
-      margin-bottom: 0.5rem;
-
-      input {
-        font-size: 10px;
-      }
-
-      &__text {
-        font-size: 10px;
-        font-weight: normal;
-      }
-    }
-
-    &__time {
-      margin-top: 0.5rem;
-
-      &__text {
-        font-size: 11px;
-        color: #999;
-      }
-    }
-  }
 
   &__input {
     display: flex;
@@ -237,6 +116,7 @@
         background-color: navy;
         color: white;
         padding: 5px 10px;
+        margin: 0 1rem 0 1rem;
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s;
@@ -247,6 +127,7 @@
 
     input {
       padding: 10px 15px;
+      margin-left: 1rem;
       border: 0.3px solid #ccc;
       border-radius: 5px;
       width: 100%;

@@ -13,32 +13,24 @@ import { Timestamp } from '../../global/common/timeStamp';
 @Entity('boards')
 export class Board extends Timestamp {
   @PrimaryGeneratedColumn('increment', { name: 'board_id' })
-  @ApiProperty({ description: '게시글의 ID.' })
+  @ApiProperty({ description: '게시글 ID' })
   id: number;
 
-  @ManyToOne(() => Node, (node) => node.boards, { eager: true })
+  @ManyToOne(() => Node)
   @JoinColumn({ name: 'node_id' })
+  @ApiProperty({ description: '게시글과 연관된 노드', type: () => Node })
   node: Node;
 
-  @Column({ name: 'node_id', type: 'int', nullable: false })
-  nodeId: number;
-
-  @Column({ name: 'user_nickname', type: 'varchar', nullable: false })
-  @ApiProperty({ description: '게시글을 작성한 사용자의 닉네임.' })
-  userNickname: string;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  @ApiProperty({ description: '게시글을 작성한 사용자' })
+  user: User;
 
   @Column({ name: 'title', type: 'varchar', nullable: false })
-  @ApiProperty({ description: '게시글의 제목.' })
+  @ApiProperty({ description: '게시글의 제목' })
   title: string;
 
   @Column({ name: 'content', type: 'text', nullable: false })
-  @ApiProperty({ description: '게시글의 내용.' })
+  @ApiProperty({ description: '게시글의 내용' })
   content: string;
-
-  @ManyToOne(() => User) // User 엔터티를 참조하는 ManyToOne 관계 설정
-  @JoinColumn({ name: 'user_id' }) // 외래 키 컬럼 설정
-  user: User; // User 엔터티 타입의 프로퍼티 추가
-
-  @Column({ name: 'user_id', type: 'int', nullable: false })
-  userId: number;
 }

@@ -97,22 +97,19 @@ export class CommentController {
 
   @ApiOperation({ summary: '댓글 수정' })
   @ApiHeader({ name: 'user_id', description: '사용자 ID' })
-  @ApiParam({
-    name: 'commentId',
-    type: 'number',
-    description: '게시글의 ID',
-  })
+  @ApiParam({ name: 'commentId', type: 'number', description: '댓글 ID' })
   @ApiCreatedResponse({
     description: '댓글 수정 성공',
-    type: Comment,
+    // 여기서 SimpleCommentResponseDto가 아닌 CommentResponseDto 사용 예시로 남겨두었습니다.
   })
   @Put(':commentId')
   async updateComment(
     @Param('commentId') commentId: number,
     @Headers('user_id') userId: string,
     @Body() updateCommentDto: UpdateCommentDto,
-  ): Promise<UpdateCommentDto> {
-    return await this.commentService.updateComment(
+  ): Promise<{ id: number; content: string }> {
+    // CommentService에서 수정된 댓글을 반환받습니다.
+    return this.commentService.updateComment(
       commentId,
       userId,
       updateCommentDto,

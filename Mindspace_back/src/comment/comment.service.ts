@@ -55,6 +55,11 @@ export class CommentService {
       throw new BoardNotFoundException();
     }
 
+    // board.node 또는 board.user 가 있는지 검사합니다.
+    if (!board.node || !board.user) {
+      throw new Error('Board is missing necessary relation data.'); // 또는 더 구체적인 예외 처리를 할 수 있습니다.
+    }
+
     const comment = this.commentMapper.DtoToEntity(
       createCommentDto,
       user,
@@ -68,8 +73,8 @@ export class CommentService {
       board: board,
       message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
       commentId: savedComment.id,
-      nodeId: board.nodeId,
-      userId: board.userId,
+      nodeId: board.node.id,
+      userId: board.user.id,
     });
 
     // 댓글을 생성한 사용자의 userId를 확인하고, 해당 사용자를 기반으로 알림 대기 중인 사용자를 찾습니다.
@@ -84,7 +89,7 @@ export class CommentService {
         board: board,
         message: `새로운 댓글이 작성되었습니다.`,
         commentId: savedComment.id,
-        nodeId: board.nodeId,
+        nodeId: board.node.id,
         userId: commentUserId,
       });
     }
@@ -164,7 +169,7 @@ export class CommentService {
     comment_id: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
-  ): Promise<UpdateCommentDto> {
+  ): Promise<{ id: number; content: string }> {
     const convertedUserId = Number(userId);
     const user = await this.userService.findUserById(convertedUserId);
 
@@ -181,12 +186,15 @@ export class CommentService {
       throw new CommentNotFoundException();
     }
 
-    if (comment.user.id.toString() !== userId) {
+    if (comment.user.id !== convertedUserId) {
       throw new CommentPermissionDeniedException();
     }
 
     comment.content = updateCommentDto.content;
-    return await this.commentRepository.save(comment);
+    await this.commentRepository.save(comment);
+
+    // CommentMapper를 사용하여 응답 DTO를 생성합니다.
+    return CommentMapper.commentToSimpleResponseDto(comment);
   }
 
   /** 댓글 삭제 */

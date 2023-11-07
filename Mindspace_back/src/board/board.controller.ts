@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -105,10 +106,14 @@ export class BoardController {
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Delete()
   async deleteOwnBoard(
-    @Query('node_id') nodeId: number,
+    @Query('node_id') nodeId: string, // nodeId를 string으로 받습니다.
     @Headers('user_id') userId: string,
   ) {
-    return this.boardService.deleteOwnBoard(nodeId, userId);
+    const convertedNodeId = parseInt(nodeId);
+    if (isNaN(convertedNodeId)) {
+      throw new BadRequestException('Invalid node ID.');
+    }
+    return this.boardService.deleteOwnBoard(convertedNodeId, userId);
   }
 
   @ApiOperation({ summary: '특정 노드의 사용자 게시글 조회' })

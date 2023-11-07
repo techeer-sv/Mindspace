@@ -29,7 +29,8 @@ import { AwsService } from '../aws/aws.service';
 import { ConfigService } from '@nestjs/config';
 import { CustomBoardRepository } from './repository/board.repository';
 import { PagingParams } from '../global/common/type';
-
+import { Node } from '../node/entities/node.entity';
+import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 @Injectable()
 export class BoardService {
   private readonly DEFAULT_NODE_ID = 1;
@@ -82,7 +83,7 @@ export class BoardService {
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { nodeId: nodeId, userId: Number(userId) },
+      where: { node: { id: nodeId }, user: { id: Number(userId) } },
     });
 
     if (existingBoard) {
@@ -104,24 +105,32 @@ export class BoardService {
 
     // 사용자 정보 조회
     const user = await this.userService.findUserById(convertedUserId);
-    const userNickname = user.nickname;
+    const userNickname = user.nickname; // 이 부분은 사용되지 않으므로, 제거하거나 필요한 경우 유지합니다.
+    console.log(`Creating board for node ID ${nodeId} and user ID ${userId}`);
 
-    // DTO를 엔터티로 변환
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    // DTO를 엔터티로 변환하고 로그 출력
+    console.log(
+      `Converting DTO to board entity for node ID: ${existingNode.id} and user ID: ${user.id}`,
+    );
     const board = this.boardMapper.dtoToEntity(
       createBoardDto,
-      nodeId,
-      convertedUserId,
-      userNickname,
+      existingNode,
+      user,
     );
 
     // 게시글 저장 후 반환
     const savedBoard = await this.boardRepository.save(board);
+    console.log(`Board created with ID: ${savedBoard.id}`);
     return BoardMapper.boardToResponseDto(savedBoard);
   }
 
   async updateBoard(
     nodeId: number,
-    userId: string, // userId의 타입을 string에서 number로 변경
+    userId: string,
     updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
     // 노드의 유효성 확인
@@ -130,11 +139,12 @@ export class BoardService {
       throw new NodeNotFoundException();
     }
 
-    const convertedUserId = Number(userId);
+    // userId를 숫자로 변환합니다. 이 변환된 값을 사용하여 findOne에 전달합니다.
+    const convertedUserId = Number(userId); // 이제 convertedUserId를 선언했습니다.
 
     // 해당 노드와 사용자 ID로 게시글을 조회
     const board = await this.boardRepository.findOne({
-      where: { nodeId: nodeId, userId: convertedUserId },
+      where: { node: { id: nodeId }, user: { id: convertedUserId } },
     });
 
     // 게시글이 없는 경우
@@ -154,34 +164,37 @@ export class BoardService {
     board.title = updateBoardDto.title;
     board.content = updateBoardDto.content;
 
+    // 변경된 내용 저장
     const updatedBoard = await this.boardRepository.save(board);
 
+    // 업데이트된 게시글 정보를 DTO로 변환하여 반환
     return BoardMapper.boardToResponseDto(updatedBoard);
   }
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
-    const convertedUserId = parseInt(userId); // userId를 숫자로 변환
+    const convertedUserId = parseInt(userId);
     if (isNaN(convertedUserId)) {
       throw new BadRequestException('Invalid user ID.');
     }
 
     // 해당 노드와 사용자 ID로 게시글 조회
     const board = await this.boardRepository.findOne({
-      where: { nodeId: nodeId, userId: convertedUserId },
+      where: { node: { id: nodeId }, user: { id: convertedUserId } },
+      relations: ['user'], // 'user' 관계를 로드하도록 명시
     });
 
-    // 게시글이 없는 경우
-    if (!board) {
+    // 게시글이 없거나 연결된 사용자 정보가 없는 경우
+    if (!board || !board.user) {
       throw new InvalidPostDeleteException(); // 게시물을 찾을 수 없습니다 예외 처리
     }
 
     // 사용자 ID가 일치하지 않는 경우
-    if (board.userId !== convertedUserId) {
+    if (board.user.id !== convertedUserId) {
       throw new UnauthorizedException(`게시물을 삭제할 권한이 없습니다.`);
     }
 
     // 게시글 삭제
-    const deleteResult = await this.boardRepository.delete(board.id);
+    await this.boardRepository.delete(board.id);
   }
 
   async getBoardByNodeIdAndUserId(
@@ -189,8 +202,12 @@ export class BoardService {
     userId: number,
   ): Promise<SpecificBoardNodeDto> {
     const board = await this.boardRepository.findOne({
-      where: { nodeId: nodeId, userId: userId },
+      where: {
+        node: { id: nodeId },
+        user: { id: userId },
+      },
     });
+
     if (!board) {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);
     }
@@ -207,14 +224,11 @@ export class BoardService {
     return BoardMapper.toBoardDetailDto(board);
   }
 
-  async findBoardById(boardId: number): Promise<Board> {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
+  async findBoardById(id: number): Promise<Board> {
+    return this.boardRepository.findOne({
+      where: { id: id },
+      relations: ['node', 'user'], // 이 부분이 관계를 로드하는 부분입니다.
     });
-    if (!board) {
-      throw new BoardNotFoundException();
-    }
-    return board;
   }
 
   async getOwnerByBoardId(boardId: number): Promise<User> {
@@ -231,17 +245,18 @@ export class BoardService {
   async getUserIdByBoardId(boardId: number): Promise<number> {
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
+      relations: ['user'], // user 관계를 로드합니다.
     });
     if (!board) {
       throw new NotFoundException(`Board with ID ${boardId} not found`);
     }
-    return board.userId;
+    // 'user' 객체에서 'id'를 가져옵니다.
+    return board.user.id;
   }
 
   async getBoardIdByUserId(userId: number): Promise<number> {
     const board = await this.boardRepository.findOne({
-      where: { userId: userId },
-      // 필요하다면 다른 조건을 추가하세요.
+      where: { user: { id: userId } }, // 'user' 객체 내의 'id' 필드를 사용합니다.
     });
     if (!board) {
       throw new NotFoundException(`Board for user ID ${userId} not found`);

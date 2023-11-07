@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import styles from "./CommentModal.module.scss";
 import { CommentModalProps } from "@/constants/types";
 import CommentView from "@/map/components/CommentModal/components/Comment";
+import {useUserBoardGetQuery} from "@/api/hooks/queries/board";
 
 const CommentModal = ({
                         isOpen,
@@ -24,7 +25,7 @@ const CommentModal = ({
     }));
   };
 
-  const totalComments = initialValue.reduce((acc, comment) => {
+  const totalComments = initialValue?.data?.reduce((acc, comment) => {
     const replyCount = comment.replies ? comment.replies.length : 0;
     return acc + 1 + replyCount;
   }, 0);
@@ -47,7 +48,7 @@ const CommentModal = ({
             </button>
           </div>
         </div>
-        {initialValue.map(comment => (
+        {initialValue?.data?.map(comment => (
             <React.Fragment key={comment.id}>
               <CommentView
                 comment={comment}

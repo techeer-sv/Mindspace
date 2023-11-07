@@ -1,7 +1,7 @@
 import {CommentViewProps} from "@/constants/types";
 import styles from "./Comment.module.scss";
 import React, {useState} from "react";
-import CommentButton from "@/components/CommentButton";
+import Button from "app/components/Button";
 
 const CommentView = ({
                          comment,
@@ -25,13 +25,13 @@ const CommentView = ({
             <div className={styles.content__header}>
                 <div className={styles.content__nickname}>
                       <span className={styles.content__nickname__text}>
-                        {comment.nickname}
+                        {comment.userNickname}
                       </span>
                 </div>
                 <div className={styles.content__header__action}>
                     {
                         showRepliesButton && (
-                            <CommentButton
+                            <Button
                             text={showReplies ? '닫기' : '답글'}
                             onClick={() => toggleReplies(comment.id)}
                             />
@@ -39,11 +39,11 @@ const CommentView = ({
                     }
                     {comment.editable && (
                         <>
-                            <CommentButton
+                            <Button
                                 text={"수정"}
                                 onClick={() => handleEditClick(comment.id, comment.content)}
                             />
-                            <CommentButton
+                            <Button
                                 text={"삭제"}
                                 onClick={() => handleEditClick(comment.id, comment.content)}
                             />
@@ -66,7 +66,7 @@ const CommentView = ({
             </div>
             <div className={styles.content__time}>
                 <span className={styles.content__time__text}>
-                  {comment.date}
+                  {comment.updatedAt}
                 </span>
             </div>
         </div>

@@ -103,7 +103,7 @@ export interface CommentViewProps {
     toggleReplies: (commentId: number) => void; // 함수 타입을 지정해야 합니다.
 }
 
-//CommentButton
+//Button
 export interface CommentButtonProps {
     text: string;
     onClick: () => void;
@@ -139,20 +139,33 @@ export interface ListModalProps {
     onListRequestClose: () => void;
 }
 
+//Cursor
+interface Cursor {
+    count: number;
+    afterCursor: number | null;
+    beforeCursor: number | null;
+}
+
 // Comment
 interface Comment {
     id: number;
-    nickname: string;
+    userNickname: string;
     content: string;
-    date: string;
+    updatedAt: string;
     editable: boolean;
-    replies: Comment[];
+    replies?: Comment[];
+}
+
+// CommentData
+interface CommentData {
+    data: Comment[];
+    cursor: Cursor;
 }
 
 // CommentModal
 export interface CommentModalProps {
     isOpen: boolean;
-    initialValue: Comment[];
+    initialValue: CommentData;
 }
 
 // Notification

@@ -1,6 +1,6 @@
 import { CommentButtonProps } from "@/constants/types";
-import styles from "./CommentButton.module.scss"
-const CommentButton = ({
+import styles from "./Button.module.scss"
+const Button = ({
                            text,
                            onClick
                        }: CommentButtonProps) => {
@@ -11,4 +11,4 @@ const CommentButton = ({
     );
 };
 
-export default CommentButton;
+export default Button;

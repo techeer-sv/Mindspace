@@ -10,7 +10,7 @@ export default function Home() {
       </div>
       <div className={styles.content__title}>
         <Image
-          src="/images/MindSpaceText.png"
+          src="/images/MindSpaceText.webp"
           width={1037}
           height={195}
           alt="logo"

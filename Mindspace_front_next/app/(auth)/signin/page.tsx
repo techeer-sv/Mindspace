@@ -27,6 +27,7 @@ export default function SignInPage() {
     Cookies.set("accessToken", token, { expires: 1 });
     setLoggedIn(true);
     router.push("/");
+    router.refresh();
   };
 
   const { mutate: loginMutation } = useSignInMutation(

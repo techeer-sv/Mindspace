@@ -1,4 +1,4 @@
-//다른 사람의 특정 노드 게시물 조회 dto
+// 다른 사람의 특정 노드 게시물 조회 dto
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BoardDetailDto {

@@ -30,21 +30,6 @@ export class NotificationService {
     this.waitingClients.push(client);
   }
 
-  async waitForNotification(userId: number): Promise<Notification> {
-    console.log(`[waitForNotification] User ${userId} started waiting.`);
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        const index = this.waitingClients.findIndex(
-          (client) => client.userId === userId,
-        );
-        if (index !== -1) this.waitingClients.splice(index, 1);
-        reject(new NoNotificationException());
-      }, this.TIMEOUT_DURATION);
-
-      this.addToWaitingClients({ userId, resolve, reject, timer });
-    });
-  }
-
   async waitForNewNotifications(userId: number): Promise<Notification> {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
@@ -53,7 +38,7 @@ export class NotificationService {
         );
         if (index !== -1) {
           this.waitingClients.splice(index, 1);
-          reject(new NotFoundException('No new notifications'));
+          reject(new NoNotificationException());
         }
       }, this.TIMEOUT_DURATION);
 

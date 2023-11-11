@@ -1,6 +1,6 @@
 export interface APIErrorResponse {
   errorCode: string;
-  errorMessage: string;
+  message: string;
 }
 
 // Auth
@@ -51,7 +51,7 @@ export type NodeObject = object & {
 
 export interface Node extends NodeObject {
   name?: string;
-  connectCount?: number;
+  connectCount: number;
   isWritten?: boolean;
 }
 

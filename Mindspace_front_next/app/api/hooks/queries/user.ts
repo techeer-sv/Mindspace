@@ -31,7 +31,7 @@ export const useSignUpMutation = (
       successAction();
     },
     onError: (error: APIErrorResponse) => {
-      errorAction(error.errorMessage);
+      errorAction(error.message);
     },
   });
 };
@@ -45,7 +45,7 @@ export const useSignInMutation = (
       successAction(accessToken);
     },
     onError: (error: APIErrorResponse) => {
-      errorAction(error.errorMessage);
+      errorAction(error.message);
     },
   });
 };

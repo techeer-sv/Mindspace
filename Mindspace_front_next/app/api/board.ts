@@ -1,7 +1,10 @@
 import { csrFetch } from "./utils/csrFetch";
 import { CreateBoardRequest } from "@/constants/types";
+import { createQueryString } from "./utils/fetchUtils";
+
 export const getBoard = async (id: number) => {
-  const endpoint = `boards?node_id=${id}`;
+  const queryString = createQueryString({ node_id: id });
+  const endpoint = `boards?${queryString}`;
 
   const data = await csrFetch(endpoint, {
     method: "GET",
@@ -11,7 +14,8 @@ export const getBoard = async (id: number) => {
 };
 
 export const deleteBoard = async (id: number) => {
-  const endpoint = `boards?node_id=${id}`;
+  const queryString = createQueryString({ node_id: id });
+  const endpoint = `boards?${queryString}`;
 
   await csrFetch(endpoint, {
     method: "DELETE",
@@ -23,7 +27,8 @@ export const createBoard = async ({
   title,
   content,
 }: CreateBoardRequest) => {
-  const endpoint = `boards?node_id=${id}`;
+  const queryString = createQueryString({ node_id: id });
+  const endpoint = `boards?${queryString}`;
   const body = JSON.stringify({
     title,
     content,
@@ -40,7 +45,8 @@ export const updateBoard = async ({
   title,
   content,
 }: CreateBoardRequest) => {
-  const endpoint = `boards?node_id=${id}`;
+  const queryString = createQueryString({ node_id: id });
+  const endpoint = `boards?${queryString}`;
   const body = JSON.stringify({
     title,
     content,
@@ -52,8 +58,12 @@ export const updateBoard = async ({
   });
 };
 
-export const getBoardListData = async (id?: number) => {
-  const endpoint = `boards/all?node_id=${id}`;
+export const getBoardListData = async (id?: number, afterCursor?: string) => {
+  const queryString = createQueryString({
+    node_id: id,
+    afterCursor: afterCursor,
+  });
+  const endpoint = `boards/all?${queryString}`;
 
   const data = await csrFetch(endpoint, {
     method: "GET",

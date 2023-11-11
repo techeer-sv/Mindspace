@@ -1,4 +1,4 @@
-import Loading from "@/components/Loading";
+import Loading from "@/components/MoonLoadSpinner";
 import HydratedNode from "./hydratedNode";
 import { Suspense } from "react";
 

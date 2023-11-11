@@ -23,6 +23,15 @@ export class CommentMapper {
     return comment;
   }
 
+  DtoFromEntity(comment: Comment) {
+    return {
+      id: comment.id,
+      userNickname: comment.user.nickname,
+      content: comment.content,
+      updateAt: comment.updatedAt,
+    };
+  }
+
   static commentToResponseDto(
     comment: Comment,
     userId: string,

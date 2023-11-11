@@ -164,7 +164,7 @@ export class CommentService {
     commentId: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
-  ): Promise<UpdateCommentDto> {
+  ): Promise<Comment> {
     const comment: Comment = await this.validateCommentOwner(commentId, userId);
     comment.content = updateCommentDto.content;
     return await this.commentRepository.save(comment);

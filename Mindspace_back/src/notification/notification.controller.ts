@@ -41,21 +41,20 @@ export class NotificationController {
   async waitForNewNotifications(
     @Headers('user_id') userIdHeader: string,
   ): Promise<NotificationResponseDTO> {
-    const user_id = parseInt(userIdHeader, 10);
-    if (isNaN(user_id)) {
+    const userId = parseInt(userIdHeader, 10);
+    if (isNaN(userId)) {
       throw new BadRequestException('userId must be a number');
     }
     const notification = await this.notificationService.waitForNewNotifications(
-      user_id,
+      userId,
     );
     return new NotificationResponseDTO(
       notification.message,
       notification.board.id,
-      notification.nodeId,
+      notification.node.id,
       notification.id,
     );
   }
-
   @Get()
   @ApiOperation({ summary: '사용자의 모든 알림 가져오기' })
   @ApiResponse({
@@ -72,18 +71,18 @@ export class NotificationController {
   async getNotifications(
     @Headers('user_id') userIdHeader: string,
   ): Promise<any[]> {
-    const user_id = parseInt(userIdHeader, 10);
-    if (isNaN(user_id)) {
+    const userId = parseInt(userIdHeader, 10);
+    if (isNaN(userId)) {
       throw new BadRequestException('userId must be a number');
     }
 
     const notifications =
-      await this.notificationService.getNotificationsForUser(user_id);
+      await this.notificationService.getNotificationsForUser(userId);
 
     return notifications.map((notification) => ({
       message: notification.message,
-      board_id: notification.board.id,
-      node_id: notification.nodeId,
+      board_id: notification.board?.id,
+      node_id: notification.node?.id,
       notification_id: notification.id,
     }));
   }

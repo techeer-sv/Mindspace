@@ -231,39 +231,6 @@ export class BoardService {
     });
   }
 
-  async getOwnerByBoardId(boardId: number): Promise<User> {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: ['user'],
-    });
-    if (!board) {
-      throw new BoardNotFoundException();
-    }
-    return board.user;
-  }
-
-  async getUserIdByBoardId(boardId: number): Promise<number> {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: ['user'], // user 관계를 로드합니다.
-    });
-    if (!board) {
-      throw new NotFoundException(`Board with ID ${boardId} not found`);
-    }
-    // 'user' 객체에서 'id'를 가져옵니다.
-    return board.user.id;
-  }
-
-  async getBoardIdByUserId(userId: number): Promise<number> {
-    const board = await this.boardRepository.findOne({
-      where: { user: { id: userId } }, // 'user' 객체 내의 'id' 필드를 사용합니다.
-    });
-    if (!board) {
-      throw new NotFoundException(`Board for user ID ${userId} not found`);
-    }
-    return board.id;
-  }
-
   async saveImage(file: Express.Multer.File) {
     return await this.imageUpload(file);
   }

@@ -80,7 +80,7 @@ export class CommentService {
     // 댓글을 생성한 사용자의 userId를 확인하고, 해당 사용자를 기반으로 알림 대기 중인 사용자를 찾습니다.
     const commentUserId = convertedUserId;
     const waitingUser = this.notificationService.waitingClients.find(
-      (client) => client.userId === commentUserId,
+      (client) => client.user_id === commentUserId,
     );
 
     if (waitingUser) {

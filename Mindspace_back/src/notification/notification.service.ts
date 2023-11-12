@@ -5,6 +5,7 @@ import { Notification } from './entities/notification.entity';
 import { Board } from '../board/entities/board.entity';
 import { User } from '../user/entities/user.entity';
 import { Node } from '../node/entities/node.entity';
+import { NoNotificationException } from './exception/NoNotificationException';
 
 @Injectable()
 export class NotificationService {

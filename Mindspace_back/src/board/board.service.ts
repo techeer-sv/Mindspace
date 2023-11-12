@@ -21,20 +21,14 @@ import { NodeService } from '../node/node.service';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
-import { NotificationResponseDTO } from '../notification/dto/notification-response.dto';
-import { NotificationService } from '../notification/notification.service';
-import { User } from '../user/entities/user.entity';
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
-import { ConfigService } from '@nestjs/config';
 import { CustomBoardRepository } from './repository/board.repository';
 import { PagingParams } from '../global/common/type';
 import { Node } from '../node/entities/node.entity';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 @Injectable()
 export class BoardService {
-  private readonly DEFAULT_NODE_ID = 1;
-
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
@@ -42,10 +36,8 @@ export class BoardService {
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
     private readonly nodeService: NodeService,
-    private readonly notificationService: NotificationService,
     private readonly utilsService: UtilsService,
     private readonly awsService: AwsService,
-    private configService: ConfigService,
   ) {}
 
   /** 게시글 목록 조회 + 페이지네이션 */
@@ -72,8 +64,8 @@ export class BoardService {
     userId: string,
     createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-    // nodeId가 없으면 DEFAULT_NODE_ID 사용
-    nodeId = nodeId ? nodeId : this.DEFAULT_NODE_ID;
+    // userId를 숫자로 변환
+    const convertedUserId = Number(userId);
 
     // 입력된 nodeId로 노드 조회
     const existingNode = await this.nodeService.findById(nodeId);
@@ -89,9 +81,6 @@ export class BoardService {
     if (existingBoard) {
       throw new NodeAlreadyWrittenException();
     }
-
-    // userId를 숫자로 변환
-    const convertedUserId = Number(userId);
 
     // 게시글 제목이 비어있는지 검사
     if (!createBoardDto.title || createBoardDto.title.trim() === '') {
@@ -172,7 +161,7 @@ export class BoardService {
   }
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
-    const convertedUserId = parseInt(userId);
+    const convertedUserId = Number(userId); // userId를 숫자로 변환
     if (isNaN(convertedUserId)) {
       throw new BadRequestException('Invalid user ID.');
     }

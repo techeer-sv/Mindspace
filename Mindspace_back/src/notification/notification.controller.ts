@@ -6,24 +6,14 @@ import {
   Headers,
   BadRequestException,
 } from '@nestjs/common';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
-import {
-  ApiBody,
-  ApiHeader,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { BoardService } from '../board/board.service';
 
 @ApiTags('notification')
 @Controller('api/v1/notifications')
 export class NotificationController {
-  constructor(
-    private readonly notificationService: NotificationService,
-    private readonly boardService: BoardService,
-  ) {}
+  constructor(private readonly notificationService: NotificationService) {}
 
   @Get('longpoll/new')
   @ApiOperation({ summary: '새로운 알림 대기' })

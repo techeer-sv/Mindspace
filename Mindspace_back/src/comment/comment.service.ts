@@ -19,7 +19,8 @@ import { CommentNotFoundException } from './exception/CommentNotFoundException';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 import { BoardNotFoundException } from '../board/exception/BoardNotFoundException';
 import { NotificationService } from '../notification/notification.service';
-import { nodeId } from 'nest-neo4j/dist/test';
+import { User } from '../user/entities/user.entity';
+import { Board } from '../board/entities/board.entity';
 
 @Injectable()
 export class CommentService {
@@ -33,6 +34,24 @@ export class CommentService {
     private readonly notificationService: NotificationService,
   ) {}
 
+  private async validateUserExists(userId: string): Promise<User> {
+    const convertedUserId = Number(userId);
+    const user = await this.userService.findUserById(convertedUserId);
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+    return user;
+  }
+
+  private async validateBoardExists(boardId: number): Promise<Board> {
+    const board = await this.boardService.findBoardById(boardId);
+    if (!board) {
+      throw new BoardNotFoundException();
+    }
+    return board;
+  }
+
+  /** 댓글 작성 */
   async createComment(
     boardId: number,
     userId: string,
@@ -42,25 +61,11 @@ export class CommentService {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
     );
-    const convertedUserId = Number(userId);
-    const user = await this.userService.findUserById(convertedUserId);
 
-    if (!user) {
-      throw new UserNotFoundException();
-    }
+    const user: User = await this.validateUserExists(userId);
+    const board: Board = await this.validateBoardExists(boardId);
 
-    const board = await this.boardService.findBoardById(boardId);
-
-    if (!board) {
-      throw new BoardNotFoundException();
-    }
-
-    // board.node 또는 board.user 가 있는지 검사합니다.
-    if (!board.node || !board.user) {
-      throw new Error('Board is missing necessary relation data.'); // 또는 더 구체적인 예외 처리를 할 수 있습니다.
-    }
-
-    const comment = this.commentMapper.DtoToEntity(
+    const comment: Comment = this.commentMapper.DtoToEntity(
       createCommentDto,
       user,
       board,
@@ -78,7 +83,6 @@ export class CommentService {
     });
 
     // 댓글을 생성한 사용자의 userId를 확인하고, 해당 사용자를 기반으로 알림 대기 중인 사용자를 찾습니다.
-    const commentUserId = convertedUserId;
     const waitingUser = this.notificationService.waitingClients.find(
       (client) => client.user_id === commentUserId,
     );
@@ -90,7 +94,7 @@ export class CommentService {
         message: `새로운 댓글이 작성되었습니다.`,
         commentId: savedComment.id,
         nodeId: board.node.id,
-        userId: commentUserId,
+        userId: Number(userId),
       });
     }
 
@@ -98,6 +102,7 @@ export class CommentService {
       `[createComment] Finished comment creation for board ${boardId} by user ${userId}`,
     );
 
+    // 대댓글 작성
     if (parentId) {
       const parentComment = await this.commentRepository.findOne({
         where: { id: parentId },
@@ -124,18 +129,8 @@ export class CommentService {
     userId: string,
     pagingParams: PagingParams,
   ) {
-    const convertedUserId = Number(userId);
-    const user = await this.userService.findUserById(convertedUserId);
-
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-
-    const board = await this.boardService.findBoardById(boardId);
-
-    if (!board) {
-      throw new BoardNotFoundException();
-    }
+    await this.validateUserExists(userId);
+    await this.validateBoardExists(boardId);
 
     const comments = await this.customCommentRepository.paginate(
       boardId,
@@ -166,7 +161,7 @@ export class CommentService {
 
   /** 댓글 수정 */
   async updateComment(
-    comment_id: number,
+    commentId: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
   ): Promise<{ id: number; content: string }> {
@@ -198,16 +193,25 @@ export class CommentService {
   }
 
   /** 댓글 삭제 */
-  async deleteComment(comment_id: number, userId: string): Promise<void> {
+  async deleteComment(commentId: number, userId: string): Promise<void> {
+    const comment: Comment = await this.validateCommentOwner(commentId, userId);
+    await this.commentRepository.remove(comment);
+  }
+
+  /** 댓글을 찾고 예외를 확인합니다. */
+  private async validateCommentOwner(
+    commentId: number,
+    userId: string,
+  ): Promise<Comment> {
     const convertedUserId = Number(userId);
-    const user = await this.userService.findUserById(convertedUserId);
+    const user: User = await this.userService.findUserById(convertedUserId);
 
     if (!user) {
       throw new UserNotFoundException();
     }
 
-    const comment = await this.commentRepository.findOne({
-      where: { id: comment_id },
+    const comment: Comment = await this.commentRepository.findOne({
+      where: { id: commentId },
       relations: ['user'],
     });
 
@@ -215,10 +219,10 @@ export class CommentService {
       throw new CommentNotFoundException();
     }
 
-    if (comment.user.id.toString() !== userId) {
+    if (comment.user.id !== convertedUserId) {
       throw new CommentPermissionDeniedException();
     }
 
-    await this.commentRepository.remove(comment);
+    return comment;
   }
 }

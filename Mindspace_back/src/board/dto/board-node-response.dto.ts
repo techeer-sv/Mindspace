@@ -1,4 +1,4 @@
-//노드별 모든 게시글 조회 dto
+// 노드별 모든 게시글 조회 dto
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BoardNodeResponseDto {

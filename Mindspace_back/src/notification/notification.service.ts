@@ -43,7 +43,7 @@ export class NotificationService {
         );
         if (index !== -1) {
           this.waitingClients.splice(index, 1);
-          reject(new NotFoundException('No new notifications'));
+          reject(new NoNotificationException());
         }
       }, this.TIMEOUT_DURATION);
 

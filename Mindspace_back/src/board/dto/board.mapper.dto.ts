@@ -5,8 +5,8 @@ import { BoardResponseDto } from './board-response.dto';
 import { BoardNodeResponseDto } from './board-node-response.dto';
 import { SpecificBoardNodeDto } from './specific-board-node.dto';
 import { BoardDetailDto } from './board-detail.dto';
-import { User } from '../../user/entities/user.entity'; // 필요한 import를 추가하세요.
 import { Node } from '../../node/entities/node.entity';
+import { User } from '../../user/entities/user.entity'; // 필요한 import를 추가하세요.
 @Injectable()
 export class BoardMapper {
   dtoToEntity(

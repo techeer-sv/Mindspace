@@ -34,7 +34,7 @@ export interface CreateBoardRequest {
     content: string;
 }
 
-// Comment
+// CommentView
 export interface CreateCommentRequest {
     boardId: number;
     commentId?: number;
@@ -169,7 +169,7 @@ interface Cursor {
     beforeCursor: number | null;
 }
 
-// Comment
+// CommentView
 interface Comment {
     id: number;
     userNickname: string;

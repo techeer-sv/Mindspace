@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styles from "./CommentModal.module.scss";
 import {CommentModalProps} from "@/constants/types";
-import CommentView from "@/map/components/CommentModal/components/Comment";
+import CommentView from "app/map/components/CommentModal/components/CommentView";
 import CommentInput from "@/map/components/CommentModal/components/CommentInput";
 
 const CommentModal = ({

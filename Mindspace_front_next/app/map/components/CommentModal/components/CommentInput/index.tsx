@@ -41,6 +41,13 @@ const CommentInput = ({
         errorCreateAction
     );
 
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // 기본 엔터키 이벤트(예: 폼 제출) 방지
+            handleSubmit();
+        }
+    };
+
     const handleSubmit = () => {
         if (!editedComment.trim()) {
             alert("댓글을 입력해주세요.");
@@ -74,7 +81,9 @@ const CommentInput = ({
                 value={editedComment}
                 onChange={(e) => {
                     setEditedComment(e.target.value);
-                }}/>
+                }}
+                onKeyPress={handleKeyPress}
+            />
             <div className={styles.input__icon}>
                 <button onClick={handleSubmit}>
                     <img src={"/icons/SendComment.svg"} alt="Comment Icon"/>

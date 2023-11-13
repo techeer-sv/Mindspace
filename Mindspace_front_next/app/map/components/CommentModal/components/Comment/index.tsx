@@ -3,6 +3,7 @@ import styles from "./Comment.module.scss";
 import React, {useState} from "react";
 import Button from "app/components/Button";
 import CommentInput from "@/map/components/CommentModal/components/CommentInput";
+import {useDeleteCommentMutation} from "@/api/hooks/queries/comment";
 
 const CommentView = ({
                          comment,
@@ -10,16 +11,13 @@ const CommentView = ({
                          showReplies,
                          toggleReplies,
                          boardId,
+                         onDeleteSuccess,
                      }: CommentViewProps) => {
     const [editing, setEditing] = useState<number | null>(null);
 
     const handleEditSuccess = (updatedContent: string) => {
         comment.content = updatedContent;
         setEditing(null);
-    };
-
-    const handleEditClick = (id: number) => {
-        setEditing(id);
     };
 
     const toggleEdit = (id: number) => {
@@ -29,6 +27,30 @@ const CommentView = ({
             setEditing(id); // 편집 모드 활성화
         }
     };
+
+    const successAction = () => {
+        alert("댓글이 성공적으로 삭제되었습니다.");
+        onDeleteSuccess(comment.id);
+    };
+
+    const errorAction = (message: string) => {
+        alert("댓글 삭제에 실패했습니다. 오류: " + message);
+    };
+
+    const {mutate: deleteCommentMutation} = useDeleteCommentMutation(
+        successAction,
+        errorAction
+    );
+
+    const handleSubmit = (id: number, isReply?: boolean) => {
+        deleteCommentMutation(id, {
+            onSuccess: () => {
+                if (isReply) {
+                    onDeleteSuccess(id); // 대댓글 삭제 성공 시 호출
+                }
+            }
+        });
+    }
 
     return (
         <div key={comment.id} className={styles.content}>
@@ -55,7 +77,7 @@ const CommentView = ({
                             />
                             <Button
                                 text={"삭제"}
-                                onClick={() => handleEditClick(comment.id)}
+                                onClick={() => handleSubmit(comment.id)}
                             />
                         </>
                     )}

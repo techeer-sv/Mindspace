@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./CommentModal.module.scss";
 import {CommentModalProps} from "@/constants/types";
 import CommentView from "@/map/components/CommentModal/components/Comment";
@@ -11,6 +11,8 @@ const CommentModal = ({
                       }: CommentModalProps) => {
     const [showReplies, setShowReplies] = useState<{ [key: number]: boolean }>({});
     const [showReplyComment, setShowReplyComment] = useState<{ [key: number]: boolean }>({});
+    const [comments, setComments] = useState(initialValue?.data || []);
+
     const toggleReplies = (commentId: number) => {
         setShowReplies(prev => ({
             ...prev,
@@ -24,12 +26,24 @@ const CommentModal = ({
             [commentId]: !prev[commentId],
         }));
     };
+    const handleDeleteSuccess = (deletedCommentId: number) => {
+        setComments(prevComments => prevComments.map(comment => {
+            // 대댓글이 삭제된 경우
+            if (comment.replies) {
+                comment.replies = comment.replies.filter(reply => reply.id !== deletedCommentId);
+            }
+            return comment;
+        }).filter(comment => comment.id !== deletedCommentId));
+    };
 
-    const totalComments = initialValue?.data?.reduce((acc, comment) => {
+    const totalComments = comments.reduce((acc, comment) => {
         const replyCount = comment.replies ? comment.replies.length : 0;
         return acc + 1 + replyCount;
     }, 0);
 
+    useEffect(() => {
+        setComments(initialValue?.data || []);
+    }, [initialValue?.data]);
 
     return (
         <div className={isOpen ? styles.comment : styles.hiddencomment}>
@@ -45,7 +59,7 @@ const CommentModal = ({
                 boardId={boardId}
                 isEditing={false}
              />
-            {initialValue?.data?.map(comment => (
+            {comments.map(comment => (
                 <React.Fragment key={comment.id}>
                     <CommentView
                         comment={comment}
@@ -53,6 +67,7 @@ const CommentModal = ({
                         showReplies={showReplies[comment.id]}
                         toggleReplies={toggleReplies}
                         boardId={boardId}
+                        onDeleteSuccess={handleDeleteSuccess}
                     />
                     {showReplies[comment.id] && (
                         <div className={styles.reply}>
@@ -63,6 +78,7 @@ const CommentModal = ({
                                     showReplies={showReplies[comment.id]}
                                     toggleReplies={toggleReplies}
                                     boardId={boardId}
+                                    onDeleteSuccess={handleDeleteSuccess}
                                 />
                             ))}
 

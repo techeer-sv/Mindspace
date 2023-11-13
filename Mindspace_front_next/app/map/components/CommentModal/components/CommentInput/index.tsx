@@ -42,9 +42,13 @@ const CommentInput = ({
 
     return (
         <div className={styles.comment__input}>
-            <input type="text" placeholder="Enter your comment" onChange={(e) => {
-                setEditedComment(e.target.value);
-            }}/>
+            <input
+                type="text"
+                placeholder="Enter your comment"
+                value={editedComment}
+                onChange={(e) => {
+                    setEditedComment(e.target.value);
+                }}/>
             <div className={styles.comment__input__icon}>
                 <button onClick={handleSubmit}>
                     <img src={"/icons/SendComment.svg"} alt="Comment Icon"/>

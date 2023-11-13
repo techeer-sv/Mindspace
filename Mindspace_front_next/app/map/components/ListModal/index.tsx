@@ -4,50 +4,19 @@ import styles from "./ListModal.module.scss";
 import {ListModalProps} from "@/constants/types";
 import {Viewer} from "@toast-ui/react-editor";
 import CustomModal from "@/components/CustomModal";
-import {useBoardGetQuery, useUserBoardGetQuery} from "@/api/hooks/queries/board";
+import {useBoardGetQuery, useCreateBoardMutation, useUserBoardGetQuery} from "@/api/hooks/queries/board";
 
 import {formatDateTime, DateTimeFormat} from "@/utils/dateTime";
 import CommentModal from "../CommentModal";
-import {useBoardCommentGetQuery} from "@/api/hooks/queries/comment";
+import {useBoardCommentGetQuery, useCreateCommentMutation} from "@/api/hooks/queries/comment";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {COMMENT_QUERIES} from "@/constants/queryKeys";
 
 function ListModal({listModalOpen, onListRequestClose}: ListModalProps) {
     const [isSelectedTable, setIsSelectedTable] = useState<number>();
     const viewerRef = useRef<Viewer>(null);
     const {data: boardData, isLoading} = useBoardGetQuery(isSelectedTable);
     const [commentModalOpen, setCommentModalOpen] = useState(false);
-    // const commentData = [
-    //   {
-    //     id: 1,
-    //     nickname: '작성자1',
-    //     content: '댓글 내용1',
-    //     date: '5분전',
-    //     editable: true,
-    //     replies: [
-    //       {
-    //         id: 3,
-    //         nickname: '작성자3',
-    //         content: '대댓글 내용1',
-    //         date: '15분전',
-    //         editable: false,
-    //       },
-    //       {
-    //         id: 4,
-    //         nickname: '작성자4',
-    //         content: '대댓글 내용1',
-    //         date: '15분전',
-    //         editable: true,
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     id: 2,
-    //     nickname: '작성자2',
-    //     content: '댓글 내용2',
-    //     date: '10분전',
-    //     editable: false,
-    //     replies: [],
-    //   },
-    // ];
 
     const toggleCommentModal = () => {
         setCommentModalOpen((prev) => !prev);
@@ -169,6 +138,7 @@ function ListModal({listModalOpen, onListRequestClose}: ListModalProps) {
                             <CommentModal
                                 isOpen={commentModalOpen}
                                 initialValue={commentData}
+                                boardId={boardData.id}
                             />
                         </div>
                     </>

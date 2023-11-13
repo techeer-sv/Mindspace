@@ -28,15 +28,19 @@ export interface NicknameResponse {
 }
 
 // Board
-
 export interface CreateBoardRequest {
     id: number;
     title: string;
     content: string;
 }
+// Comment
+export interface CreateCommentRequest {
+    boardId: number;
+    commentId?: number;
+    content: string;
+}
 
 // NodeMap
-
 export type NodeObject = object & {
     id?: number;
     name?: string;
@@ -100,8 +104,11 @@ export interface CommentViewProps {
     comment: Comment;
     showRepliesButton: boolean;
     showReplies: boolean;
-    toggleReplies: (commentId: number) => void; // 함수 타입을 지정해야 합니다.
+    toggleReplies: (commentId: number) => void;
 }
+
+//CommentInput
+
 
 //Button
 export interface CommentButtonProps {
@@ -166,10 +173,10 @@ interface CommentData {
 export interface CommentModalProps {
     isOpen: boolean;
     initialValue: CommentData;
+    boardId: number;
 }
 
 // Notification
-
 export interface Notification {
     notification_id: number;
     message: string;

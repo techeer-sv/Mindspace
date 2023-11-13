@@ -2,8 +2,7 @@ import React, {useState} from "react";
 import styles from "./CommentModal.module.scss";
 import {CommentModalProps} from "@/constants/types";
 import CommentView from "@/map/components/CommentModal/components/Comment";
-import {useUserBoardGetQuery} from "@/api/hooks/queries/board";
-import {useCreateCommentMutation} from "@/api/hooks/queries/comment";
+import CommentInput from "@/map/components/CommentModal/components/CommentInput";
 
 const CommentModal = ({
                           isOpen,
@@ -12,41 +11,6 @@ const CommentModal = ({
                       }: CommentModalProps) => {
     const [showReplies, setShowReplies] = useState<{ [key: number]: boolean }>({});
     const [showReplyComment, setShowReplyComment] = useState<{ [key: number]: boolean }>({});
-    const [editedComment, setEditedComment] = useState<string>("");
-    const [parentsComment, setParentsComment] = useState<number>(0)
-    const successAction = () => {
-        alert("댓글이 성공적으로 추가되었습니다.");
-        // 성공 시 필요한 추가적인 상태 업데이트나 쿼리 갱신
-        setEditedComment(""); // 입력 필드 초기화
-    };
-
-    const errorAction = (message: string) => {
-        alert("댓글 추가에 실패했습니다. 오류: " + message);
-        // 오류 처리 로직
-    };
-
-    const {mutate: createCommentMutation} = useCreateCommentMutation(
-        successAction,
-        errorAction
-    );
-
-    const handleSubmit = () => {
-        if (!editedComment.trim()) {
-            alert("댓글을 입력해주세요.");
-            return;
-        } else if (parentsComment == 0) {
-            createCommentMutation({
-                boardId: boardId,
-                content: editedComment,
-            })
-        } else {
-            createCommentMutation({
-                boardId: boardId,
-                commentId: parentsComment,
-                content: editedComment,
-            })
-        }
-    };
 
     const toggleReplies = (commentId: number) => {
         setShowReplies(prev => ({
@@ -78,16 +42,9 @@ const CommentModal = ({
                     댓글 {totalComments}
                 </span>
             </div>
-            <div className={styles.comment__input}>
-                <input type="text" placeholder="Enter your comment" onChange={(e) => {
-                    setEditedComment(e.target.value);
-                }}/>
-                <div className={styles.comment__input__icon}>
-                    <button onClick={handleSubmit}>
-                        <img src={"/icons/SendComment.svg"} alt="Comment Icon"/>
-                    </button>
-                </div>
-            </div>
+            <CommentInput
+                boardId={boardId}
+            />
             {initialValue?.data?.map(comment => (
                 <React.Fragment key={comment.id}>
                     <CommentView
@@ -110,15 +67,12 @@ const CommentModal = ({
                             <div className={styles.reply__input__button}>
                                 <button onClick={() => toggleCommentInput(comment.id)}>댓글 달기</button>
                             </div>
+
                             {showReplyComment[comment.id] && (
-                                <div className={styles.reply__input}>
-                                    <input type="text" placeholder="Enter your comment"/>
-                                    <div className={styles.reply__input__icon}>
-                                        <button>
-                                            <img src={"/icons/SendComment.svg"} alt="Comment Icon"/>
-                                        </button>
-                                    </div>
-                                </div>
+                                <CommentInput
+                                    boardId={boardId}
+                                    commentId={comment.id}
+                                />
                             )}
                         </div>
                     )}

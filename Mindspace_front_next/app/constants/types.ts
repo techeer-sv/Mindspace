@@ -108,7 +108,10 @@ export interface CommentViewProps {
 }
 
 //CommentInput
-
+export interface CommentInputProps {
+    boardId: number;
+    commentId?: number;
+}
 
 //Button
 export interface CommentButtonProps {

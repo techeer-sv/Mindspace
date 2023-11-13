@@ -33,11 +33,19 @@ export interface CreateBoardRequest {
     title: string;
     content: string;
 }
+
 // Comment
 export interface CreateCommentRequest {
     boardId: number;
     commentId?: number;
     content: string;
+}
+
+export interface UpdateCommentRequest {
+    commentId: number | undefined;
+    content: string | undefined;
+    // 쿼리키 초기화를 위해 사용합니다.
+    boardId: number;
 }
 
 // NodeMap
@@ -105,12 +113,16 @@ export interface CommentViewProps {
     showRepliesButton: boolean;
     showReplies: boolean;
     toggleReplies: (commentId: number) => void;
+    boardId: number;
 }
 
 //CommentInput
 export interface CommentInputProps {
     boardId: number;
     commentId?: number;
+    isEditing: boolean;
+    initialComment?: string;
+    onEditSuccess?: (editedContent: string) => void;
 }
 
 //Button

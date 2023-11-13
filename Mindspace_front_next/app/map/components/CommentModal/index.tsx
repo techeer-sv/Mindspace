@@ -11,7 +11,6 @@ const CommentModal = ({
                       }: CommentModalProps) => {
     const [showReplies, setShowReplies] = useState<{ [key: number]: boolean }>({});
     const [showReplyComment, setShowReplyComment] = useState<{ [key: number]: boolean }>({});
-
     const toggleReplies = (commentId: number) => {
         setShowReplies(prev => ({
             ...prev,
@@ -44,7 +43,8 @@ const CommentModal = ({
             </div>
             <CommentInput
                 boardId={boardId}
-            />
+                isEditing={false}
+             />
             {initialValue?.data?.map(comment => (
                 <React.Fragment key={comment.id}>
                     <CommentView
@@ -52,6 +52,7 @@ const CommentModal = ({
                         showRepliesButton={true}
                         showReplies={showReplies[comment.id]}
                         toggleReplies={toggleReplies}
+                        boardId={boardId}
                     />
                     {showReplies[comment.id] && (
                         <div className={styles.reply}>
@@ -61,6 +62,7 @@ const CommentModal = ({
                                     showRepliesButton={false}
                                     showReplies={showReplies[comment.id]}
                                     toggleReplies={toggleReplies}
+                                    boardId={boardId}
                                 />
                             ))}
 
@@ -72,6 +74,7 @@ const CommentModal = ({
                                 <CommentInput
                                     boardId={boardId}
                                     commentId={comment.id}
+                                    isEditing={false}
                                 />
                             )}
                         </div>

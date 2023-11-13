@@ -1,5 +1,5 @@
 import {csrFetch} from "@/api/utils/csrFetch";
-import {CreateCommentRequest} from "@/constants/types";
+import {CreateBoardRequest, CreateCommentRequest, UpdateCommentRequest} from "@/constants/types";
 
 export const getComment = async (id: number | undefined) => {
     const endpoint = `comments?board_id=${id}`;
@@ -23,5 +23,29 @@ export const createComment = async ({
     await csrFetch(endpoint, {
         method: "POST",
         body: body,
+    });
+};
+
+export const updateComment = async ({
+                                        commentId,
+                                        content,
+                                        boardId,
+                                    }: UpdateCommentRequest) => {
+    const endpoint = `comments/${commentId}`;
+    const body = JSON.stringify({
+        content,
+    });
+
+    await csrFetch(endpoint, {
+        method: "PUT",
+        body: body,
+    });
+};
+
+export const deleteComment = async (id: number) => {
+    const endpoint = `comments/${id}`;
+
+    await csrFetch(endpoint, {
+        method: "DELETE",
     });
 };

@@ -1,7 +1,7 @@
 import {CommentInputProps} from "@/constants/types";
 import React, {useState} from "react";
 import {useCreateCommentMutation, useUpdateCommentMutation} from "@/api/hooks/queries/comment";
-import styles from "@/map/components/CommentModal/CommentModal.module.scss";
+import styles from "@/map/components/CommentModal/components/CommentInput/CommentInput.module.scss";
 
 const CommentInput = ({
                           boardId,
@@ -67,7 +67,7 @@ const CommentInput = ({
     };
 
     return (
-        <div className={styles.comment__input}>
+        <div className={styles.input}>
             <input
                 type="text"
                 placeholder="Enter your comment"
@@ -75,7 +75,7 @@ const CommentInput = ({
                 onChange={(e) => {
                     setEditedComment(e.target.value);
                 }}/>
-            <div className={styles.comment__input__icon}>
+            <div className={styles.input__icon}>
                 <button onClick={handleSubmit}>
                     <img src={"/icons/SendComment.svg"} alt="Comment Icon"/>
                 </button>

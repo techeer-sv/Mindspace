@@ -24,50 +24,50 @@
     }
   }
 
-  &__input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    input {
-      padding: 10px 15px;
-      margin-left: 1rem;
-      border: 0.3px solid #ccc;
-      border-radius: 5px;
-      width: 100%;
-      outline: none;
-    }
-
-    input:focus {
-      border: 0.3px solid #ccc;
-    }
-
-    input::placeholder {
-      color: #888;
-      font-style: italic;
-    }
-
-    &__icon {
-      margin: 1rem;
-
-      button {
-        border: none;
-        padding: 0;
-        background-color: transparent;
-        cursor: pointer;
-        overflow: hidden;
-
-        img {
-          width: 20px;
-          height: 20px;
-        }
-
-        &:hover img {
-          opacity: 0.5;
-        }
-      }
-    }
-  }
+  //&__input {
+  //  display: flex;
+  //  align-items: center;
+  //  justify-content: center;
+  //
+  //  input {
+  //    padding: 10px 15px;
+  //    margin-left: 1rem;
+  //    border: 0.3px solid #ccc;
+  //    border-radius: 5px;
+  //    width: 100%;
+  //    outline: none;
+  //  }
+  //
+  //  input:focus {
+  //    border: 0.3px solid #ccc;
+  //  }
+  //
+  //  input::placeholder {
+  //    color: #888;
+  //    font-style: italic;
+  //  }
+  //
+  //  &__icon {
+  //    margin: 1rem;
+  //
+  //    button {
+  //      border: none;
+  //      padding: 0;
+  //      background-color: transparent;
+  //      cursor: pointer;
+  //      overflow: hidden;
+  //
+  //      img {
+  //        width: 20px;
+  //        height: 20px;
+  //      }
+  //
+  //      &:hover img {
+  //        opacity: 0.5;
+  //      }
+  //    }
+  //  }
+  //}
 
   &::-webkit-scrollbar {
     width: 8px;

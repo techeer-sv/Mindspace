@@ -21,14 +21,14 @@ export class NotificationService {
   ) {}
 
   public waitingClients: {
-    user_id: number;
+    userId: number;
     resolve: (value: unknown) => void;
     reject: (reason?: any) => void;
     timer: NodeJS.Timeout;
   }[] = [];
 
   private addToWaitingClients(client: {
-    user_id: number;
+    userId: number;
     resolve: (value: unknown) => void;
     reject: (reason?: any) => void;
     timer: NodeJS.Timeout;
@@ -36,11 +36,11 @@ export class NotificationService {
     this.waitingClients.push(client);
   }
 
-  async waitForNewNotifications(user_id: number): Promise<Notification> {
+  async waitForNewNotifications(userId: number): Promise<Notification> {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         const index = this.waitingClients.findIndex(
-          (client) => client.user_id === user_id,
+          (client) => client.userId === userId,
         );
         if (index !== -1) {
           this.waitingClients.splice(index, 1);
@@ -48,13 +48,13 @@ export class NotificationService {
         }
       }, this.TIMEOUT_DURATION);
 
-      this.addToWaitingClients({ user_id, resolve, reject, timer });
+      this.addToWaitingClients({ userId, resolve, reject, timer });
     });
   }
 
-  async getNotificationsForUser(user_id: number): Promise<Notification[]> {
+  async getNotificationsForUser(userId: number): Promise<Notification[]> {
     return await this.notificationRepository.find({
-      where: { user: { id: user_id } },
+      where: { user: { id: userId } },
       relations: ['board', 'node'],
       order: { id: 'DESC' },
     });
@@ -71,8 +71,8 @@ export class NotificationService {
     board: Board;
     message: string;
     commentId: number;
-    nodeId: number; // Node ID
-    userId: number; // User ID
+    nodeId: number;
+    userId: number;
   }): Promise<Notification> {
     // 먼저 Node와 User 엔티티를 조회합니다.
     const node = await this.nodeRepository.findOneBy({
@@ -92,8 +92,8 @@ export class NotificationService {
     const newNotification = new Notification();
     newNotification.message = data.message;
     newNotification.board = data.board;
-    newNotification.node = node; // Node 엔티티 할당
-    newNotification.user = user; // User 엔티티 할당
+    newNotification.node = node;
+    newNotification.user = user;
 
     // 생성된 Notification 객체를 저장합니다.
     const savedNotification = await this.notificationRepository.save(
@@ -102,20 +102,20 @@ export class NotificationService {
 
     // 대기 중인 클라이언트를 처리합니다.
     const waitingClient = this.waitingClients.find(
-      (client) => client.user_id === data.userId, // 바로 userId를 사용합니다.
+      (client) => client.userId === data.userId,
     );
     if (waitingClient) {
       console.log(
-        `[createNotificationForBoardOwner] Found waiting user: ${data.userId}`, // 바로 userId를 사용합니다.
+        `[createNotificationForBoardOwner] Found waiting user: ${data.userId}`,
       );
       clearTimeout(waitingClient.timer);
       waitingClient.resolve(savedNotification);
       this.waitingClients = this.waitingClients.filter(
-        (client) => client.user_id !== data.userId, // 바로 userId를 사용합니다.
+        (client) => client.userId !== data.userId,
       );
     } else {
       console.log(
-        `[createNotificationForBoardOwner] No waiting user found for: ${data.userId}`, // 바로 userId를 사용합니다.
+        `[createNotificationForBoardOwner] No waiting user found for: ${data.userId}`,
       );
     }
 

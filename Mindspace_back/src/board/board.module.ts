@@ -26,6 +26,6 @@ import { CustomBoardRepository } from './repository/board.repository';
     BoardService,
     TypeOrmModule.forFeature([Board]),
     CustomBoardRepository,
-  ], // 이 부분을 추가하세요
+  ],
 })
 export class BoardModule {}

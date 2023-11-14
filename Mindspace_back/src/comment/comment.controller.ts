@@ -106,7 +106,6 @@ export class CommentController {
     @Headers('user_id') userId: string,
     @Body() updateCommentDto: UpdateCommentDto,
   ): Promise<{ id: number; content: string }> {
-    // CommentService에서 수정된 댓글을 반환받습니다.
     return this.commentService.updateComment(
       commentId,
       userId,

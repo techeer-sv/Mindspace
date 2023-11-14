@@ -94,7 +94,6 @@ export class BoardService {
 
     // 사용자 정보 조회
     const user = await this.userService.findUserById(convertedUserId);
-    const userNickname = user.nickname; // 이 부분은 사용되지 않으므로, 제거하거나 필요한 경우 유지합니다.
     console.log(`Creating board for node ID ${nodeId} and user ID ${userId}`);
 
     if (!user) {
@@ -128,8 +127,7 @@ export class BoardService {
       throw new NodeNotFoundException();
     }
 
-    // userId를 숫자로 변환합니다. 이 변환된 값을 사용하여 findOne에 전달합니다.
-    const convertedUserId = Number(userId); // 이제 convertedUserId를 선언했습니다.
+    const convertedUserId = Number(userId);
 
     // 해당 노드와 사용자 ID로 게시글을 조회
     const board = await this.boardRepository.findOne({
@@ -174,7 +172,7 @@ export class BoardService {
 
     // 게시글이 없거나 연결된 사용자 정보가 없는 경우
     if (!board || !board.user) {
-      throw new InvalidPostDeleteException(); // 게시물을 찾을 수 없습니다 예외 처리
+      throw new InvalidPostDeleteException();
     }
 
     // 사용자 ID가 일치하지 않는 경우
@@ -216,7 +214,7 @@ export class BoardService {
   async findBoardById(id: number): Promise<Board> {
     return this.boardRepository.findOne({
       where: { id: id },
-      relations: ['node', 'user'], // 이 부분이 관계를 로드하는 부분입니다.
+      relations: ['node', 'user'],
     });
   }
 

@@ -31,7 +31,7 @@ export class NotificationController {
   async waitForNewNotifications(
     @Headers('user_id') userIdHeader: string,
   ): Promise<NotificationResponseDTO> {
-    const userId = parseInt(userIdHeader, 10);
+    const userId = parseInt(userIdHeader);
     if (isNaN(userId)) {
       throw new BadRequestException('userId must be a number');
     }
@@ -61,7 +61,7 @@ export class NotificationController {
   async getNotifications(
     @Headers('user_id') userIdHeader: string,
   ): Promise<any[]> {
-    const userId = parseInt(userIdHeader, 10);
+    const userId = parseInt(userIdHeader);
     if (isNaN(userId)) {
       throw new BadRequestException('userId must be a number');
     }

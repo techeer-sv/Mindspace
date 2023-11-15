@@ -30,6 +30,7 @@ const Navbar = () => {
     alert("로그아웃 되었습니다");
     queryClient.clear();
     router.push("/");
+    router.refresh();
     Cookies.remove("accessToken");
   };
 

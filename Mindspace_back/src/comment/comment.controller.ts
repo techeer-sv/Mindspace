@@ -103,7 +103,7 @@ export class CommentController {
   })
   @ApiCreatedResponse({
     description: '댓글 수정 성공',
-    type: Comment,
+    // 여기서 SimpleCommentResponseDto가 아닌 CommentResponseDto 사용 예시로 남겨두었습니다.
   })
   @Put(':commentId')
   async updateComment(

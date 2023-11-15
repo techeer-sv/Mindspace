@@ -47,4 +47,13 @@ export class CommentMapper {
       editable: comment.user.id.toString() === userId,
     };
   }
+  static commentToSimpleResponseDto(comment: Comment): {
+    id: number;
+    content: string;
+  } {
+    return {
+      id: comment.id,
+      content: comment.content,
+    };
+  }
 }

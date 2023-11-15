@@ -103,7 +103,6 @@ export class CommentController {
   })
   @ApiCreatedResponse({
     description: '댓글 수정 성공',
-    // 여기서 SimpleCommentResponseDto가 아닌 CommentResponseDto 사용 예시로 남겨두었습니다.
   })
   @Put(':commentId')
   async updateComment(
@@ -111,12 +110,11 @@ export class CommentController {
     @Headers('user_id') userId: string,
     @Body() updateCommentDto: UpdateCommentDto,
   ): Promise<PutCommentDto> {
-    const putResult: Comment = await this.commentService.updateComment(
+    return await this.commentService.updateComment(
       commentId,
       userId,
       updateCommentDto,
     );
-    return this.commentMapper.DtoFromEntity(putResult);
   }
 
   @ApiOperation({ summary: '댓글 삭제' })

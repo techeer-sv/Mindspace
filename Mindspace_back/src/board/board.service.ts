@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
+import { Comment } from '../comment/entities/comment.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserService } from '../user/user.service';
@@ -32,6 +33,8 @@ export class BoardService {
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    @InjectRepository(Comment)
+    private readonly commentRepository: Repository<Comment>,
     private readonly customBoardRepository: CustomBoardRepository,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
@@ -180,8 +183,9 @@ export class BoardService {
       throw new UnauthorizedException(`게시물을 삭제할 권한이 없습니다.`);
     }
 
-    // 게시글 삭제
-    await this.boardRepository.delete(board.id);
+    // 게시글 soft delete
+    board.deletedAt = new Date();
+    await this.boardRepository.save(board);
   }
 
   async getBoardByNodeIdAndUserId(

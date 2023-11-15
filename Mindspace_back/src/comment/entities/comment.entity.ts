@@ -6,10 +6,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 import { Timestamp } from '../../global/common/timeStamp';
 import { User } from '../../user/entities/user.entity';
 import { Board } from '../../board/entities/board.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('comment')
 export class Comment extends Timestamp {

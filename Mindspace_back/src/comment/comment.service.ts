@@ -21,6 +21,7 @@ import { BoardNotFoundException } from '../board/exception/BoardNotFoundExceptio
 import { NotificationService } from '../notification/notification.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
+import { PutCommentDto } from './dto/put-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -164,32 +165,11 @@ export class CommentService {
     commentId: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
-  ): Promise<{ id: number; content: string }> {
-    const convertedUserId = Number(userId);
-    const user = await this.userService.findUserById(convertedUserId);
-
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-
-    const comment = await this.commentRepository.findOne({
-      where: { id: commentId },
-      relations: ['user'],
-    });
-
-    if (!comment) {
-      throw new CommentNotFoundException();
-    }
-
-    if (comment.user.id !== convertedUserId) {
-      throw new CommentPermissionDeniedException();
-    }
-
+  ): Promise<PutCommentDto> {
+    const comment: Comment = await this.validateCommentOwner(commentId, userId);
     comment.content = updateCommentDto.content;
-    await this.commentRepository.save(comment);
-
-    // CommentMapper를 사용하여 응답 DTO를 생성합니다.
-    return CommentMapper.commentToSimpleResponseDto(comment);
+    const UpdateComment: Comment = await this.commentRepository.save(comment);
+    return this.commentMapper.DtoFromEntity(UpdateComment);
   }
 
   /** 댓글 삭제 */

@@ -28,7 +28,7 @@ export class Notification {
   @ApiProperty({ description: '게시글을 작성한 사용자' })
   user: User;
 
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'board_id' })
   board: Board;
 }

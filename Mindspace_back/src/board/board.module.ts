@@ -22,6 +22,10 @@ import { CustomBoardRepository } from './repository/board.repository';
   ],
   providers: [BoardService, BoardMapper, CustomBoardRepository],
   controllers: [BoardController],
-  exports: [BoardService],
+  exports: [
+    BoardService,
+    TypeOrmModule.forFeature([Board]),
+    CustomBoardRepository,
+  ],
 })
 export class BoardModule {}

@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { Notification } from './entities/notification.entity';
 import { Board } from '../board/entities/board.entity';
+import { User } from '../user/entities/user.entity';
+import { Node } from '../node/entities/node.entity';
 import { NoNotificationException } from './exception/NoNotificationException';
 
 @Injectable()
@@ -12,6 +14,10 @@ export class NotificationService {
   constructor(
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
+    @InjectRepository(Node)
+    private nodeRepository: Repository<Node>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   public waitingClients: {
@@ -46,9 +52,10 @@ export class NotificationService {
     });
   }
 
-  async getNotificationsForUser(user_id: number): Promise<Notification[]> {
+  async getNotificationsForUser(userId: number): Promise<Notification[]> {
     return await this.notificationRepository.find({
-      where: { user_id: user_id },
+      where: { user: { id: userId } },
+      relations: ['board', 'node'],
       order: { id: 'DESC' },
     });
   }
@@ -67,16 +74,33 @@ export class NotificationService {
     nodeId: number;
     userId: number;
   }): Promise<Notification> {
+    // 먼저 Node와 User 엔티티를 조회합니다.
+    const node = await this.nodeRepository.findOneBy({
+      id: data.nodeId,
+    } as FindOptionsWhere<Node>);
+    const user = await this.userRepository.findOneBy({ id: data.userId });
+
+    // 찾은 Node와 User 엔티티를 검증합니다.
+    if (!node) {
+      throw new NotFoundException(`Node with ID ${data.nodeId} not found`);
+    }
+    if (!user) {
+      throw new NotFoundException(`User with ID ${data.userId} not found`);
+    }
+
+    // Notification 객체를 생성합니다.
     const newNotification = new Notification();
     newNotification.message = data.message;
     newNotification.board = data.board;
-    newNotification.nodeId = data.nodeId;
-    newNotification.user_id = data.userId;
+    newNotification.node = node;
+    newNotification.user = user;
 
+    // 생성된 Notification 객체를 저장합니다.
     const savedNotification = await this.notificationRepository.save(
       newNotification,
     );
 
+    // 대기 중인 클라이언트를 처리합니다.
     const waitingClient = this.waitingClients.find(
       (client) => client.userId === data.userId,
     );

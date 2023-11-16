@@ -114,7 +114,6 @@ export interface CommentViewProps {
   showReplies: boolean;
   toggleReplies: (commentId: number) => void;
   boardId: number;
-  onDeleteSuccess: (deletedComment: number) => void;
 }
 
 //CommentInput

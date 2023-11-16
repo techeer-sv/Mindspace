@@ -48,7 +48,7 @@ const CommentInput = ({
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // 기본 엔터키 이벤트(예: 폼 제출) 방지
+      e.preventDefault();
       handleSubmit();
     }
   };

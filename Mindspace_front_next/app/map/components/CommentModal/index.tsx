@@ -26,21 +26,6 @@ const CommentModal = ({ isOpen, initialValue, boardId }: CommentModalProps) => {
       [commentId]: !prev[commentId],
     }));
   };
-  const handleDeleteSuccess = (deletedCommentId: number) => {
-    setComments((prevComments) =>
-      prevComments
-        .map((comment) => {
-          // 대댓글이 삭제된 경우
-          if (comment.replies) {
-            comment.replies = comment.replies.filter(
-              (reply) => reply.id !== deletedCommentId,
-            );
-          }
-          return comment;
-        })
-        .filter((comment) => comment.id !== deletedCommentId),
-    );
-  };
 
   const totalComments = useMemo(() => {
     return comments.reduce((acc, comment) => {

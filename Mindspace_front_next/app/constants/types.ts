@@ -4,7 +4,7 @@ export interface APIErrorResponse {
 }
 
 // Auth
-export interface SignUpReqeust {
+export interface SignUpRequest {
   userName: string;
   email: string;
   password: string;

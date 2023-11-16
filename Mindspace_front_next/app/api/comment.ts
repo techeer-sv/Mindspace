@@ -1,9 +1,5 @@
 import { csrFetch } from "@/api/utils/csrFetch";
-import {
-  CreateBoardRequest,
-  CreateCommentRequest,
-  UpdateCommentRequest,
-} from "@/constants/types";
+import { CreateCommentRequest, UpdateCommentRequest } from "@/constants/types";
 import { createQueryString } from "@/api/utils/fetchUtils";
 
 export const getComment = async (id: number | undefined) => {

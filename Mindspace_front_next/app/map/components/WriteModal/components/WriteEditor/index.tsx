@@ -21,7 +21,7 @@ const WriteEditor = ({
   const editorRef = useRef<Editor>(null);
   const nodeInfo = useRecoilValue(nodeAtom);
 
-  const [edtedTitle, setEditedTitle] = useState(nodeData?.title);
+  const [editedTitle, setEditedTitle] = useState(nodeData?.title);
   const [editedContent, setEditedContent] = useState(nodeData?.content);
 
   const handleEditorChange = () => {
@@ -43,14 +43,14 @@ const WriteEditor = ({
     if (nodeInfo.isWritten) {
       updateBoardMutation({
         id: nodeInfo.id as number,
-        title: edtedTitle ?? "",
+        title: editedTitle ?? "",
         content: editedContent ?? "",
       });
       updateNodeInfo(nodeInfo?.id, true);
     } else {
       createBoardMutation({
         id: nodeInfo.id as number,
-        title: edtedTitle ?? "",
+        title: editedTitle ?? "",
         content: editedContent ?? "",
       });
       onEditToggle();
@@ -111,7 +111,7 @@ const WriteEditor = ({
           <input
             type="text"
             placeholder={`[${nodeInfo?.name}] 제목을 입력해 주세요`}
-            value={edtedTitle}
+            value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
           />
         </div>

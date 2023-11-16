@@ -123,9 +123,9 @@ const CommentModal = ({
                                 <div key={reply.id} className={styles.reply__content}>
                                     <div className={styles.reply__content__header}>
                                         <div className={styles.reply__content__header__nickname}>
-                                                <span className={styles.reply__content__nickname__text}>
-                                                    {reply.nickname}
-                                                </span>
+                                            <span className={styles.reply__content__nickname__text}>
+                                                {reply.nickname}
+                                            </span>
                                         </div>
                                         <div className={styles.reply__content__header__action}>
                                             {reply.editable && (

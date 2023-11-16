@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./CommentModal.module.scss";
 import { CommentModalProps } from "@/constants/types";
 import CommentView from "app/map/components/CommentModal/components/CommentView";
@@ -42,10 +42,12 @@ const CommentModal = ({ isOpen, initialValue, boardId }: CommentModalProps) => {
     );
   };
 
-  const totalComments = comments.reduce((acc, comment) => {
-    const replyCount = comment.replies ? comment.replies.length : 0;
-    return acc + 1 + replyCount;
-  }, 0);
+  const totalComments = useMemo(() => {
+    return comments.reduce((acc, comment) => {
+      const replyCount = comment.replies ? comment.replies.length : 0;
+      return acc + 1 + replyCount;
+    }, 0);
+  }, [comments]);
 
   useEffect(() => {
     setComments(initialValue?.data || []);

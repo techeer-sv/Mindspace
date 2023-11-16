@@ -12,18 +12,18 @@ const CommentView = ({
   toggleReplies,
   boardId,
 }: CommentViewProps) => {
-  const [editing, setEditing] = useState<number | null>(null);
+  const [editing, setEditing] = useState<boolean>(false);
 
   const handleEditSuccess = () => {
-    setEditing(null);
+    setEditing(false);
   };
 
   const toggleEdit = (id: number) => {
-    if (editing === id) {
-      setEditing(null); // 이미 편집 중인 경우 편집 모드 종료
-    } else {
-      setEditing(id); // 편집 모드 활성화
+    if (editing) {
+      setEditing(false);
+      return;
     }
+    setEditing(true);
   };
 
   const successAction = () => {
@@ -62,7 +62,7 @@ const CommentView = ({
           {comment.editable && (
             <>
               <Button
-                text={editing === comment.id ? "닫기" : "수정"}
+                text={editing ? "닫기" : "수정"}
                 onClick={() => toggleEdit(comment.id)}
               />
               <Button text={"삭제"} onClick={() => handleSubmit(comment.id)} />
@@ -71,7 +71,7 @@ const CommentView = ({
         </div>
       </div>
       <div className={styles.content__box}>
-        {editing === comment.id ? (
+        {editing ? (
           <>
             <CommentInput
               boardId={boardId}

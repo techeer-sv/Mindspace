@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Button from "app/components/Button";
 import CommentInput from "@/map/components/CommentModal/components/CommentInput";
 import { useDeleteCommentMutation } from "@/api/hooks/queries/comment";
+import { prefixes } from "next/dist/build/output/log";
 
 const CommentView = ({
   comment,
@@ -18,12 +19,8 @@ const CommentView = ({
     setEditing(false);
   };
 
-  const toggleEdit = (id: number) => {
-    if (editing) {
-      setEditing(false);
-      return;
-    }
-    setEditing(true);
+  const toggleEdit = () => {
+    setEditing((prev) => !prev);
   };
 
   const successAction = () => {
@@ -61,10 +58,7 @@ const CommentView = ({
           )}
           {comment.editable && (
             <>
-              <Button
-                text={editing ? "닫기" : "수정"}
-                onClick={() => toggleEdit(comment.id)}
-              />
+              <Button text={editing ? "닫기" : "수정"} onClick={toggleEdit} />
               <Button text={"삭제"} onClick={() => handleSubmit(comment.id)} />
             </>
           )}

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BOARD_QUERIES, COMMENT_QUERIES } from "@/constants/queryKeys";
+import { COMMENT_QUERIES } from "@/constants/queryKeys";
 import {
   createComment,
   deleteComment,

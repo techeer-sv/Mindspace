@@ -1,5 +1,5 @@
 import { CommentViewProps } from "@/constants/types";
-import styles from "./Comment.module.scss";
+import styles from "./CommentView.module.scss";
 import React, { useState } from "react";
 import Button from "app/components/Button";
 import CommentInput from "@/map/components/CommentModal/components/CommentInput";
@@ -14,8 +14,7 @@ const CommentView = ({
 }: CommentViewProps) => {
   const [editing, setEditing] = useState<number | null>(null);
 
-  const handleEditSuccess = (updatedContent: string) => {
-    comment.content = updatedContent;
+  const handleEditSuccess = () => {
     setEditing(null);
   };
 

@@ -38,7 +38,6 @@ export const createComment = async ({
 export const updateComment = async ({
   commentId,
   content,
-  boardId,
 }: UpdateCommentRequest) => {
   const endpoint = `comments/${commentId}`;
   const body = JSON.stringify({

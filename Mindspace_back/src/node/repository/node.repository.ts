@@ -16,9 +16,8 @@ export class CustomNodeRepository {
       .createQueryBuilder('node')
       .innerJoin('node.boards', 'board')
       .where('node.name = :nodeName', { nodeName })
-      .andWhere('board.userId = :userId', { userId })
+      .andWhere('board.user_id = :userId', { userId })
       .getCount();
-
     return count > 0;
   }
 }

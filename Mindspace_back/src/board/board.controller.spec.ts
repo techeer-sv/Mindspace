@@ -40,10 +40,8 @@ describe('BoardController', () => {
           id: 1, // id as a number
           userNickname: 'user1',
           title: 'Title 1',
-          //content: 'Content 1',
           updatedAt: new Date('2023-11-17T08:48:28.077Z'), // updatedAt as a Date object
         },
-        // ... other mocked board data
       ],
       cursor: {
         count: 10,

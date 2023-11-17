@@ -16,7 +16,7 @@ describe('BoardController', () => {
           provide: BoardService,
           useValue: {
             getAllBoardsByNodeId: jest.fn(),
-            createBoard: jest.fn(), // createBoard 메소드를 모의 객체에 추가
+            createBoard: jest.fn(),
             updateBoard: jest.fn(),
             deleteOwnBoard: jest.fn(),
             saveImage: jest.fn(),
@@ -31,13 +31,13 @@ describe('BoardController', () => {
   });
 
   it('노드 ID로 페이지네이션된 게시글 데이터를 반환해야 함', async () => {
-    const nodeId = 1; // Example node_id, as a number
-    const afterCursor = 'Y3JlYXRlZEF0OjE2OTYzMTg5OTc5Mzg'; // Example afterCursor, as a string
-    const beforeCursor = null; // Example beforeCursor, as a string or null
+    const nodeId = 1;
+    const afterCursor = 'Y3JlYXRlZEF0OjE2OTYzMTg5OTc5Mzg';
+    const beforeCursor = null;
     const mockResponse: PaginatedBoardResponseDto = {
       data: [
         {
-          id: 1, // id as a number
+          id: 1,
           userNickname: 'user1',
           title: 'Title 1',
           updatedAt: new Date('2023-11-17T08:48:28.077Z'), // updatedAt as a Date object
@@ -69,7 +69,7 @@ describe('BoardController', () => {
     it('새로운 게시글을 생성하고 생성된 게시글 데이터를 반환해야 함', async () => {
       const nodeId = 1; // Example node_id, as a number
       const userId = '123'; // Example user_id, as a string
-      const createBoardDto = { title: 'New Title', content: 'New Content' }; // Example DTO
+      const createBoardDto = { title: 'New Title', content: 'New Content' };
       const mockBoardResponse: BoardResponseDto = {
         id: 1,
         userNickname: 'user1',
@@ -135,7 +135,7 @@ describe('BoardController', () => {
       const nodeId = 1;
       const userId = '123';
 
-      jest.spyOn(service, 'deleteOwnBoard').mockResolvedValue(undefined); // undefined를 반환하는 것은 void 함수의 모의입니다.
+      jest.spyOn(service, 'deleteOwnBoard').mockResolvedValue(undefined);
 
       await controller.deleteOwnBoard(nodeId, userId);
 

@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class BoardIdDto {
+export class CommentIdDto {
   @IsString()
   @IsNotEmpty()
-  board_id: string;
+  comment_id: string;
 }

@@ -21,12 +21,15 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Comment } from './entities/comment.entity';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PagingParams } from '../global/common/type';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
 import { CommentMapper } from './dto/comment.mapper.dto';
 import { PutCommentDto } from './dto/put-comment.dto';
+import { BoardIdDto } from '../common/dto/board-id.dto';
+import { UserIdDto } from '../common/dto/user-id.dto';
+import { CommentIdDto } from './dto/commnet-id.dto';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
@@ -47,16 +50,16 @@ export class CommentController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createComment(
-    @Query('board_id') boardId: number,
-    @Headers('user_id') userId: string,
+    @Query() boardIdDto: BoardIdDto,
+    @Headers() userIdDto: UserIdDto,
     @Body() createCommentDto: CreateCommentDto,
-    @Query('comment_id') parentId?: number,
+    @Query() commentIdDto?: CommentIdDto,
   ): Promise<{ message: string }> {
     await this.commentService.createComment(
-      boardId,
-      userId,
+      boardIdDto.board_id,
+      userIdDto.user_id,
       createCommentDto,
-      parentId,
+      commentIdDto.comment_id,
     );
 
     return { message: '댓글이 성공적으로 작성되었습니다.' };
@@ -83,13 +86,13 @@ export class CommentController {
   })
   @Get()
   async getComments(
-    @Query('board_id') boardId: number,
-    @Headers('user_id') userId: string,
-    @Query() pagingParams: PagingParams,
+    @Query() boardIdDto: BoardIdDto,
+    @Headers() userIdDto: UserIdDto,
+    @Query() pagingParams: CursorPaginationDto,
   ): Promise<PaginatedCommentResponseDto> {
     return await this.commentService.getCommentsByBoardId(
-      boardId,
-      userId,
+      boardIdDto.board_id,
+      userIdDto.user_id,
       pagingParams,
     );
   }
@@ -97,22 +100,22 @@ export class CommentController {
   @ApiOperation({ summary: '댓글 수정' })
   @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @ApiParam({
-    name: 'commentId',
+    name: 'comment_id',
     type: 'number',
     description: '댓글의 ID',
   })
   @ApiCreatedResponse({
     description: '댓글 수정 성공',
   })
-  @Put(':commentId')
+  @Put(':comment_id')
   async updateComment(
-    @Param('commentId') commentId: number,
-    @Headers('user_id') userId: string,
+    @Param() commentIdDto: CommentIdDto,
+    @Headers() userIdDto: UserIdDto,
     @Body() updateCommentDto: UpdateCommentDto,
   ): Promise<PutCommentDto> {
     return await this.commentService.updateComment(
-      commentId,
-      userId,
+      commentIdDto.comment_id,
+      userIdDto.user_id,
       updateCommentDto,
     );
   }
@@ -120,15 +123,18 @@ export class CommentController {
   @ApiOperation({ summary: '댓글 삭제' })
   @ApiHeader({ name: 'user_id', description: '사용자 ID' })
   @ApiParam({
-    name: 'commentId',
+    name: 'comment_id',
     type: 'number',
     description: '댓글의 ID',
   })
-  @Delete(':commentId')
+  @Delete(':comment_id')
   async deleteComment(
-    @Param('commentId') commentId: number,
-    @Headers('user_id') userId: string,
+    @Param() commentIdDto: CommentIdDto,
+    @Headers() userIdDto: UserIdDto,
   ): Promise<void> {
-    return await this.commentService.deleteComment(commentId, userId);
+    return await this.commentService.deleteComment(
+      commentIdDto.comment_id,
+      userIdDto.user_id,
+    );
   }
 }

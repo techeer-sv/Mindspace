@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PagingParams } from '../global/common/type';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UserService } from '../user/user.service';
@@ -22,6 +21,7 @@ import { NotificationService } from '../notification/notification.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
 import { PutCommentDto } from './dto/put-comment.dto';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 
 @Injectable()
 export class CommentService {
@@ -54,17 +54,17 @@ export class CommentService {
 
   /** 댓글 작성 */
   async createComment(
-    boardId: number,
+    boardId: string,
     userId: string,
     createCommentDto: CreateCommentDto,
-    parentId?: number,
+    parentId?: string,
   ): Promise<Comment> {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
     );
 
     const user: User = await this.validateUserExists(userId);
-    const board: Board = await this.validateBoardExists(boardId);
+    const board: Board = await this.validateBoardExists(Number(boardId));
 
     const comment: Comment = this.commentMapper.DtoToEntity(
       createCommentDto,
@@ -106,7 +106,7 @@ export class CommentService {
     // 대댓글 작성
     if (parentId) {
       const parentComment = await this.commentRepository.findOne({
-        where: { id: parentId },
+        where: { id: Number(parentId) },
         relations: ['parent'],
       });
 
@@ -126,15 +126,15 @@ export class CommentService {
 
   /** 댓글 목록 조회 */
   async getCommentsByBoardId(
-    boardId: number,
+    boardId: string,
     userId: string,
-    pagingParams: PagingParams,
+    pagingParams: CursorPaginationDto,
   ) {
     await this.validateUserExists(userId);
-    await this.validateBoardExists(boardId);
+    await this.validateBoardExists(Number(boardId));
 
     const comments = await this.customCommentRepository.paginate(
-      boardId,
+      Number(boardId),
       pagingParams,
     );
 
@@ -162,19 +162,25 @@ export class CommentService {
 
   /** 댓글 수정 */
   async updateComment(
-    commentId: number,
+    commentId: string,
     userId: string,
     updateCommentDto: UpdateCommentDto,
   ): Promise<PutCommentDto> {
-    const comment: Comment = await this.validateCommentOwner(commentId, userId);
+    const comment: Comment = await this.validateCommentOwner(
+      Number(commentId),
+      userId,
+    );
     comment.content = updateCommentDto.content;
     const UpdateComment: Comment = await this.commentRepository.save(comment);
     return this.commentMapper.DtoFromEntity(UpdateComment);
   }
 
   /** 댓글 삭제 */
-  async deleteComment(commentId: number, userId: string): Promise<void> {
-    const comment: Comment = await this.validateCommentOwner(commentId, userId);
+  async deleteComment(commentId: string, userId: string): Promise<void> {
+    const comment: Comment = await this.validateCommentOwner(
+      Number(commentId),
+      userId,
+    );
     await this.commentRepository.remove(comment);
   }
 

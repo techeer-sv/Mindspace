@@ -1,9 +1,11 @@
 import "./globals.scss";
+import styles from "./main.module.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LayoutProvider from "@/components/LayoutProvider";
 import Recoil from "@/components/Recoil";
 import ReactQuery from "@/components/ReactQuery";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +39,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
+        <Image
+          className={styles.background}
+          src="/images/background.png"
+          alt="background"
+          fill
+        />
         <Recoil>
           <ReactQuery>
             <LayoutProvider>{children}</LayoutProvider>

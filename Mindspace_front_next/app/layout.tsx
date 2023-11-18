@@ -1,13 +1,13 @@
 import "./globals.scss";
 import styles from "./main.module.scss";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Akshar } from "next/font/google";
 import LayoutProvider from "@/components/LayoutProvider";
 import Recoil from "@/components/Recoil";
 import ReactQuery from "@/components/ReactQuery";
 import Image from "next/image";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Akshar({ preload: false });
 
 export const metadata: Metadata = {
   title: "Mindspace",
@@ -34,14 +34,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html className={inter.className} lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
         <Image
           className={styles.background}
-          src="/images/background.png"
+          src="/images/background.webp"
           alt="background"
           fill
         />

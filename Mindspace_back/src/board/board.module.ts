@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
 import { Board } from './entities/board.entity';
-import { Comment } from '../comment/entities/comment.entity';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserModule } from '../user/user.module';
 import { NodeModule } from '../node/node.module';
@@ -14,7 +13,7 @@ import { CustomBoardRepository } from './repository/board.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Board, Comment]),
+    TypeOrmModule.forFeature([Board]),
     UserModule,
     NodeModule,
     forwardRef(() => NotificationModule),

@@ -30,8 +30,11 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
-import { PagingParams } from '../global/common/type';
 import { PaginatedBoardResponseDto } from './dto/board-pagination-response.dto';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
+import { NodeIdDto } from '../common/dto/node-id.dto';
+import { UserIdDto } from '../common/dto/user-id.dto';
+import { BoardIdDto } from '../common/dto/board-id.dto';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -64,10 +67,14 @@ export class BoardController {
   })
   @Get('/all')
   async getAllBoardsByNodeId(
-    @Query('node_id') nodeId: number,
-    @Query() pagingParams: PagingParams,
+    @Query() nodeIdDto: NodeIdDto,
+    @Query() pagingParams: CursorPaginationDto,
   ): Promise<PaginatedBoardResponseDto> {
-    return await this.boardService.getAllBoardsByNodeId(nodeId, pagingParams);
+    console.log(pagingParams);
+    return await this.boardService.getAllBoardsByNodeId(
+      nodeIdDto.node_id,
+      pagingParams,
+    );
   }
 
   @ApiOperation({ summary: '게시글 생성' })
@@ -77,11 +84,15 @@ export class BoardController {
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Post()
   async createBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @Headers() userIdDto: UserIdDto,
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-    return this.boardService.createBoard(nodeId, userId, createBoardDto);
+    return this.boardService.createBoard(
+      nodeIdDto.node_id,
+      userIdDto.user_id,
+      createBoardDto,
+    );
   }
 
   @ApiOperation({ summary: '게시글 수정' })
@@ -91,11 +102,15 @@ export class BoardController {
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Put()
   async updateBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @Headers() userIdDto: UserIdDto,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
-    return this.boardService.updateBoard(nodeId, userId, updateBoardDto);
+    return this.boardService.updateBoard(
+      nodeIdDto.node_id,
+      userIdDto.user_id,
+      updateBoardDto,
+    );
   }
 
   @ApiOperation({ summary: '게시글 삭제' })
@@ -105,10 +120,13 @@ export class BoardController {
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Delete()
   async deleteOwnBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @Headers() userIdDto: UserIdDto,
   ) {
-    return this.boardService.deleteOwnBoard(nodeId, userId);
+    return this.boardService.deleteOwnBoard(
+      nodeIdDto.node_id,
+      userIdDto.user_id,
+    );
   }
 
   @ApiOperation({ summary: '특정 노드의 사용자 게시글 조회' })
@@ -131,11 +149,13 @@ export class BoardController {
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
   @Get()
   async getBoardByNodeId(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userIdHeader: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @Headers() userIdDto: UserIdDto,
   ): Promise<SpecificBoardNodeDto> {
-    const userId = parseInt(userIdHeader);
-    return await this.boardService.getBoardByNodeIdAndUserId(nodeId, userId);
+    return await this.boardService.getBoardByNodeIdAndUserId(
+      nodeIdDto.node_id,
+      userIdDto.user_id,
+    );
   }
 
   @ApiOperation({ summary: '특정 게시글 조회' })
@@ -146,7 +166,7 @@ export class BoardController {
   })
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
   @Get(':id')
-  async getBoardDetail(@Param('id') id: number): Promise<BoardDetailDto> {
+  async getBoardDetail(@Param('id') id: BoardIdDto): Promise<BoardDetailDto> {
     return this.boardService.getBoardDetailById(id);
   }
 

@@ -12,7 +12,7 @@ export class CustomBoardRepository {
     private readonly BoardRepository: Repository<Board>,
   ) {}
 
-  async paginate(nodeId: number, pagingParams?: PagingParams) {
+  async paginate(nodeId: string, pagingParams?: PagingParams) {
     const queryBuilder = this.BoardRepository.createQueryBuilder('board')
       .where('board.node_id = :nodeId', { nodeId })
       .orderBy('board.id', 'DESC');
@@ -23,8 +23,8 @@ export class CustomBoardRepository {
       query: {
         limit: 10,
         order: 'DESC',
-        afterCursor: pagingParams.afterCursor,
-        beforeCursor: pagingParams.beforeCursor,
+        afterCursor: pagingParams?.afterCursor,
+        beforeCursor: pagingParams?.beforeCursor,
       },
     });
 

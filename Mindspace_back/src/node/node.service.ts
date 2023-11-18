@@ -36,7 +36,7 @@ export class NodeService {
     return nodes.map((node) => this.nodeMapper.DtoFromEntity(node));
   }
 
-  async getNodeInfoWithLinks(userId: number): Promise<any> {
+  async getNodeInfoWithLinks(userId: string): Promise<any> {
     // neo4j 노드와 링크를 가져옵니다.
     const neo4jNodes = await this.customNeo4jNodeRepository.getNodes();
     const neo4jLinks = await this.customNeo4jNodeRepository.getLinks();
@@ -45,7 +45,7 @@ export class NodeService {
       neo4jNodes.map(async (node) => {
         const isWritten = await this.customNodeRepository.isNodeWrittenByUser(
           node.name,
-          userId,
+          Number(userId),
         );
 
         const pgNode = await this.nodeRepository.findOne({

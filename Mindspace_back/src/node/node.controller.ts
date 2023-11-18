@@ -2,6 +2,7 @@ import { Controller, Get, Headers } from '@nestjs/common';
 import { NodeService } from './node.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { NodeResponseDto } from './dto/node-response.dto';
+import { UserIdDto } from '../common/dto/user-id.dto';
 
 @ApiTags('Node')
 @Controller('api/v1/node')
@@ -16,9 +17,7 @@ export class NodeController {
 
   @ApiOperation({ summary: '노드 맵 정보 조회' })
   @Get('check')
-  async getNodeInfoWithLinks(
-    @Headers('user_id') userId: number,
-  ): Promise<any[]> {
-    return await this.nodeService.getNodeInfoWithLinks(userId);
+  async getNodeInfoWithLinks(@Headers() userIdDto: UserIdDto): Promise<any[]> {
+    return await this.nodeService.getNodeInfoWithLinks(userIdDto.user_id);
   }
 }

@@ -175,7 +175,8 @@ export class CommentService {
   /** 댓글 삭제 */
   async deleteComment(commentId: number, userId: string): Promise<void> {
     const comment: Comment = await this.validateCommentOwner(commentId, userId);
-    await this.commentRepository.remove(comment);
+    comment.content = '삭제된 댓글입니다.';
+    await this.commentRepository.save(comment);
   }
 
   /** 댓글을 찾고 예외를 확인합니다. */

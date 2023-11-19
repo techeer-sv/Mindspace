@@ -26,8 +26,4 @@ export class Notification {
   @ManyToOne(() => Board, { eager: true })
   @JoinColumn({ name: 'board_id' })
   board: Board;
-
-  get userNickname(): string {
-    return this.board.user.nickname; // board 객체를 통해 user의 nickname을 가져옵니다. 이때 board의 user 객체는 eager 로딩되어 있어야 합니다.
-  }
 }

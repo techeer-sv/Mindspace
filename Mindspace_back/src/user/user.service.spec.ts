@@ -7,6 +7,8 @@ import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserEmailDuplicatedException } from './exception/UserEmailDuplicatedException';
 import { UserNicknameDuplicatedException } from './exception/UserNicknameDuplicatedException';
 import { UserMapper } from './dto/user.mapper';
+import { UserNotFoundException } from './exception/UserNotFoundException';
+import { UserInvalidPasswordException } from './exception/UserInvalidPasswordException';
 
 describe('UserService', () => {
   let service: UserService;
@@ -70,6 +72,40 @@ describe('UserService', () => {
       await expect(service.signupUser(dto)).rejects.toThrow(
         UserNicknameDuplicatedException,
       );
+    });
+  });
+
+  describe('loginUser', () => {
+    it('should throw UserNotFoundException if user does not exist', async () => {
+      jest.spyOn(repo, 'findOne').mockResolvedValue(null);
+
+      await expect(
+        service.loginUser({ email: 'test@test.com', password: 'password' }),
+      ).rejects.toThrow(UserNotFoundException);
+    });
+
+    it('should throw UserInvalidPasswordException if password does not match', async () => {
+      const fakeUser: Partial<User> = {
+        password: 'correct_password',
+        // other necessary properties...
+      };
+
+      jest.spyOn(repo, 'findOne').mockResolvedValue(fakeUser as User);
+
+      await expect(
+        service.loginUser({
+          email: 'test@test.com',
+          password: 'wrong_password',
+        }),
+      ).rejects.toThrow(UserInvalidPasswordException);
+    });
+
+    it('should return user if user exists and password matches', async () => {
+      const user = { email: 'test@test.com', password: 'password' }; // add necessary properties
+      jest.spyOn(repo, 'findOne').mockResolvedValue(user as User);
+
+      const result = await service.loginUser(user);
+      expect(result).toEqual(user);
     });
   });
 });

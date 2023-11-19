@@ -161,7 +161,7 @@ export class BoardService {
 
     // 게시글이 없는 경우
     if (!board) {
-      throw new InvalidPostDeleteException(); // 게시물을 찾을 수 없습니다 예외 처리
+      throw new InvalidPostDeleteException();
     }
 
     // 사용자 ID가 일치하지 않는 경우

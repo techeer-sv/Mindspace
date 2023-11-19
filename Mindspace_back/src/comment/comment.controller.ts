@@ -53,15 +53,6 @@ export class CommentController {
       createCommentDto,
       parentId,
     );
-    console.log(
-      await this.commentService.createComment(
-        boardId,
-        userId,
-        createCommentDto,
-        parentId,
-      ),
-    );
-
     return { message: '댓글이 성공적으로 작성되었습니다.' };
   }
 

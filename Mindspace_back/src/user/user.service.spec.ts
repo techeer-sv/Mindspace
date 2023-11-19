@@ -10,6 +10,7 @@ import { UserMapper } from './dto/user.mapper';
 import { UserNotFoundException } from './exception/UserNotFoundException';
 import { UserInvalidPasswordException } from './exception/UserInvalidPasswordException';
 import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
+import { NotFoundException } from '@nestjs/common';
 
 type MockUserMapper = {
   nicknameDtoFromEntity: jest.Mock;
@@ -208,6 +209,36 @@ describe('UserService', () => {
         await service.getUserNickname(1);
       } catch (e) {
         expect(e).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+  });
+
+  describe('isUserExisted', () => {
+    it('should return a user if user exists', async () => {
+      const testUser: User = Object.assign(new User(), {
+        id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        email: 'test1@example.com',
+        password: 'testPassword1',
+        nickname: 'testNickname1',
+        isActive: true,
+      });
+
+      jest.spyOn(repo, 'findOne').mockResolvedValue(testUser);
+
+      const result = await service.isUserExisted(1);
+      expect(result).toEqual(testUser);
+    });
+
+    it('should throw NotFoundException if user does not exist', async () => {
+      jest.spyOn(repo, 'findOne').mockResolvedValue(undefined);
+
+      try {
+        await service.isUserExisted(1);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
       }
     });
   });

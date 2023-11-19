@@ -108,4 +108,36 @@ describe('UserService', () => {
       expect(result).toEqual(user);
     });
   });
+
+  describe('getAllUser', () => {
+    it('should return a list of users', async () => {
+      const testUsers: User[] = [
+        Object.assign(new User(), {
+          id: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+          email: 'test1@example.com',
+          password: 'testPassword1',
+          nickname: 'testUser1',
+          isActive: true,
+        }),
+        Object.assign(new User(), {
+          id: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+          email: 'test2@example.com',
+          password: 'testPassword2',
+          nickname: 'testUser2',
+          isActive: true,
+        }),
+      ];
+
+      jest.spyOn(repo, 'find').mockResolvedValue(testUsers);
+
+      const result = await service.getAllUser();
+      expect(result).toEqual(testUsers);
+    });
+  });
 });

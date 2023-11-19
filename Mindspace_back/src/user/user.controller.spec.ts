@@ -23,6 +23,7 @@ describe('UserController', () => {
             signupUser: jest.fn(),
             loginUser: jest.fn(),
             getAllUser: jest.fn(),
+            getUserNickname: jest.fn(),
           },
         },
         {
@@ -136,6 +137,22 @@ describe('UserController', () => {
 
       expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(res.json).toHaveBeenCalledWith(testUsers);
+    });
+  });
+
+  describe('getUserNickname (닉네임 반환 API)', () => {
+    it('should return the nickname of the user', async () => {
+      const testUserId = 1;
+      const testNickname = 'testUser1';
+
+      jest
+        .spyOn(userService, 'getUserNickname')
+        .mockResolvedValue({ nickname: testNickname });
+
+      const result = await userController.getUserNickname(testUserId);
+
+      expect(result).toEqual({ nickname: testNickname });
+      expect(userService.getUserNickname).toHaveBeenCalledWith(testUserId);
     });
   });
 });

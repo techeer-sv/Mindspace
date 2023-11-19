@@ -9,11 +9,16 @@ import { UserNicknameDuplicatedException } from './exception/UserNicknameDuplica
 import { UserMapper } from './dto/user.mapper';
 import { UserNotFoundException } from './exception/UserNotFoundException';
 import { UserInvalidPasswordException } from './exception/UserInvalidPasswordException';
+import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
+
+type MockUserMapper = {
+  nicknameDtoFromEntity: jest.Mock;
+};
 
 describe('UserService', () => {
   let service: UserService;
   let repo: Repository<User>;
-  let mapper: UserMapper;
+  let mapper: MockUserMapper;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,14 +27,17 @@ describe('UserService', () => {
         { provide: getRepositoryToken(User), useClass: Repository },
         {
           provide: UserMapper,
-          useValue: { DtoToEntity: jest.fn().mockReturnValue(new User()) },
+          useValue: {
+            DtoToEntity: jest.fn().mockReturnValue(new User()),
+            nicknameDtoFromEntity: jest.fn(),
+          },
         },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     repo = module.get<Repository<User>>(getRepositoryToken(User));
-    mapper = module.get<UserMapper>(UserMapper);
+    mapper = module.get<MockUserMapper>(UserMapper);
   });
 
   it('should be defined', () => {
@@ -87,7 +95,6 @@ describe('UserService', () => {
     it('should throw UserInvalidPasswordException if password does not match', async () => {
       const fakeUser: Partial<User> = {
         password: 'correct_password',
-        // other necessary properties...
       };
 
       jest.spyOn(repo, 'findOne').mockResolvedValue(fakeUser as User);
@@ -165,6 +172,40 @@ describe('UserService', () => {
 
       try {
         await service.findUserById(1);
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+  });
+
+  describe('getUserNickname', () => {
+    it('should return a UserNicknameResponseDto if user exists', async () => {
+      const testUser: User = Object.assign(new User(), {
+        id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        email: 'test1@example.com',
+        password: 'testPassword1',
+        nickname: 'testNickname1',
+        isActive: true,
+      });
+      const testUserNicknameResponseDto: UserNicknameResponseDto = {
+        nickname: testUser.nickname,
+      };
+
+      jest.spyOn(service, 'isUserExisted').mockResolvedValue(testUser);
+      mapper.nicknameDtoFromEntity.mockReturnValue(testUserNicknameResponseDto);
+
+      const result = await service.getUserNickname(1);
+      expect(result).toEqual(testUserNicknameResponseDto);
+    });
+
+    it('should throw UserNotFoundException if user does not exist', async () => {
+      jest.spyOn(service, 'isUserExisted').mockResolvedValue(undefined);
+
+      try {
+        await service.getUserNickname(1);
       } catch (e) {
         expect(e).toBeInstanceOf(UserNotFoundException);
       }

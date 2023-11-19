@@ -3,6 +3,10 @@ import { CommentService } from './comment.service';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
 import { CommentSingleResponseDto } from './dto/comment-single-response.dto';
 import { CommentResponseDto } from './dto/comment-response-dto';
+import { UserNotFoundException } from '../user/exception/UserNotFoundException';
+import { BoardNotFoundException } from '../board/exception/BoardNotFoundException';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CommentNotFoundException } from './exception/CommentNotFoundException';
 
 describe('CommentService', () => {
   let service: CommentService;
@@ -74,6 +78,26 @@ describe('CommentService', () => {
       );
       expect(result).toEqual(mockPaginatedComments);
     });
+
+    /** 유저를 찾지 못할 떄 예외처리 */
+    it('should throw a UserNotFoundException', () => {
+      try {
+        const pagingParams = { afterCursor: null, beforeCursor: null };
+        service.getCommentsByBoardId(1, '999', pagingParams); // userId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException); // 예외처리
+      }
+    });
+
+    /** 게시글을 찾지 못할 때 예외처리 */
+    it('should throw a BoardNotFoundException', () => {
+      try {
+        const pagingParams = { afterCursor: null, beforeCursor: null };
+        service.getCommentsByBoardId(999, '1', pagingParams); // boardId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(BoardNotFoundException); // 예외처리
+      }
+    });
   });
 
   /** 댓글 생성 */
@@ -111,12 +135,60 @@ describe('CommentService', () => {
       );
       expect(result).toEqual(mockCommentResponse);
     });
+
+    /** 유저를 찾지 못할 떄 예외처리 */
+    it('should throw a UserNotFoundException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 작성',
+        };
+        service.createComment(1, '999', createCommentDto, 1); // userId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException); // 예외처리
+      }
+    });
+
+    /** 게시글을 찾지 못할 때 예외처리 */
+    it('should throw a BoardNotFoundException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 작성',
+        };
+        service.createComment(999, '1', createCommentDto, 1); // boardId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(BoardNotFoundException); // 예외처리
+      }
+    });
+
+    /** 부모 댓글을 찾지 못할 때 예외처리 */
+    it('should throw a NotFoundException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 작성',
+        };
+        service.createComment(1, '1', createCommentDto, 999); // parentId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException); // 예외처리
+      }
+    });
+
+    /** 부모 댓글이 대댓글일 때 예외처리 */
+    it('should throw a BadRequestException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 작성',
+        };
+        service.createComment(1, '1', createCommentDto, 2); // parentId가 2 데이터를 생성(대댓글의 대댓글)
+      } catch (e) {
+        expect(e).toBeInstanceOf(BadRequestException); // 예외처리
+      }
+    });
   });
 
   /** 댓글 수정 */
   describe('updateComment', () => {
     it('should update a comment', async () => {
-      const boardId = 1;
+      const commentId = 1;
       const userId = '1';
       const updateCommentDto = {
         content: '댓글 수정',
@@ -133,17 +205,41 @@ describe('CommentService', () => {
       jest.spyOn(service, 'updateComment').mockResolvedValue(mockBoardResponse);
 
       const result = await service.updateComment(
-        boardId,
+        commentId,
         userId,
         updateCommentDto,
       );
 
       expect(service.updateComment).toHaveBeenCalledWith(
-        boardId,
+        commentId,
         userId,
         updateCommentDto,
       );
       expect(result).toEqual(mockBoardResponse);
+    });
+
+    /** 유저를 찾지 못할 떄 예외처리 */
+    it('should throw a UserNotFoundException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 수정',
+        };
+        service.updateComment(1, '999', createCommentDto); // userId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException); // 예외처리
+      }
+    });
+
+    /** 댓글을 찾지 못할 때 예외처리 */
+    it('should throw a BoardNotFoundException', () => {
+      try {
+        const createCommentDto = {
+          content: '댓글 수정',
+        };
+        service.updateComment(999, '1', createCommentDto); // boardId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(CommentNotFoundException); // 예외처리
+      }
     });
   });
 
@@ -158,6 +254,24 @@ describe('CommentService', () => {
       await service.deleteComment(commentId, userId);
 
       expect(service.deleteComment).toHaveBeenCalledWith(commentId, userId);
+    });
+
+    /** 유저를 찾지 못할 떄 예외처리 */
+    it('should throw a UserNotFoundException', () => {
+      try {
+        service.deleteComment(1, '999'); // userId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException); // 예외처리
+      }
+    });
+
+    /** 댓글을 찾지 못할 때 예외처리 */
+    it('should throw a BoardNotFoundException', () => {
+      try {
+        service.deleteComment(999, '1'); // boardId가 999인 데이터를 생성
+      } catch (e) {
+        expect(e).toBeInstanceOf(CommentNotFoundException); // 예외처리
+      }
     });
   });
 });

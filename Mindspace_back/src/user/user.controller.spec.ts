@@ -22,6 +22,7 @@ describe('UserController', () => {
           useValue: {
             signupUser: jest.fn(),
             loginUser: jest.fn(),
+            getAllUser: jest.fn(),
           },
         },
         {
@@ -99,6 +100,42 @@ describe('UserController', () => {
       expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(res.json).toHaveBeenCalledWith(mappedResult);
       expect(userService.loginUser).toHaveBeenCalledWith(userLoginRequestDto);
+    });
+  });
+
+  describe('getAllUser (회원 전체 조회 API)', () => {
+    it('should return all users', async () => {
+      const testUsers: User[] = [
+        Object.assign(new User(), {
+          id: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+          email: 'test1@example.com',
+          password: 'testPassword1',
+          nickname: 'testUser1',
+          isActive: true,
+        }),
+        Object.assign(new User(), {
+          id: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+          email: 'test2@example.com',
+          password: 'testPassword2',
+          nickname: 'testUser2',
+          isActive: true,
+        }),
+      ];
+
+      jest.spyOn(userService, 'getAllUser').mockResolvedValue(testUsers);
+
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+      await userController.getAllUser(res as any);
+
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.json).toHaveBeenCalledWith(testUsers);
     });
   });
 });

@@ -140,4 +140,34 @@ describe('UserService', () => {
       expect(result).toEqual(testUsers);
     });
   });
+
+  describe('findUserById', () => {
+    it('should return a user if user exists', async () => {
+      const testUser: User = Object.assign(new User(), {
+        id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        email: 'test1@example.com',
+        password: 'testPassword1',
+        nickname: 'testUser1',
+        isActive: true,
+      });
+
+      jest.spyOn(repo, 'findOne').mockResolvedValue(testUser);
+
+      const result = await service.findUserById(1);
+      expect(result).toEqual(testUser);
+    });
+
+    it('should throw UserNotFoundException if user does not exist', async () => {
+      jest.spyOn(repo, 'findOne').mockResolvedValue(undefined);
+
+      try {
+        await service.findUserById(1);
+      } catch (e) {
+        expect(e).toBeInstanceOf(UserNotFoundException);
+      }
+    });
+  });
 });

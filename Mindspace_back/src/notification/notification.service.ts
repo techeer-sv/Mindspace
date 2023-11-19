@@ -88,12 +88,23 @@ export class NotificationService {
       throw new NotFoundException(`User with ID ${data.userId} not found`);
     }
 
+    // 게시글 소유자 확인
+    const boardOwnerUserId = data.board.user.id;
+
+    // 게시글 소유자에게만 알림을 설정합니다.
+    if (boardOwnerUserId !== data.userId) {
+      console.log(
+        `[createNotificationForBoardOwner] The notification will not be sent as the user ${data.userId} is not the owner of the board ${data.board.id}`,
+      );
+      return null; // 게시글 소유자가 아니면 알림 생성을 중단
+    }
+
     // Notification 객체를 생성합니다.
     const newNotification = new Notification();
     newNotification.message = data.message;
     newNotification.board = data.board;
     newNotification.node = node;
-    newNotification.user = user;
+    newNotification.user = user; // 게시글 소유자 (User 엔티티)
 
     // 생성된 Notification 객체를 저장합니다.
     const savedNotification = await this.notificationRepository.save(
@@ -102,20 +113,16 @@ export class NotificationService {
 
     // 대기 중인 클라이언트를 처리합니다.
     const waitingClient = this.waitingClients.find(
-      (client) => client.userId === data.userId,
+      (client) => client.userId === boardOwnerUserId,
     );
     if (waitingClient) {
       console.log(
-        `[createNotificationForBoardOwner] Found waiting user: ${data.userId}`,
+        `[createNotificationForBoardOwner] Found waiting user: ${boardOwnerUserId}`,
       );
       clearTimeout(waitingClient.timer);
       waitingClient.resolve(savedNotification);
       this.waitingClients = this.waitingClients.filter(
-        (client) => client.userId !== data.userId,
-      );
-    } else {
-      console.log(
-        `[createNotificationForBoardOwner] No waiting user found for: ${data.userId}`,
+        (client) => client.userId !== boardOwnerUserId,
       );
     }
 

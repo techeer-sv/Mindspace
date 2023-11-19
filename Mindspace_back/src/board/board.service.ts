@@ -26,7 +26,6 @@ import { AwsService } from '../aws/aws.service';
 import { CustomBoardRepository } from './repository/board.repository';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
-import { BoardIdDto } from '../common/dto/board-id.dto';
 
 @Injectable()
 export class BoardService {
@@ -43,7 +42,7 @@ export class BoardService {
 
   /** 게시글 목록 조회 + 페이지네이션 */
   async getAllBoardsByNodeId(
-    nodeId: string,
+    nodeId: number,
     pagingParams: CursorPaginationDto,
   ) {
     const paginationResult = await this.customBoardRepository.paginate(
@@ -64,7 +63,7 @@ export class BoardService {
   }
 
   async createBoard(
-    nodeId: string,
+    nodeId: number,
     userId: string,
     createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
@@ -121,7 +120,7 @@ export class BoardService {
   }
 
   async updateBoard(
-    nodeId: string,
+    nodeId: number,
     userId: string,
     updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
@@ -162,7 +161,7 @@ export class BoardService {
     return BoardMapper.boardToResponseDto(updatedBoard);
   }
 
-  async deleteOwnBoard(nodeId: string, userId: string): Promise<void> {
+  async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {
     const convertedUserId = Number(userId); // userId를 숫자로 변환
     if (isNaN(convertedUserId)) {
       throw new BadRequestException('Invalid user ID.');
@@ -190,7 +189,7 @@ export class BoardService {
   }
 
   async getBoardByNodeIdAndUserId(
-    nodeId: string,
+    nodeId: number,
     userId: string,
   ): Promise<SpecificBoardNodeDto> {
     const board = await this.boardRepository.findOne({
@@ -206,9 +205,9 @@ export class BoardService {
     return BoardMapper.SpecificBoardNodeDto(board);
   }
 
-  async getBoardDetailById(boardId: BoardIdDto): Promise<BoardDetailDto> {
+  async getBoardDetailById(boardId: number): Promise<BoardDetailDto> {
     const board = await this.boardRepository.findOne({
-      where: { id: Number(boardId) },
+      where: { id: boardId },
     });
     if (!board) {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);

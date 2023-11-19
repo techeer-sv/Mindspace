@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BoardIdDto {
-  @IsString()
+  @ApiProperty({ description: '게시글 ID' })
+  @IsNumber()
   @IsNotEmpty()
-  board_id: string;
+  @Transform(({ value }) => Number(value))
+  board_id: number;
 }

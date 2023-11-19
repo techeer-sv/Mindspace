@@ -54,17 +54,17 @@ export class CommentService {
 
   /** 댓글 작성 */
   async createComment(
-    boardId: string,
+    boardId: number,
     userId: string,
     createCommentDto: CreateCommentDto,
-    parentId?: string,
+    parentId?: number,
   ): Promise<Comment> {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
     );
 
     const user: User = await this.validateUserExists(userId);
-    const board: Board = await this.validateBoardExists(Number(boardId));
+    const board: Board = await this.validateBoardExists(boardId);
 
     const comment: Comment = this.commentMapper.DtoToEntity(
       createCommentDto,
@@ -126,15 +126,15 @@ export class CommentService {
 
   /** 댓글 목록 조회 */
   async getCommentsByBoardId(
-    boardId: string,
+    boardId: number,
     userId: string,
     pagingParams: CursorPaginationDto,
   ) {
     await this.validateUserExists(userId);
-    await this.validateBoardExists(Number(boardId));
+    await this.validateBoardExists(boardId);
 
     const comments = await this.customCommentRepository.paginate(
-      Number(boardId),
+      boardId,
       pagingParams,
     );
 
@@ -162,7 +162,7 @@ export class CommentService {
 
   /** 댓글 수정 */
   async updateComment(
-    commentId: string,
+    commentId: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
   ): Promise<PutCommentDto> {
@@ -176,7 +176,7 @@ export class CommentService {
   }
 
   /** 댓글 삭제 */
-  async deleteComment(commentId: string, userId: string): Promise<void> {
+  async deleteComment(commentId: number, userId: string): Promise<void> {
     const comment: Comment = await this.validateCommentOwner(
       Number(commentId),
       userId,

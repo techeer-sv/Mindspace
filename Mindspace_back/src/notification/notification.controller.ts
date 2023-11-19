@@ -1,14 +1,9 @@
-import {
-  Controller,
-  Get,
-  Delete,
-  Param,
-  Headers,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Get, Delete, Param } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
+import { NotificationIdDto } from './dto/notification-id.dto';
+import { UserHeader } from '../common/customDecorator/user-header.decorator';
 
 @ApiTags('notification')
 @Controller('api/v1/notifications')
@@ -29,14 +24,10 @@ export class NotificationController {
     description: '사용자 ID',
   })
   async waitForNewNotifications(
-    @Headers('user_id') userIdHeader: string,
+    @UserHeader('user_id') userId: string,
   ): Promise<NotificationResponseDTO> {
-    const userId = parseInt(userIdHeader);
-    if (isNaN(userId)) {
-      throw new BadRequestException('userId must be a number');
-    }
     const notification = await this.notificationService.waitForNewNotifications(
-      userId,
+      Number(userId),
     );
     return new NotificationResponseDTO(
       notification.message,
@@ -59,15 +50,10 @@ export class NotificationController {
     description: '사용자 ID',
   })
   async getNotifications(
-    @Headers('user_id') userIdHeader: string,
+    @UserHeader('user_id') userId: string,
   ): Promise<any[]> {
-    const userId = parseInt(userIdHeader);
-    if (isNaN(userId)) {
-      throw new BadRequestException('userId must be a number');
-    }
-
     const notifications =
-      await this.notificationService.getNotificationsForUser(userId);
+      await this.notificationService.getNotificationsForUser(Number(userId));
 
     return notifications.map((notification) => ({
       message: notification.message,
@@ -85,9 +71,11 @@ export class NotificationController {
   })
   @ApiResponse({ status: 404, description: '알림을 찾을 수 없습니다.' })
   async deleteNotification(
-    @Param('notificationId') notificationId: number,
+    @Param() notificationIdDto: NotificationIdDto,
   ): Promise<{ message: string }> {
-    await this.notificationService.deleteNotification(notificationId);
+    await this.notificationService.deleteNotification(
+      notificationIdDto.notificationId,
+    );
     return { message: '성공적으로 알림이 삭제되었습니다.' };
   }
 }

@@ -1,7 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CommentIdDto {
-  @IsString()
-  @IsNotEmpty()
-  comment_id: string;
+  @IsNumber()
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  comment_id?: number;
 }

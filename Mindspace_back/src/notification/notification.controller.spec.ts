@@ -69,11 +69,11 @@ describe('NotificationController', () => {
 
       const mockNotifications = [
         {
-          id: 2, // 실제 Notification 엔티티의 id 필드
+          id: 2,
           message: 'user님이 Sample Title에 댓글을 작성했습니다.',
-          nodeId: 1, // 실제 Notification 엔티티의 nodeId 필드
-          user_id: 1, // 실제 Notification 엔티티의 user_id 필드
-          board: new Board(), // 이 부분은 Board 엔티티의 실제 인스턴스나 적절한 모킹이 필요합니다.
+          nodeId: 1,
+          user_id: 1,
+          board: new Board(), // 이 부분은 Board 엔티티
         },
         {
           id: 1,

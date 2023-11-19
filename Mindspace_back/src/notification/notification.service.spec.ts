@@ -21,6 +21,8 @@ describe('NotificationService', () => {
           useValue: {
             waitForNewNotifications: jest.fn(),
             getNotificationsForUser: jest.fn(),
+            deleteNotification: jest.fn(),
+            createNotificationForBoardOwner: jest.fn(),
           },
         },
       ],
@@ -54,7 +56,7 @@ describe('NotificationService', () => {
         .spyOn(notificationRepository, 'find')
         .mockResolvedValue(mockNotifications);
 
-      const userId = 1; // 실제 사용자 ID
+      const userId = 1;
       const result = await service.getNotificationsForUser(userId);
 
       expect(result).toBeInstanceOf(Array);
@@ -62,7 +64,6 @@ describe('NotificationService', () => {
       result.forEach((res, index) => {
         expect(res).toMatchObject({
           message: mockNotifications[index].message,
-          // 이 부분은 NotificationResponseDTO의 구조에 맞게 조정해야 함
         });
       });
     });

@@ -62,7 +62,7 @@ export class NotificationController {
   async getNotifications(
     @Headers('user_id') userIdHeader: string,
   ): Promise<any[]> {
-    const user_id = parseInt(userIdHeader, 10);
+    const user_id = parseInt(userIdHeader);
     if (isNaN(user_id)) {
       throw new BadRequestException('userId must be a number');
     }

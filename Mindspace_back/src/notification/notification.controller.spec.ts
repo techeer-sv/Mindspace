@@ -69,54 +69,19 @@ describe('NotificationController', () => {
 
       const mockNotifications = [
         {
-          id: 1,
-          message: 'Test Notification 1',
-          nodeId: 101,
-          user_id: 1,
-          board: {
-            id: 201,
-            nodeId: 301,
-            userNickname: 'UserNickname1',
-            title: 'Board Title 1',
-            content: 'Board Content 1',
-            user: {
-              id: 1,
-              email: 'user1@example.com',
-              password: 'password1',
-              nickname: 'User1',
-              isActive: true,
-            },
-            node: {
-              id: 301,
-              name: 'Node1',
-            },
-          },
+          id: 2, // 실제 Notification 엔티티의 id 필드
+          message: 'user님이 Sample Title에 댓글을 작성했습니다.',
+          nodeId: 1, // 실제 Notification 엔티티의 nodeId 필드
+          user_id: 1, // 실제 Notification 엔티티의 user_id 필드
+          board: new Board(), // 이 부분은 Board 엔티티의 실제 인스턴스나 적절한 모킹이 필요합니다.
         },
         {
-          id: 2,
-          message: 'Test Notification 2',
-          nodeId: 102,
+          id: 1,
+          message: 'user님이 Sample Title에 댓글을 작성했습니다.',
+          nodeId: 1,
           user_id: 1,
-          board: {
-            id: 202,
-            nodeId: 302,
-            userNickname: 'UserNickname2',
-            title: 'Board Title 2',
-            content: 'Board Content 2',
-            user: {
-              id: 2,
-              email: 'user2@example.com',
-              password: 'password2',
-              nickname: 'User2',
-              isActive: true,
-            },
-            node: {
-              id: 302,
-              name: 'Node2',
-            },
-          },
+          board: new Board(),
         },
-        // 필요에 따라 추가 모의 데이터
       ];
 
       jest

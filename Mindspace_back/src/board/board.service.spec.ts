@@ -4,6 +4,12 @@ import { CustomBoardRepository } from './repository/board.repository';
 import { PaginatedBoardResponseDto } from './dto/board-pagination-response.dto';
 import { BoardResponseDto } from './dto/board-response.dto';
 import { BoardController } from './board.controller';
+import { ContentNullException } from './exception/ContentNullException';
+import { TitleNullException } from './exception/TitleNullException';
+import { NodeNotFoundException } from './exception/NodeNotFoundException';
+import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
+import { BoardNotFoundException } from './exception/BoardNotFoundException';
+import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 
 describe('BoardService', () => {
   let service: BoardService;
@@ -90,6 +96,64 @@ describe('BoardService', () => {
       );
       expect(result).toEqual(mockBoardResponse);
     });
+
+    it('내용이 없는 경우 ContentNullException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const createBoardDto = { title: 'New Title', content: '' };
+
+      // 'createBoard' 메서드가 'ContentNullException'을 던지도록 모의 구현
+      jest.spyOn(service, 'createBoard').mockImplementation(async () => {
+        throw new ContentNullException();
+      });
+
+      // 'createBoard' 메서드를 호출했을 때 'ContentNullException'이 발생하는지 검증
+      await expect(
+        service.createBoard(nodeId, userId, createBoardDto),
+      ).rejects.toThrow(ContentNullException);
+    });
+
+    it('제목이 없는 경우 TitleNullException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const createBoardDto = { title: '', content: 'Some content' };
+
+      jest.spyOn(service, 'createBoard').mockImplementation(async () => {
+        throw new TitleNullException();
+      });
+
+      await expect(
+        service.createBoard(nodeId, userId, createBoardDto),
+      ).rejects.toThrow(TitleNullException);
+    });
+
+    it('해당 노드를 찾을 수 없을 때 NodeNotFoundException을 던져야 함', async () => {
+      const nodeId = 999;
+      const userId = '123';
+      const createBoardDto = { title: 'New Title', content: 'New Content' };
+
+      jest.spyOn(service, 'createBoard').mockImplementationOnce(async () => {
+        throw new NodeNotFoundException();
+      });
+
+      await expect(
+        service.createBoard(nodeId, userId, createBoardDto),
+      ).rejects.toThrowError(NodeNotFoundException);
+    });
+
+    it('이미 작성된 노드에 대한 작성 요청인 경우 NodeAlreadyWrittenException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const createBoardDto = { title: 'New Title', content: 'New Content' };
+
+      jest.spyOn(service, 'createBoard').mockImplementation(async () => {
+        throw new NodeAlreadyWrittenException();
+      });
+
+      await expect(
+        service.createBoard(nodeId, userId, createBoardDto),
+      ).rejects.toThrow(NodeAlreadyWrittenException);
+    });
   });
 
   //게시글 업데이트 테스트
@@ -120,6 +184,68 @@ describe('BoardService', () => {
       );
       expect(result).toEqual(mockBoardResponse);
     });
+
+    it('내용이 없는 경우 ContentNullException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const updateBoardDto = { title: 'New Title', content: '' };
+
+      jest.spyOn(service, 'updateBoard').mockImplementation(async () => {
+        throw new ContentNullException();
+      });
+
+      await expect(
+        service.updateBoard(nodeId, userId, updateBoardDto),
+      ).rejects.toThrow(ContentNullException);
+    });
+
+    it('제목이 없는 경우 TitleNullException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const UpdateBoardDto = { title: '', content: 'Some content' };
+
+      jest.spyOn(service, 'updateBoard').mockImplementation(async () => {
+        throw new TitleNullException();
+      });
+
+      await expect(
+        service.updateBoard(nodeId, userId, UpdateBoardDto),
+      ).rejects.toThrow(TitleNullException);
+    });
+
+    it('해당 노드를 찾을 수 없을 때 NodeNotFoundException을 던져야 함', async () => {
+      const nodeId = 999;
+      const userId = '123';
+      const UpdateBoardDto = {
+        title: 'New Title',
+        content: 'New Content',
+      };
+
+      jest.spyOn(service, 'updateBoard').mockImplementationOnce(async () => {
+        throw new NodeNotFoundException();
+      });
+
+      await expect(
+        service.updateBoard(nodeId, userId, UpdateBoardDto),
+      ).rejects.toThrowError(NodeNotFoundException);
+    });
+
+    it('해당 게시물을 찾을 수 없을 때 BoardNotFoundException을 던져야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+      const UpdateBoardDto = {
+        title: 'New Title',
+        content: 'New Content',
+      };
+
+      jest.spyOn(service, 'updateBoard').mockImplementationOnce(async () => {
+        throw new BoardNotFoundException();
+      });
+
+      await expect(
+        service.updateBoard(nodeId, userId, UpdateBoardDto),
+      ).rejects.toThrowError(BoardNotFoundException);
+    });
   });
 
   //게시글 삭제 테스트
@@ -133,6 +259,19 @@ describe('BoardService', () => {
       await service.deleteOwnBoard(nodeId, userId);
 
       expect(service.deleteOwnBoard).toHaveBeenCalledWith(nodeId, userId);
+    });
+
+    it('해당 게시판을 찾을 수 없을 때 BoardNotFoundException을 던져줘야 함', async () => {
+      const nodeId = 1;
+      const userId = '123';
+
+      jest.spyOn(service, 'deleteOwnBoard').mockImplementationOnce(async () => {
+        throw new InvalidPostDeleteException();
+      });
+
+      await expect(service.deleteOwnBoard(nodeId, userId)).rejects.toThrowError(
+        InvalidPostDeleteException,
+      );
     });
   });
 

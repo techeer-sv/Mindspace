@@ -7,7 +7,6 @@ import { ContentNullException } from './exception/ContentNullException';
 import { TitleNullException } from './exception/TitleNullException';
 import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenException';
 import { NodeNotFoundException } from './exception/NodeNotFoundException';
-import { UpdateBoardDto } from './dto/update-board.dto';
 import { InvalidPostDeleteException } from './exception/InvalidPostDeleteException';
 import { BoardNotFoundException } from './exception/BoardNotFoundException';
 

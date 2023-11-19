@@ -21,20 +21,15 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Comment } from './entities/comment.entity';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PagingParams } from '../global/common/type';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
-import { CommentMapper } from './dto/comment.mapper.dto';
 import { PutCommentDto } from './dto/put-comment.dto';
 
 @ApiTags('Comment')
 @Controller('api/v1/comments')
 export class CommentController {
-  constructor(
-    private readonly commentService: CommentService,
-    private readonly commentMapper: CommentMapper,
-  ) {}
+  constructor(private readonly commentService: CommentService) {}
 
   @ApiOperation({ summary: '댓글 또는 대댓글 생성' })
   @ApiQuery({ name: 'board_id', description: '댓글을 작성할 게시글의 ID' })
@@ -57,6 +52,14 @@ export class CommentController {
       userId,
       createCommentDto,
       parentId,
+    );
+    console.log(
+      await this.commentService.createComment(
+        boardId,
+        userId,
+        createCommentDto,
+        parentId,
+      ),
     );
 
     return { message: '댓글이 성공적으로 작성되었습니다.' };

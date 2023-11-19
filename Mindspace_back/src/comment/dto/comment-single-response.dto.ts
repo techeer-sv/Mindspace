@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CommentResponseDto {
+export class CommentSingleResponseDto {
   @ApiProperty({ description: '댓글의 ID' })
   id: number;
 
@@ -17,5 +17,5 @@ export class CommentResponseDto {
   editable: boolean;
 
   @ApiProperty({ description: '대댓글 목록' })
-  replies?: CommentResponseDto[];
+  replies?: CommentSingleResponseDto[];
 }

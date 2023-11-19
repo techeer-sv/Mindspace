@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CreateCommentDto } from './create-comment.dto';
 import { Comment } from '../entities/comment.entity';
-import { CommentResponseDto } from './comment-response.dto';
+import { CommentSingleResponseDto } from './comment-single-response.dto';
 import { User } from '../../user/entities/user.entity';
 import { Board } from '../../board/entities/board.entity';
 
@@ -28,14 +28,14 @@ export class CommentMapper {
       id: comment.id,
       userNickname: comment.user.nickname,
       content: comment.content,
-      updateAt: comment.updatedAt,
+      updatedAt: comment.updatedAt,
     };
   }
 
   static commentToResponseDto(
     comment: Comment,
     userId: string,
-  ): CommentResponseDto {
+  ): CommentSingleResponseDto {
     return {
       id: comment.id,
       userNickname: comment.user.nickname,

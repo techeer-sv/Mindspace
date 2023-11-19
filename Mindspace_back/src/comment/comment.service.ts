@@ -10,7 +10,7 @@ import { Comment } from './entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UserService } from '../user/user.service';
 import { CommentMapper } from './dto/comment.mapper.dto';
-import { CommentResponseDto } from './dto/comment-response.dto';
+import { CommentSingleResponseDto } from './dto/comment-single-response.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { BoardService } from '../board/board.service';
 import { CustomCommentRepository } from './repository/comment.repository';
@@ -22,6 +22,7 @@ import { NotificationService } from '../notification/notification.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
 import { PutCommentDto } from './dto/put-comment.dto';
+import { CommentResponseDto } from './dto/comment-response-dto';
 
 @Injectable()
 export class CommentService {
@@ -58,7 +59,7 @@ export class CommentService {
     userId: string,
     createCommentDto: CreateCommentDto,
     parentId?: number,
-  ): Promise<Comment> {
+  ): Promise<CommentResponseDto> {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
     );
@@ -121,14 +122,15 @@ export class CommentService {
       comment.parent = parentComment;
     }
 
-    return await this.commentRepository.save(comment);
+    const createComment: Comment = await this.commentRepository.save(comment);
+    return this.commentMapper.DtoFromEntity(createComment);
   }
 
   /** 댓글 목록 조회 */
   async getCommentsByBoardId(
     boardId: number,
     userId: string,
-    pagingParams: PagingParams,
+    pagingParams?: PagingParams,
   ) {
     await this.validateUserExists(userId);
     await this.validateBoardExists(boardId);
@@ -138,7 +140,7 @@ export class CommentService {
       pagingParams,
     );
 
-    const transformedComments: CommentResponseDto[] = await Promise.all(
+    const transformedComments: CommentSingleResponseDto[] = await Promise.all(
       comments.data.map(async (comment) => {
         const replies = await this.customCommentRepository.findReplies(
           comment.id,

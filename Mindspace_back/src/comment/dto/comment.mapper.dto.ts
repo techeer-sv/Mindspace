@@ -36,6 +36,7 @@ export class CommentMapper {
     comment: Comment,
     userId: string,
   ): CommentResponseDto {
+    const isDeletedComment = comment.content === '삭제된 댓글입니다.';
     return {
       id: comment.id,
       userNickname: comment.user.nickname,
@@ -44,7 +45,7 @@ export class CommentMapper {
         addSuffix: true,
         locale: ko,
       }),
-      editable: comment.user.id.toString() === userId,
+      editable: !isDeletedComment && comment.user.id.toString() === userId,
     };
   }
 }

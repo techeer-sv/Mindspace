@@ -21,7 +21,6 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Comment } from './entities/comment.entity';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PagingParams } from '../global/common/type';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';

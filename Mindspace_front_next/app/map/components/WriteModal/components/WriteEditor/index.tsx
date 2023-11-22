@@ -63,6 +63,16 @@ const WriteEditor = ({
     }
   }, [createBoardErrorMessage]);
 
+  useEffect(() => {
+    const initialValueSetting = () => {
+      if (editorRef?.current) {
+        editorRef?.current?.getInstance().setMarkdown(nodeData?.content ?? "");
+      }
+    };
+
+    initialValueSetting();
+  }, [nodeData]);
+
   const updateEditorContent = (newContent: string) => {
     const currentContent = editorRef?.current?.getInstance().getMarkdown();
 
@@ -143,7 +153,6 @@ const WriteEditor = ({
           >
             <Editor
               ref={editorRef}
-              initialValue={nodeData?.content ?? " "}
               placeholder="내용을 입력해 주세요"
               onChange={handleEditorChange}
               previewStyle="tab"

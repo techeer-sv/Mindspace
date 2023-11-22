@@ -11,6 +11,8 @@ import {
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
 
+const INIT_EDITOR_VALUE = "";
+
 const WriteEditor = ({
   nodeData,
   onEditToggle,
@@ -66,7 +68,9 @@ const WriteEditor = ({
   useEffect(() => {
     const initialValueSetting = () => {
       if (editorRef?.current) {
-        editorRef?.current?.getInstance().setMarkdown(nodeData?.content ?? "");
+        editorRef?.current
+          ?.getInstance()
+          .setMarkdown(nodeData?.content ?? INIT_EDITOR_VALUE);
       }
     };
 

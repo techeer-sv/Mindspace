@@ -110,6 +110,18 @@ const WriteEditor = ({
     }
   };
 
+  const onUploadImage = async (
+    blob: File,
+    callback: (imageUrl: string, fileName: string) => void,
+  ) => {
+    uploadImageMutation(blob, {
+      onSuccess: (data) => {
+        callback(data.imageUrl, blob.name);
+      },
+    });
+    return false;
+  };
+
   const {
     mutate: uploadImageMutation,
     isLoading: isImageUploading,
@@ -158,6 +170,9 @@ const WriteEditor = ({
             <Editor
               ref={editorRef}
               placeholder="내용을 입력해 주세요"
+              hooks={{
+                addImageBlobHook: onUploadImage,
+              }}
               onChange={handleEditorChange}
               previewStyle="tab"
               height="100%"

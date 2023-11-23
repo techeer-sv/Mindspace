@@ -3,9 +3,9 @@ import { NodeController } from './node.controller';
 import { NodeService } from './node.service';
 
 const MockNodeService = {
-  getAllNode : jest.fn(),
-  getNodeInfoWithLinks : jest.fn(),
-}
+  getAllNode: jest.fn(),
+  getNodeInfoWithLinks: jest.fn(),
+};
 
 describe('NodeController', () => {
   let controller: NodeController;
@@ -14,9 +14,7 @@ describe('NodeController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [NodeController],
-      providers: [
-        { provide: NodeService, useValue: MockNodeService },
-      ],
+      providers: [{ provide: NodeService, useValue: MockNodeService }],
     }).compile();
 
     controller = module.get<NodeController>(NodeController);
@@ -90,5 +88,4 @@ describe('NodeController', () => {
       },
     ]);
   });
-
 });

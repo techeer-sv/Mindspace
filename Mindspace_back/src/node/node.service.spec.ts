@@ -40,7 +40,10 @@ describe('NodeService', () => {
         NodeService,
         { provide: getRepositoryToken(Node), useValue: mockNodeRepository },
         { provide: NodeMapper, useValue: mockNodeMapper },
-        { provide: CustomNeo4jNodeRepository, useValue: mockCustomNeo4jNodeRepository },
+        {
+          provide: CustomNeo4jNodeRepository,
+          useValue: mockCustomNeo4jNodeRepository,
+        },
         { provide: CustomNodeRepository, useValue: mockCustomNodeRepository },
       ],
     }).compile();
@@ -62,8 +65,12 @@ describe('NodeService', () => {
       await service.seedInitialData();
 
       expect(mockNodeRepository.count).toHaveBeenCalled();
-      expect(mockNodeRepository.create).toHaveBeenCalledTimes(initialTestData.length);
-      expect(mockNodeRepository.save).toHaveBeenCalledTimes(initialTestData.length);
+      expect(mockNodeRepository.create).toHaveBeenCalledTimes(
+        initialTestData.length,
+      );
+      expect(mockNodeRepository.save).toHaveBeenCalledTimes(
+        initialTestData.length,
+      );
     });
 
     it('노드가 이미 존재할 때 초기화 진행하지 않기', async () => {
@@ -79,15 +86,27 @@ describe('NodeService', () => {
 
   describe('getAllNode', () => {
     it('NodeResponseDto 배열을 반환하는지 확인하기', async () => {
-      const mockNodes = [{ id: 1, name: 'Node 1' }, { id: 2, name: 'Node 2' }];
+      const mockNodes = [
+        { id: 1, name: 'Node 1' },
+        { id: 2, name: 'Node 2' },
+      ];
       mockNodeRepository.find.mockResolvedValue(mockNodes);
-      mockNodeMapper.DtoFromEntity.mockImplementation((node) => ({ id: node.id, name: node.name }));
+      mockNodeMapper.DtoFromEntity.mockImplementation((node) => ({
+        id: node.id,
+        name: node.name,
+      }));
 
       const result = await service.getAllNode();
 
       expect(mockNodeRepository.find).toHaveBeenCalled();
-      expect(mockNodeMapper.DtoFromEntity).toHaveBeenCalledTimes(mockNodes.length);
-      expect(result).toEqual(expect.arrayContaining(mockNodes.map((node) => ({ id: node.id, name: node.name }))));
+      expect(mockNodeMapper.DtoFromEntity).toHaveBeenCalledTimes(
+        mockNodes.length,
+      );
+      expect(result).toEqual(
+        expect.arrayContaining(
+          mockNodes.map((node) => ({ id: node.id, name: node.name })),
+        ),
+      );
     });
   });
 
@@ -99,7 +118,9 @@ describe('NodeService', () => {
 
       const result = await service.findById(nodeId);
 
-      expect(mockNodeRepository.findOne).toHaveBeenCalledWith({ where: { id: nodeId } });
+      expect(mockNodeRepository.findOne).toHaveBeenCalledWith({
+        where: { id: nodeId },
+      });
       expect(result).toEqual(mockNode);
     });
 
@@ -109,7 +130,9 @@ describe('NodeService', () => {
 
       const result = await service.findById(nodeId);
 
-      expect(mockNodeRepository.findOne).toHaveBeenCalledWith({ where: { id: nodeId } });
+      expect(mockNodeRepository.findOne).toHaveBeenCalledWith({
+        where: { id: nodeId },
+      });
       expect(result).toBeUndefined();
     });
   });

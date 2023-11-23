@@ -4,7 +4,7 @@ export interface APIErrorResponse {
 }
 
 // Auth
-export interface SignUpReqeust {
+export interface SignUpRequest {
   userName: string;
   email: string;
   password: string;
@@ -28,15 +28,27 @@ export interface NicknameResponse {
 }
 
 // Board
-
 export interface CreateBoardRequest {
   id: number;
   title: string;
   content: string;
 }
 
-// NodeMap
+// CommentView
+export interface CreateCommentRequest {
+  boardId: number;
+  commentId?: number;
+  content: string;
+}
 
+export interface UpdateCommentRequest {
+  commentId: number | undefined;
+  content: string | undefined;
+  // 쿼리키 초기화를 위해 사용합니다.
+  boardId: number;
+}
+
+// NodeMap
 export type NodeObject = object & {
   id?: number;
   name?: string;
@@ -51,7 +63,7 @@ export type NodeObject = object & {
 
 export interface Node extends NodeObject {
   name?: string;
-  connectCount: number;
+  connectCount?: number;
   isWritten?: boolean;
 }
 
@@ -95,6 +107,30 @@ export interface WriteModalProps {
   updateNodeInfo: (id: number | undefined, isWritten: boolean) => void;
 }
 
+//CommentView
+export interface CommentViewProps {
+  comment: Comment;
+  showRepliesButton: boolean;
+  showReplies: boolean;
+  toggleReplies: (commentId: number) => void;
+  boardId: number;
+}
+
+//CommentInput
+export interface CommentInputProps {
+  boardId: number;
+  commentId?: number;
+  isEditing: boolean;
+  initialComment?: string;
+  onEditSuccess?: (editedContent: string) => void;
+}
+
+//Button
+export interface CommentButtonProps {
+  text: string;
+  onClick: () => void;
+}
+
 export interface BoardResponseDto {
   id: number;
   userNickname: string;
@@ -125,22 +161,37 @@ export interface ListModalProps {
   onListRequestClose: () => void;
 }
 
-// Comment
+//Cursor
+interface Cursor {
+  count: number;
+  afterCursor: number | null;
+  beforeCursor: number | null;
+}
+
+// CommentView
 interface Comment {
   id: number;
-  nickname: string;
+  userNickname: string;
   content: string;
-  date: string;
+  updatedAt: string;
+  editable: boolean;
+  replies?: Comment[];
+}
+
+// CommentData
+interface CommentData {
+  data: Comment[];
+  cursor: Cursor;
 }
 
 // CommentModal
 export interface CommentModalProps {
   isOpen: boolean;
-  initialValue: Comment[];
+  initialValue: CommentData;
+  boardId: number;
 }
 
 // Notification
-
 export interface Notification {
   notification_id: number;
   message: string;

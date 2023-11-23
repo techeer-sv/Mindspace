@@ -8,26 +8,17 @@ import { useBoardGetQuery } from "@/api/hooks/queries/board";
 
 import { formatDateTime, DateTimeFormat } from "@/utils/dateTime";
 import CommentModal from "../CommentModal";
+import {
+  useBoardCommentGetQuery,
+  useCreateCommentMutation,
+} from "@/api/hooks/queries/comment";
 
 function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
   const [isSelectedTable, setIsSelectedTable] = useState<number>();
   const viewerRef = useRef<Viewer>(null);
   const { data: boardData, isLoading } = useBoardGetQuery(isSelectedTable);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
-  const commentData = [
-    {
-      id: 1,
-      nickname: "작성자1",
-      content: "댓글 내용1",
-      date: "5분전",
-    },
-    {
-      id: 2,
-      nickname: "작성자2",
-      content: "댓글 내용2",
-      date: "10분전",
-    },
-  ];
+
   const toggleCommentModal = () => {
     setCommentModalOpen((prev) => !prev);
   };
@@ -42,6 +33,8 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
       viewerRef.current.getInstance().setMarkdown(boardData?.content);
     }
   }, [boardData?.content]);
+
+  const { data: commentData } = useBoardCommentGetQuery(isSelectedTable);
 
   return (
     <CustomModal
@@ -65,14 +58,24 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
       ) : (
         !isLoading && (
           <>
-            <button
-              className={styles.header__button}
-              onClick={() => {
-                setIsSelectedTable(undefined);
-              }}
-            >
-              <span className={styles.post__button}>Back</span>
-            </button>
+            <div className={styles.header}>
+              <button
+                className={styles.header__button}
+                onClick={() => {
+                  setIsSelectedTable(undefined);
+                }}
+              >
+                <span className={styles.post__button}>Back</span>
+              </button>
+              <button
+                className={styles.header__button}
+                onClick={toggleCommentModal}
+              >
+                <span className={styles.post__button}>
+                  {commentModalOpen ? "닫기" : "댓글"}
+                </span>
+              </button>
+            </div>
             <div className={styles.post__wrapper}>
               <div className={styles.post__wrapper__content}>
                 <div className={styles.post__wrapper__content__wrapper}>
@@ -99,16 +102,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
                         className={
                           styles.post__wrapper__content__wrapper__info__box
                         }
-                      >
-                        <button
-                          onClick={toggleCommentModal}
-                          className={
-                            styles.post__wrapper__content__wrapper__info__box__button
-                          }
-                        >
-                          댓글
-                        </button>
-                      </div>
+                      ></div>
                       <span
                         className={
                           styles.post__wrapper__content__wrapper__info__name
@@ -140,6 +134,7 @@ function ListModal({ listModalOpen, onListRequestClose }: ListModalProps) {
               <CommentModal
                 isOpen={commentModalOpen}
                 initialValue={commentData}
+                boardId={boardData.id}
               />
             </div>
           </>

@@ -8,11 +8,12 @@
   border-radius: 10px;
   margin-left: 0.5rem;
   transform: translateX(0);
+  overflow-y: auto;
 
   &__header {
     display: flex;
     align-items: center;
-    margin: 2rem 0 0 2rem;
+    margin: 2rem 0 0 1.5rem;
 
     &__icon {
       margin-right: 10px;
@@ -23,74 +24,22 @@
     }
   }
 
-  &__input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    input {
-      padding: 10px 15px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      width: 60%;
-    }
-
-    input:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-
-    input::placeholder {
-      color: #888;
-      font-style: italic;
-    }
-
-    &__icon {
-      margin: 1rem;
-
-      button {
-        border: none;
-        padding: 0;
-        background-color: transparent;
-        cursor: pointer;
-        overflow: hidden;
-      }
-
-      button:hover img {
-        opacity: 0.5;
-      }
-    }
+  &::-webkit-scrollbar {
+    width: 8px;
+    display: none;
   }
 
-  &__content {
-    margin: 0 1.5rem 1rem 1.5rem;
-    border-bottom: 1px #ebedf2 solid;
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0)
+  }
 
-    &__nickname {
-      margin-bottom: 0.5rem;
+  &::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 10px;
+  }
 
-      &__text {
-        font-size: 15px;
-        font-weight: bold;
-      }
-    }
-
-    &__box {
-      margin-bottom: 0.5rem;
-
-      &__text {
-        font-size: 15px;
-        font-weight: bold;
-      }
-    }
-
-    &__time {
-      margin-bottom: 0.5rem;
-
-      &__text {
-        font-size: 12px;
-      }
-    }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #888888;
   }
 }
 
@@ -98,4 +47,37 @@
   transform: translateX(100%);
   overflow-y: hidden;
   flex: 0;
+}
+
+.reply {
+  border-radius: 10px;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 14px;
+
+  &__input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        border: 1px solid navy;
+        background-color: navy;
+        color: white;
+        padding: 5px 10px;
+        margin: 0 1rem 0 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        font-size: 12px;
+      }
+    }
+  }
 }

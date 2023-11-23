@@ -21,6 +21,7 @@ import { BoardNotFoundException } from '../board/exception/BoardNotFoundExceptio
 import { NotificationService } from '../notification/notification.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
+import { PutCommentDto } from './dto/put-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -78,8 +79,8 @@ export class CommentService {
       board: board,
       message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
       commentId: savedComment.id,
-      nodeId: board.nodeId,
-      userId: board.userId,
+      nodeId: board.node.id,
+      userId: board.user.id,
     });
 
     // 댓글을 생성한 사용자의 userId를 확인하고, 해당 사용자를 기반으로 알림 대기 중인 사용자를 찾습니다.
@@ -93,7 +94,7 @@ export class CommentService {
         board: board,
         message: `새로운 댓글이 작성되었습니다.`,
         commentId: savedComment.id,
-        nodeId: board.nodeId,
+        nodeId: board.node.id,
         userId: Number(userId),
       });
     }
@@ -164,16 +165,18 @@ export class CommentService {
     commentId: number,
     userId: string,
     updateCommentDto: UpdateCommentDto,
-  ): Promise<UpdateCommentDto> {
+  ): Promise<PutCommentDto> {
     const comment: Comment = await this.validateCommentOwner(commentId, userId);
     comment.content = updateCommentDto.content;
-    return await this.commentRepository.save(comment);
+    const UpdateComment: Comment = await this.commentRepository.save(comment);
+    return this.commentMapper.DtoFromEntity(UpdateComment);
   }
 
   /** 댓글 삭제 */
   async deleteComment(commentId: number, userId: string): Promise<void> {
     const comment: Comment = await this.validateCommentOwner(commentId, userId);
-    await this.commentRepository.remove(comment);
+    comment.content = '삭제된 댓글입니다.';
+    await this.commentRepository.save(comment);
   }
 
   /** 댓글을 찾고 예외를 확인합니다. */

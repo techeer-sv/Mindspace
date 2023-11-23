@@ -3,14 +3,14 @@ import {
   NicknameResponse,
   SignInResponse,
   SignInRequest,
-  SignUpReqeust,
+  SignUpRequest,
 } from "@/constants/types";
 
 export const createUser = async ({
   userName,
   email,
   password,
-}: SignUpReqeust) => {
+}: SignUpRequest) => {
   const endpoint = "users/signup";
   const body = JSON.stringify({
     nickname: userName,

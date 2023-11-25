@@ -4,7 +4,7 @@
 <image src="https://github.com/techeer-sv/Mindspace/assets/105929978/37ad493e-f2c5-42c7-a384-de461f9d6c8e">
 <br>
 <h3>
-개발 학습 경로를 직관적인 마인드맵과 연결 그래프로 탐색하며, 다양한 시각에서 키워드 별 글을 모아보고 공유하는 통합 학습 플랫폼
+개발 기술 키워드를 기준으로 마인드맵 형태로 탐색해 정리한 글을 공유하는 통합 학습 플랫폼
 </h3>
 </div>
 
@@ -69,11 +69,27 @@
 
 <br>
 
+### 댓글 작성
+
+<br>
+
+![comment](https://github.com/techeer-sv/Mindspace/assets/105929978/cf74b488-96f4-45e8-a927-de588b3c9886)
+
+<br>
+
+### 댓글 알림
+
+<br>
+
+![alarm](https://github.com/techeer-sv/Mindspace/assets/105929978/058c64de-e17b-4baf-a906-2c58dda9189a)
+
+<br>
+
 <hr>
 
 ## **System Architecture**
 
-![System Architecture](https://github.com/techeer-sv/Mindspace/assets/105929978/e07a2c01-8c98-4888-aa1f-f372922c5ff8)
+<img width="821" alt="System Architecture" src="https://github.com/techeer-sv/Mindspace/assets/105929978/9e796ddc-4126-442b-802c-f13cdf4e250b">
 
 <br>
 
@@ -89,19 +105,19 @@
 
 ### Database(MySQL)
 
-<img width="528" alt="erd" src="https://github.com/techeer-sv/Mindspace/assets/105929978/6b8840fb-5eeb-4f25-ac9c-9ce8c1e86eca">
+<img width="528" alt="erd" src="https://github.com/techeer-sv/Mindspace/assets/105929978/d530514f-3e1c-43cc-b4de-57ece6901ab7">
 
 <br>
 
 ### Database(Neo4j)
 
-<img width="528" alt="erd" src="https://github.com/techeer-sv/Mindspace_front/assets/105929978/c799d9d5-f463-4eb4-9d79-508abf9ab5a5">
+<img width="408" alt="image" src="https://github.com/techeer-sv/Mindspace/assets/105929978/8de8e282-2ad7-4c62-ac67-34a0fb02eb7e">
 
 <br>
 
 ## **Api**
 
-![api](https://github.com/techeer-sv/Mindspace/assets/105929978/4a70f78b-c369-4f2d-9912-7e58d9eb3d40)
+<img width="754" alt="image" src="https://github.com/techeer-sv/Mindspace/assets/105929978/39799064-a25d-4398-96aa-d8516002cff1">
 
 <br>
 
@@ -166,7 +182,6 @@
         </td>
         <td width="150" align="center">
             Backend<br>
-            Devops<br>
         </td>
         <td width="150" align="center">
             Backend<br>
@@ -174,11 +189,11 @@
         </td>
         <td width="150" align="center">
             Frontend<br>
+            Backend<br>
             Devops<br>
         </td>
         <td width="150" align="center">
             Backend<br>
-            Devops<br>
         </td>
     </tr>
     <tr>

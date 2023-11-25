@@ -57,7 +57,6 @@ export class CommentController {
       createCommentDto,
       commentIdDto.comment_id,
     );
-
     return { message: '댓글이 성공적으로 작성되었습니다.' };
   }
 

@@ -22,6 +22,7 @@ import { User } from '../user/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
 import { PutCommentDto } from './dto/put-comment.dto';
 import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
+import { CommentSingleResponseDto } from './dto/comment-single-response.dto';
 
 @Injectable()
 export class CommentService {
@@ -58,7 +59,7 @@ export class CommentService {
     userId: string,
     createCommentDto: CreateCommentDto,
     parentId?: number,
-  ): Promise<Comment> {
+  ): Promise<CommentSingleResponseDto> {
     console.log(
       `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
     );
@@ -121,14 +122,15 @@ export class CommentService {
       comment.parent = parentComment;
     }
 
-    return await this.commentRepository.save(comment);
+    const createComment: Comment = await this.commentRepository.save(comment);
+    return this.commentMapper.DtoFromEntity(createComment);
   }
 
   /** 댓글 목록 조회 */
   async getCommentsByBoardId(
     boardId: number,
     userId: string,
-    pagingParams: CursorPaginationDto,
+    pagingParams?: CursorPaginationDto,
   ) {
     await this.validateUserExists(userId);
     await this.validateBoardExists(boardId);
@@ -177,11 +179,9 @@ export class CommentService {
 
   /** 댓글 삭제 */
   async deleteComment(commentId: number, userId: string): Promise<void> {
-    const comment: Comment = await this.validateCommentOwner(
-      Number(commentId),
-      userId,
-    );
-    await this.commentRepository.remove(comment);
+    const comment: Comment = await this.validateCommentOwner(commentId, userId);
+    comment.content = '삭제된 댓글입니다.';
+    await this.commentRepository.save(comment);
   }
 
   /** 댓글을 찾고 예외를 확인합니다. */

@@ -6,6 +6,9 @@
 <h3>
 개발 기술 키워드를 기준으로 마인드맵 형태로 탐색해 정리한 글을 공유하는 통합 학습 플랫폼
 </h3>
+
+[Medium](https://medium.com/@suhyeon3484/mindspace-%EA%B0%9C%EB%B0%9C-%EB%A7%88%EC%9D%B8%EB%93%9C%EB%A7%B5-%ED%94%8C%EB%9E%AB%ED%8F%BC-abf698c35c3a)
+
 </div>
 
 <hr>

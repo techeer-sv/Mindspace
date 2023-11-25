@@ -1,48 +1,12 @@
-@mixin font-face($name, $path, $weight: null, $style: null, $exts: woff2 otf) {
-  $src: null;
-  $formats: (
-    otf: "opentype",
-    woff2: "woff2",
-  );
-  @each $ext in $exts {
-    $format: map-get($formats, $ext);
-    $src: append($src, url($path + "." + $ext) format($format), comma);
-  }
-  @font-face {
-    font-family: $name;
-    font-style: $style;
-    font-weight: $weight;
-    src: $src;
-  }
-}
-
-/* 적용 예 */
-@include font-face(
-  "NEXONLv1Gothic",
-  "/fonts/NEXONLv1Gothic",
-  400,
-  null,
-  woff2 otf
-);
-
-html,
-body,
-* {
-  font-family: "NEXONLv1Gothic", sans-serif;
-}
-
 html {
   height: 100vh;
   width: 100%;
-  font-family: "NEXONLv1Gothic", sans-serif;
 }
 body {
   margin: 0;
   position: relative;
   width: 100%;
   height: 100%;
-  background-image: url("/images/BackGround.webp");
-  background-size: cover;
   overflow: hidden;
 }
 

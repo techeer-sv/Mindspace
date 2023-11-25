@@ -1,5 +1,4 @@
 "use client";
-// WriteEditor/index.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { Editor } from "@toast-ui/react-editor";
 import styles from "../../WriteModal.module.scss";
@@ -11,6 +10,8 @@ import {
 } from "@/api/hooks/queries/board";
 import { nodeAtom } from "@/recoil/state/nodeAtom";
 import { WriteEditorProps } from "@/constants/types";
+
+const INIT_EDITOR_VALUE = "";
 
 const WriteEditor = ({
   nodeData,
@@ -64,11 +65,50 @@ const WriteEditor = ({
     }
   }, [createBoardErrorMessage]);
 
-  const {
-    mutate: uploadImageMutation,
-    isLoading: isImageUploading,
-    isError: isImageUploadError,
-  } = useUploadImageMutation();
+  useEffect(() => {
+    const initialValueSetting = () => {
+      if (editorRef?.current) {
+        editorRef?.current
+          ?.getInstance()
+          .setMarkdown(nodeData?.content ?? INIT_EDITOR_VALUE);
+      }
+    };
+
+    initialValueSetting();
+  }, [nodeData]);
+
+  const updateEditorContent = (newContent: string) => {
+    const currentContent = editorRef?.current?.getInstance().getMarkdown();
+
+    editorRef?.current
+      ?.getInstance()
+      .setMarkdown(`${currentContent}\n${newContent}`);
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const files = Array.from(event.dataTransfer.files);
+    for (const file of files) {
+      if (file.type.startsWith("image/")) {
+        await new Promise<void>((resolve, reject) => {
+          uploadImageMutation(file, {
+            onSuccess: (data) => {
+              const markdownImageLink = `![${file.name}](${data.imageUrl})`;
+              updateEditorContent(markdownImageLink);
+              resolve();
+            },
+            onError: (error) => {
+              console.log(error);
+              updateEditorContent("이미지 업로드에 실패했습니다.");
+              reject();
+            },
+          });
+        });
+      }
+    }
+  };
 
   const onUploadImage = async (
     blob: File,
@@ -81,6 +121,13 @@ const WriteEditor = ({
     });
     return false;
   };
+
+  const {
+    mutate: uploadImageMutation,
+    isLoading: isImageUploading,
+    isError: isImageUploadError,
+  } = useUploadImageMutation();
+
   return (
     <>
       <div className={styles.header}>
@@ -118,14 +165,14 @@ const WriteEditor = ({
         <div className={styles.content__editor}>
           <div
             className={`${styles.content__editor} ${styles.editor__content}`}
+            onDropCapture={handleDrop}
           >
             <Editor
               ref={editorRef}
-              initialValue={nodeData?.content ?? " "}
+              placeholder="내용을 입력해 주세요"
               hooks={{
                 addImageBlobHook: onUploadImage,
               }}
-              placeholder="내용을 입력해 주세요"
               onChange={handleEditorChange}
               previewStyle="tab"
               height="100%"

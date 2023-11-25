@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "./Alarm.module.scss";
 import {
   useAllNotificationQuery,
@@ -19,14 +19,14 @@ const Alarm = () => {
     deleteNotification(notification_id);
   };
 
-  const renderNotificationCount = () => {
-    const count = notificationList.length;
-    return count > 9 ? "+9" : count.toString();
-  };
-
   useNewNotificationPolling();
   const { data: notificationList = [] } = useAllNotificationQuery();
   const { mutate: deleteNotification } = useDeleteNotificationMutation();
+
+  const notificationCount = useMemo(() => {
+    const count = notificationList.length;
+    return count > 9 ? "+9" : count.toString();
+  }, [notificationList.length]);
 
   return (
     <div className={styles.alarm}>
@@ -41,9 +41,7 @@ const Alarm = () => {
           <path d="M12 2C8.1 2 5 5.1 5 9v6l-1 2v1h18v-1l-1-2V9c0-3.9-3.1-7-7-7zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z"></path>
         </svg>
         {notificationList.length > 0 && (
-          <div className={styles.alarm__notification}>
-            {renderNotificationCount()}
-          </div>
+          <div className={styles.alarm__notification}>{notificationCount}</div>
         )}
       </button>
       {isVisible && (

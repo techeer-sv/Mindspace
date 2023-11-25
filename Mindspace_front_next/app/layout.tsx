@@ -1,11 +1,15 @@
 import "./globals.scss";
+import styles from "./main.module.scss";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import LayoutProvider from "@/components/LayoutProvider";
 import Recoil from "@/components/Recoil";
 import ReactQuery from "@/components/ReactQuery";
+import Image from "next/image";
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendardVariableFont = localFont({
+  src: [{ path: "/assets/fonts/PretendardVariable.woff2" }],
+});
 
 export const metadata: Metadata = {
   title: "Mindspace",
@@ -32,11 +36,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html className={pretendardVariableFont.className} lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={inter.className}>
+      <body className={pretendardVariableFont.className}>
+        <Image
+          className={styles.background}
+          src="/images/background.webp"
+          alt="background"
+          fill
+        />
         <Recoil>
           <ReactQuery>
             <LayoutProvider>{children}</LayoutProvider>

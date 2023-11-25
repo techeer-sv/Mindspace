@@ -113,14 +113,14 @@
     <tbody>
     <tr>
         <th>사진</th>
-         <td width="100" align="center">
-            <a href="https://github.com/teawon">
-                <img src="https://avatars.githubusercontent.com/u/78795820?v=4" width="60" height="60">
-            </a>
-        </td>
         <td width="100" align="center">
             <a href="https://github.com/suhyeon0921">
                 <img src="https://avatars.githubusercontent.com/u/105929978?v=4" width="60" height="60">
+            </a>
+        </td>
+         <td width="100" align="center">
+            <a href="https://github.com/teawon">
+                <img src="https://avatars.githubusercontent.com/u/78795820?v=4" width="60" height="60">
             </a>
         </td>
         <td width="100" align="center">
@@ -133,19 +133,30 @@
                 <img src="https://avatars.githubusercontent.com/u/98696925?v=4" width="60" height="60">
             </a>
         </td>
+        <td width="100" align="center">
+            <a href="https://github.com/barabobBOB">
+                <img src="https://avatars.githubusercontent.com/u/83595905?v=4" width="60" height="60">
+            </a>
+        </td>
+         <td width="100" align="center">
+            <a href="https://github.com/ssojungg">
+                <img src="https://avatars.githubusercontent.com/u/126966126?v=4" width="60" height="60">
+            </a>
+        </td>
     </tr>
     <tr>
         <th>이름</th>
-        <td width="100" align="center">정태원</td>
         <td width="100" align="center">이수현</td>
+        <td width="100" align="center">정태원</td>
         <td width="100" align="center">양지윤</td>
         <td width="100" align="center">박소윤</td>
+        <td width="100" align="center">최세연</td>
+        <td width="100" align="center">곽소정</td>
     </tr>
     <tr>
         <th>역할</th>
         <td width="150" align="center">
             Leader<br>
-            Frontend<br>
             Backend<br>
             Devops<br>
         </td>
@@ -155,6 +166,14 @@
         </td>
         <td width="150" align="center">
             Backend<br>
+            Devops<br>
+        </td>
+        <td width="150" align="center">
+            Backend<br>
+            Devops<br>
+        </td>
+        <td width="150" align="center">
+            Frontend<br>
             Devops<br>
         </td>
         <td width="150" align="center">
@@ -165,13 +184,13 @@
     <tr>
         <th>GitHub</th>
         <td width="100" align="center">
-            <a href="https://github.com/teawon">
-                <img src="http://img.shields.io/badge/teawon-green?style=social&logo=github"/>
+            <a href="https://github.com/suhyeon0921">
+                <img src="http://img.shields.io/badge/suhyeon0921-green?style=social&logo=github"/>
             </a>
         </td>
         <td width="100" align="center">
-            <a href="https://github.com/suhyeon0921">
-                <img src="http://img.shields.io/badge/suhyeon0921-green?style=social&logo=github"/>
+            <a href="https://github.com/teawon">
+                <img src="http://img.shields.io/badge/teawon-green?style=social&logo=github"/>
             </a>
         </td>
         <td width="100" align="center">
@@ -182,6 +201,16 @@
         <td width="100" align="center">
             <a href="https://github.com/velyvelylovely">
                 <img src="http://img.shields.io/badge/velyvelylovely-green?style=social&logo=github"/>
+            </a>
+        </td>
+        <td width="100" align="center">
+            <a href="https://github.com/barabobBOB">
+                <img src="http://img.shields.io/badge/barabobBOB-green?style=social&logo=github"/>
+            </a>
+        </td>
+         <td width="100" align="center">
+            <a href="https://github.com/ssojungg">
+                <img src="http://img.shields.io/badge/sojungg-green?style=social&logo=github"/>
             </a>
         </td>
     </tr>

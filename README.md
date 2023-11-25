@@ -53,6 +53,23 @@
 
 <br>
 
+### 댓글 작성
+
+<br>
+
+<img src="https://github.com/techeer-sv/Mindspace/assets/126966126/1eb25f41-611a-4cd9-ab95-4b1a7e9d6e54" width="100%">
+
+<br>
+
+### 댓글 알림
+
+<br>
+
+<img src="https://github.com/techeer-sv/Mindspace/assets/126966126/8406f654-bad9-44f4-82a3-caa88738c26d" width="100%">
+
+
+<br>
+
 ### 글 삭제
 
 <br>
@@ -73,7 +90,8 @@
 
 ## **System Architecture**
 
-![System Architecture](https://github.com/techeer-sv/Mindspace/assets/105929978/e07a2c01-8c98-4888-aa1f-f372922c5ff8)
+<img width="821" alt="nestjs시스템아키텍쳐" src="https://github.com/techeer-sv/Mindspace/assets/126966126/2bbd1e12-5000-4604-9098-14e8b0131ab6">
+
 
 <br>
 
@@ -81,15 +99,16 @@
 
 |                                                                                                                                                                                                                                                                                                                             Frontend                                                                                                                                                                                                                                                                                                                              |                                                                                                                                                                                                                                                                          Backend                                                                                                                                                                                                                                                                           |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><br><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=black"><br><img src="https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"><br><img src="https://img.shields.io/badge/recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white"><br><img src="https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=D3.jst&logoColor=white"><br><img src="https://img.shields.io/badge/jest-EC6F91?style=for-the-badge&logo=jest&logoColor=white"> | <img src="https://img.shields.io/badge/Neo4j-4581C3?style=for-the-badge&logo=Neo4j&logoColor=white" /><br><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><br><img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><br><img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black"><br><img src="https://img.shields.io/badge/Querydsl-85EA2D?style=for-the-badge&logo=Querydsl&logoColor=black"> |
+| <img src="https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge"><br><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=black"><br><img src="https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"><br><img src="https://img.shields.io/badge/recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white"><br><img src="https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=D3.jst&logoColor=white"><br><img src="https://img.shields.io/badge/jest-EC6F91?style=for-the-badge&logo=jest&logoColor=white"> | <img src="https://img.shields.io/badge/Neo4j-4581C3?style=for-the-badge&logo=Neo4j&logoColor=white" /><br><img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"><br><img src="https://img.shields.io/badge/Nestjs-E0234E?style=for-the-badge&logo=Nestjs&logoColor=White"><br><img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black"><br><img src="https://img.shields.io/badge/Querydsl-85EA2D?style=for-the-badge&logo=Querydsl&logoColor=black"> |
+
 
 <br>
 
 ## **Database**
 
-### Database(MySQL)
+### Database(PostgreSQL)
 
-<img width="528" alt="erd" src="https://github.com/techeer-sv/Mindspace/assets/105929978/6b8840fb-5eeb-4f25-ac9c-9ce8c1e86eca">
+![image (1)](https://github.com/techeer-sv/Mindspace/assets/126966126/9033f59a-b65e-4129-a0a1-fd17cc9a6a1b)
 
 <br>
 
@@ -101,7 +120,8 @@
 
 ## **Api**
 
-![api](https://github.com/techeer-sv/Mindspace/assets/105929978/4a70f78b-c369-4f2d-9912-7e58d9eb3d40)
+![image](https://github.com/techeer-sv/Mindspace/assets/126966126/f2bfcd75-70a7-464d-8dee-dcd923a14f68)
+
 
 <br>
 
@@ -131,6 +151,16 @@
         <td width="100" align="center">
             <a href="https://github.com/velyvelylovely">
                 <img src="https://avatars.githubusercontent.com/u/98696925?v=4" width="60" height="60">
+            </a>
+        </td>
+         <td width="100" align="center">
+            <a href="https://github.com/teawon">
+                <img src="https://avatars.githubusercontent.com/u/78795820?v=4" width="60" height="60">
+            </a>
+        </td>
+         <td width="100" align="center">
+            <a href="https://github.com/teawon">
+                <img src="https://avatars.githubusercontent.com/u/78795820?v=4" width="60" height="60">
             </a>
         </td>
     </tr>

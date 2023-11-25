@@ -28,7 +28,7 @@ export class CommentMapper {
       id: comment.id,
       userNickname: comment.user.nickname,
       content: comment.content,
-      updateAt: comment.updatedAt,
+      updatedAt: comment.updatedAt,
     };
   }
 

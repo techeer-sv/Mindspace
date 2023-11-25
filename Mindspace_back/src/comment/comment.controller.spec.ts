@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
-import { CommentSingleResponseDto } from './dto/comment-single-response.dto';
+import { CommentResponseDto } from './dto/comment-response.dto';
 
 describe('CommentController', () => {
   let controller: CommentController;
@@ -113,7 +113,7 @@ describe('CommentController', () => {
       const commentId = 1;
       const userId = '1';
       const updateCommentDto = { content: '댓글 수정' };
-      const mockUpdatedComment: CommentSingleResponseDto = {
+      const mockUpdatedComment: CommentResponseDto = {
         id: 1,
         userNickname: 'user1',
         content: 'Update Content',

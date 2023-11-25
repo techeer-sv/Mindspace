@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentService } from './comment.service';
 import { PaginatedCommentResponseDto } from './dto/comment-pagination-response.dto';
+import { CommentResponseDto } from './dto/comment-response.dto';
 import { CommentSingleResponseDto } from './dto/comment-single-response.dto';
-import { CommentResponseDto } from './dto/comment-response-dto';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
 import { BoardNotFoundException } from '../board/exception/BoardNotFoundException';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
@@ -109,7 +109,7 @@ describe('CommentService', () => {
         content: '댓글 작성',
       };
       const parentId = 1;
-      const mockCommentResponse: CommentResponseDto = {
+      const mockCommentResponse: CommentSingleResponseDto = {
         id: 1,
         userNickname: 'user1',
         content: '댓글 작성',
@@ -193,7 +193,7 @@ describe('CommentService', () => {
       const updateCommentDto = {
         content: '댓글 수정',
       };
-      const mockBoardResponse: CommentSingleResponseDto = {
+      const mockBoardResponse: CommentResponseDto = {
         id: 1,
         userNickname: 'user1',
         content: 'Update Content',

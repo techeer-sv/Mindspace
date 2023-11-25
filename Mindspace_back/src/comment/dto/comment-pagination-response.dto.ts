@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CommentSingleResponseDto } from './comment-single-response.dto';
+import { CommentResponseDto } from './comment-response.dto';
 
 class Cursor {
   @ApiProperty({ example: 10 })
@@ -13,8 +13,8 @@ class Cursor {
 }
 
 export class PaginatedCommentResponseDto {
-  @ApiProperty({ type: [CommentSingleResponseDto] })
-  data: CommentSingleResponseDto[];
+  @ApiProperty({ type: [CommentResponseDto] })
+  data: CommentResponseDto[];
 
   @ApiProperty({ type: Cursor })
   cursor: Cursor;

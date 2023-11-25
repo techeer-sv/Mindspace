@@ -49,8 +49,6 @@ export class CommentController {
     @Body() createCommentDto: CreateCommentDto,
     @Query() commentIdDto?: CommentIdDto,
   ): Promise<{ message: string }> {
-    console.log(commentIdDto.comment_id);
-    console.log(typeof commentIdDto.comment_id);
     await this.commentService.createComment(
       boardIdDto.board_id,
       userId,

@@ -60,10 +60,6 @@ export class CommentService {
     createCommentDto: CreateCommentDto,
     parentId?: number,
   ): Promise<CommentSingleResponseDto> {
-    console.log(
-      `[createComment] Started comment creation for board ${boardId} by user ${userId}`,
-    );
-
     const user: User = await this.validateUserExists(userId);
     const board: Board = await this.validateBoardExists(boardId);
 
@@ -73,13 +69,34 @@ export class CommentService {
       board,
       user.nickname,
     );
-    const savedComment = await this.commentRepository.save(comment);
+
+    if (parentId) {
+      const parentComment = await this.commentRepository.findOne({
+        where: { id: Number(parentId) },
+        relations: ['parent'],
+      });
+
+      if (!parentComment) {
+        throw new NotFoundException('부모 댓글을 찾을 수 없습니다.');
+      }
+
+      // 여기서 parentComment의 parentId가 null인지 확인합니다.
+      // null이 아니라면, 이 댓글은 이미 대댓글이므로 대댓글의 대댓글을 작성하려는 시도입니다.
+      if (parentComment.parent !== null) {
+        throw new BadRequestException('대댓글의 대댓글은 작성할 수 없습니다.');
+      }
+
+      // parentId가 null인 경우에만 대댓글로 설정합니다.
+      comment.parent = parentComment;
+    }
+
+    const createComment: Comment = await this.commentRepository.save(comment);
 
     // 알림 서비스의 createNotificationForBoardOwner 메서드를 호출하여 알림 생성 및 전송
     await this.notificationService.createNotificationForBoardOwner({
       board: board,
       message: `${user.nickname}님이 ${board.title}에 댓글을 작성했습니다.`,
-      commentId: savedComment.id,
+      commentId: createComment.id,
       nodeId: board.node.id,
       userId: board.user.id,
     });
@@ -94,35 +111,12 @@ export class CommentService {
       await this.notificationService.createNotificationForBoardOwner({
         board: board,
         message: `새로운 댓글이 작성되었습니다.`,
-        commentId: savedComment.id,
+        commentId: createComment.id,
         nodeId: board.node.id,
         userId: Number(userId),
       });
     }
 
-    console.log(
-      `[createComment] Finished comment creation for board ${boardId} by user ${userId}`,
-    );
-
-    // 대댓글 작성
-    if (parentId) {
-      const parentComment = await this.commentRepository.findOne({
-        where: { id: Number(parentId) },
-        relations: ['parent'],
-      });
-
-      if (!parentComment) {
-        throw new NotFoundException('부모 댓글을 찾을 수 없습니다.');
-      }
-
-      if (parentComment.parent) {
-        throw new BadRequestException('대댓글의 대댓글은 작성할 수 없습니다.');
-      }
-
-      comment.parent = parentComment;
-    }
-
-    const createComment: Comment = await this.commentRepository.save(comment);
     return this.commentMapper.DtoFromEntity(createComment);
   }
 

@@ -97,7 +97,6 @@ export class BoardService {
 
     // 사용자 정보 조회
     const user = await this.userService.findUserById(convertedUserId);
-    console.log(`Creating board for node ID ${nodeId} and user ID ${userId}`);
 
     if (!user) {
       throw new UserNotFoundException();
@@ -198,6 +197,12 @@ export class BoardService {
         user: { id: Number(userId) },
       },
     });
+
+    const user = await this.userService.findUserById(Number(userId));
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
 
     if (!board) {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);

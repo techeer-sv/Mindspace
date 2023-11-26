@@ -4,9 +4,9 @@ import { NotificationService } from './notification.service';
 import { NotificationResponseDTO } from './dto/notification-response.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Notification } from './entities/notification.entity';
-import { nodeId } from 'nest-neo4j/dist/test';
 import { Board } from '../board/entities/board.entity';
-import { id } from 'date-fns/locale';
+import { User } from '../user/entities/user.entity';
+import { Node as NodeEntity } from '../node/entities/node.entity';
 
 describe('NotificationController', () => {
   let controller: NotificationController;
@@ -35,18 +35,29 @@ describe('NotificationController', () => {
   describe('waitForNewNotifications', () => {
     it('새로운 알림 대기', async () => {
       const userId = '1';
+      const mockNode = new NodeEntity();
+      mockNode.id = 2;
+
+      const mockUser = new User();
+      mockUser.id = 1;
+
+      const mockBoardUser = new User();
+      mockBoardUser.id = 2;
+      mockBoardUser.nickname = 'MockUser';
+
+      const mockBoard = new Board();
+      mockBoard.id = 3;
+      mockBoard.node = mockNode;
+      mockBoard.user = mockBoardUser;
+      mockBoard.title = 'MockTitle';
+      mockBoard.content = 'MockContent';
+
       const mockNotification = new Notification();
       mockNotification.id = 4;
-      mockNotification.nodeId = 2;
-      mockNotification.user_id = 1;
+      mockNotification.node = mockNode;
+      mockNotification.user = mockUser;
       mockNotification.message = 'New Notification';
-      mockNotification.board = new Board();
-      mockNotification.board.id = 3;
-      mockNotification.board.nodeId = 1;
-      mockNotification.board.userId = 2;
-      mockNotification.board.userNickname = 'MockUser';
-      mockNotification.board.title = 'MockTitle';
-      mockNotification.board.content = 'MockContent';
+      mockNotification.board = mockBoard;
 
       jest
         .spyOn(service, 'waitForNewNotifications')
@@ -57,7 +68,7 @@ describe('NotificationController', () => {
       expect(result).toBeInstanceOf(NotificationResponseDTO);
       expect(result.message).toEqual(mockNotification.message);
       expect(result.board_id).toEqual(mockNotification.board.id);
-      expect(result.node_id).toEqual(mockNotification.nodeId);
+      expect(result.node_id).toEqual(mockNotification.node.id);
       expect(result.notification_id).toEqual(mockNotification.id);
     });
   });
@@ -71,15 +82,15 @@ describe('NotificationController', () => {
         {
           id: 2,
           message: 'user님이 Sample Title에 댓글을 작성했습니다.',
-          nodeId: 1,
-          user_id: 1,
-          board: new Board(), // 이 부분은 Board 엔티티
+          node: { id: 1 } as NodeEntity,
+          user: { id: 1 } as User,
+          board: new Board(),
         },
         {
           id: 1,
           message: 'user님이 Sample Title에 댓글을 작성했습니다.',
-          nodeId: 1,
-          user_id: 1,
+          node: { id: 1 } as NodeEntity,
+          user: { id: 1 } as User,
           board: new Board(),
         },
       ];
@@ -92,11 +103,12 @@ describe('NotificationController', () => {
 
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(mockNotifications.length);
+      // 예상 결과값을 수정합니다.
       result.forEach((res, index) => {
         expect(res).toEqual({
           message: mockNotifications[index].message,
-          board_id: mockNotifications[index].board.id,
-          node_id: mockNotifications[index].nodeId,
+          board_id: mockNotifications[index].board.id, // 'board.id'를 사용하여 실제 ID 값을 기대
+          node_id: mockNotifications[index].node.id, // 'node.id'를 사용하여 실제 ID 값을 기대
           notification_id: mockNotifications[index].id,
         });
       });

@@ -27,7 +27,7 @@ export class BoardMapper {
   static boardToResponseDto(board: Board): BoardResponseDto {
     return {
       id: board.id,
-      userNickname: board.user?.nickname, // user 객체의 nickname 속성 접근
+      userNickname: board.user.nickname, // user 객체의 nickname 속성 접근
       title: board.title,
       content: board.content,
       updatedAt: board.updatedAt,
@@ -37,7 +37,7 @@ export class BoardMapper {
   static BoardNodeResponseDto(board: Board): BoardNodeResponseDto {
     return {
       id: board.id,
-      userNickname: board.user?.nickname, // user 객체의 nickname 속성 접근
+      userNickname: board.user.nickname, // user 객체의 nickname 속성 접근
       title: board.title,
       updatedAt: board.updatedAt,
     };
@@ -55,7 +55,7 @@ export class BoardMapper {
   static toBoardDetailDto(board: Board): BoardDetailDto {
     return {
       id: board.id,
-      userNickname: board.user?.nickname, // user 객체의 nickname 속성 접근
+      userNickname: board.user.nickname, // user 객체의 nickname 속성 접근
       title: board.title,
       content: board.content,
       updatedAt: board.updatedAt,

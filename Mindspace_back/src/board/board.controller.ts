@@ -103,7 +103,7 @@ export class BoardController {
     @Query() nodeIdDto: NodeIdDto,
     @UserHeader('user_id') userId: string,
     @Body() updateBoardDto: UpdateBoardDto,
-  ): Promise<BoardResponseDto> {
+  ) {
     return this.boardService.updateBoard(
       nodeIdDto.node_id,
       userId,

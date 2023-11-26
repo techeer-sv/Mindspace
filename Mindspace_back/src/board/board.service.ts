@@ -50,13 +50,9 @@ export class BoardService {
       pagingParams,
     );
 
-    console.log('paginationResult -- ', paginationResult);
-
     const data = paginationResult.data.map((board) =>
       BoardMapper.BoardNodeResponseDto(board),
     );
-
-    console.log('data --- ', data);
 
     const cursor = {
       count: paginationResult.data.length,
@@ -116,11 +112,8 @@ export class BoardService {
       user,
     );
 
-    console.log('service bobarddd -- ', board);
-
     // 게시글 저장 후 반환
     const savedBoard = await this.boardRepository.save(board);
-    console.log(`Board created with ID: ${savedBoard.id}`);
     return BoardMapper.boardToResponseDto(savedBoard);
   }
 
@@ -128,7 +121,7 @@ export class BoardService {
     nodeId: number,
     userId: string,
     updateBoardDto: UpdateBoardDto,
-  ): Promise<BoardResponseDto> {
+  ): Promise<void> {
     // 노드의 유효성 확인
     const node = await this.nodeService.findById(Number(nodeId));
     if (!node) {
@@ -159,11 +152,7 @@ export class BoardService {
     board.title = updateBoardDto.title;
     board.content = updateBoardDto.content;
 
-    // 변경된 내용 저장
-    const updatedBoard = await this.boardRepository.save(board);
-
-    // 업데이트된 게시글 정보를 DTO로 변환하여 반환
-    return BoardMapper.boardToResponseDto(updatedBoard);
+    await this.boardRepository.save(board);
   }
 
   async deleteOwnBoard(nodeId: number, userId: string): Promise<void> {

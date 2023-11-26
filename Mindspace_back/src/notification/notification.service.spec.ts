@@ -87,10 +87,8 @@ describe('NotificationService', () => {
           user: mockUser,
           board: mockBoard,
         },
-        // ...다른 mock Notification 객체들...
       ];
 
-      // notificationRepository.find 함수를 모의 구현
       jest
         .spyOn(notificationRepository, 'find')
         .mockResolvedValue(mockNotifications);

@@ -24,21 +24,6 @@
 
 ## **Demo**
 
-### 로그인
-
-<br>
-
-<img src="https://github.com/suhyeon0921/nest-practice/assets/105929978/47b2cfe5-d410-4735-b0b5-a3883de04696" width="100%">
-
-<br>
-
-### 회원가입
-
-<br>
-
-<img src="https://github.com/suhyeon0921/nest-practice/assets/105929978/15384cf3-4be2-4d6a-8942-d5b2a122b8d4" width="100%">
-
-<br>
 
 ### 메인
 
@@ -76,17 +61,17 @@
 
 <br>
 
-![comment](https://github.com/techeer-sv/Mindspace/assets/105929978/cf74b488-96f4-45e8-a927-de588b3c9886)
+<img src="https://github.com/techeer-sv/Mindspace/assets/105929978/cf74b488-96f4-45e8-a927-de588b3c9886" width="100%">
 
 <br>
 
 ### 댓글 알림
 
 <br>
+<div align="center">
+     <img src="https://github.com/techeer-sv/Mindspace/assets/105929978/058c64de-e17b-4baf-a906-2c58dda9189a" width="50%">
+</div>
 
-![alarm](https://github.com/techeer-sv/Mindspace/assets/105929978/058c64de-e17b-4baf-a906-2c58dda9189a)
-
-<br>
 
 <hr>
 

@@ -14,6 +14,7 @@ export class CustomBoardRepository {
 
   async paginate(nodeId: number, pagingParams?: PagingParams) {
     const queryBuilder = this.BoardRepository.createQueryBuilder('board')
+      .leftJoinAndSelect('board.user', 'user')
       .where('board.node_id = :nodeId', { nodeId })
       .orderBy('board.id', 'DESC');
 
@@ -29,7 +30,7 @@ export class CustomBoardRepository {
     });
 
     const paginationResult = await paginator.paginate(queryBuilder);
-
+    console.log('paginationResult--', paginationResult);
     return {
       data: paginationResult.data,
       cursor: {

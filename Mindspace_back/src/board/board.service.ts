@@ -50,9 +50,13 @@ export class BoardService {
       pagingParams,
     );
 
+    console.log('paginationResult -- ', paginationResult);
+
     const data = paginationResult.data.map((board) =>
       BoardMapper.BoardNodeResponseDto(board),
     );
+
+    console.log('data --- ', data);
 
     const cursor = {
       count: paginationResult.data.length,
@@ -111,6 +115,8 @@ export class BoardService {
       existingNode,
       user,
     );
+
+    console.log('service bobarddd -- ', board);
 
     // 게시글 저장 후 반환
     const savedBoard = await this.boardRepository.save(board);
@@ -213,7 +219,9 @@ export class BoardService {
   async getBoardDetailById(boardId: number): Promise<BoardDetailDto> {
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
+      relations: ['user'],
     });
+
     if (!board) {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);
     }

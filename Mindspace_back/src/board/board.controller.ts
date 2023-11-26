@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   HttpCode,
   Param,
   Post,
@@ -30,8 +29,11 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { SpecificBoardNodeDto } from './dto/specific-board-node.dto';
 import { BoardDetailDto } from './dto/board-detail.dto';
 import { ImageUploadDto } from './dto/image-upload.dto';
-import { PagingParams } from '../global/common/type';
 import { PaginatedBoardResponseDto } from './dto/board-pagination-response.dto';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
+import { NodeIdDto } from '../common/dto/node-id.dto';
+import { BoardIdDto } from '../common/dto/board-id.dto';
+import { UserHeader } from '../common/customDecorator/user-header.decorator';
 
 @ApiTags('Board')
 @Controller('api/v1/boards')
@@ -64,51 +66,62 @@ export class BoardController {
   })
   @Get('/all')
   async getAllBoardsByNodeId(
-    @Query('node_id') nodeId: number,
-    @Query() pagingParams: PagingParams,
+    @Query() nodeIdDto: NodeIdDto,
+    @Query() pagingParams: CursorPaginationDto,
   ): Promise<PaginatedBoardResponseDto> {
-    return await this.boardService.getAllBoardsByNodeId(nodeId, pagingParams);
+    return await this.boardService.getAllBoardsByNodeId(
+      nodeIdDto.node_id,
+      pagingParams,
+    );
   }
 
   @ApiOperation({ summary: '게시글 생성' })
   @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID' })
-  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID', required: true })
   @ApiResponse({ status: 201, description: '게시글 작성 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Post()
   async createBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @UserHeader('user_id') userId: string,
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<BoardResponseDto> {
-    return this.boardService.createBoard(nodeId, userId, createBoardDto);
+    return this.boardService.createBoard(
+      nodeIdDto.node_id,
+      userId,
+      createBoardDto,
+    );
   }
 
   @ApiOperation({ summary: '게시글 수정' })
-  @ApiQuery({ name: 'node_id', description: '게시글을 작성할 노드의 ID' })
-  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
+  @ApiQuery({ name: 'node_id', description: '게시글을 수정할 노드의 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID', required: true })
   @ApiResponse({ status: 201, description: '게시글 작성 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Put()
   async updateBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @UserHeader('user_id') userId: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
-    return this.boardService.updateBoard(nodeId, userId, updateBoardDto);
+    return this.boardService.updateBoard(
+      nodeIdDto.node_id,
+      userId,
+      updateBoardDto,
+    );
   }
 
   @ApiOperation({ summary: '게시글 삭제' })
   @ApiQuery({ name: 'node_id', description: '게시글을 삭제할 노드의 ID' })
-  @ApiHeader({ name: 'user_id', description: '사용자 ID' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID', required: true })
   @ApiResponse({ status: 201, description: '게시글 삭제 성공', type: Board }) // 201 Created response
   @ApiResponse({ status: 500, description: '서버 오류' }) // 500 Internal Server Error response
   @Delete()
   async deleteOwnBoard(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userId: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @UserHeader('user_id') userId: string,
   ) {
-    return this.boardService.deleteOwnBoard(nodeId, userId);
+    return this.boardService.deleteOwnBoard(nodeIdDto.node_id, userId);
   }
 
   @ApiOperation({ summary: '특정 노드의 사용자 게시글 조회' })
@@ -131,11 +144,13 @@ export class BoardController {
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
   @Get()
   async getBoardByNodeId(
-    @Query('node_id') nodeId: number,
-    @Headers('user_id') userIdHeader: string,
+    @Query() nodeIdDto: NodeIdDto,
+    @UserHeader('user_id') userId: string,
   ): Promise<SpecificBoardNodeDto> {
-    const userId = parseInt(userIdHeader);
-    return await this.boardService.getBoardByNodeIdAndUserId(nodeId, userId);
+    return await this.boardService.getBoardByNodeIdAndUserId(
+      nodeIdDto.node_id,
+      userId,
+    );
   }
 
   @ApiOperation({ summary: '특정 게시글 조회' })
@@ -145,9 +160,11 @@ export class BoardController {
     type: BoardDetailDto,
   })
   @ApiResponse({ status: 404, description: '게시글을 찾을 수 없습니다.' })
-  @Get(':id')
-  async getBoardDetail(@Param('id') id: number): Promise<BoardDetailDto> {
-    return this.boardService.getBoardDetailById(id);
+  @Get(':board_id')
+  async getBoardDetail(
+    @Param() boardIdDto: BoardIdDto,
+  ): Promise<BoardDetailDto> {
+    return this.boardService.getBoardDetailById(boardIdDto.board_id);
   }
 
   /**

@@ -60,8 +60,8 @@ export class NotificationService {
     });
   }
 
-  async deleteNotification(id: number): Promise<void> {
-    const result = await this.notificationRepository.delete(id);
+  async deleteNotification(id: string): Promise<void> {
+    const result = await this.notificationRepository.delete(Number(id));
     if (result.affected === 0) {
       throw new NotFoundException(`Notification with ID ${id} not found`);
     }

@@ -68,8 +68,8 @@ export class UserService {
     return user;
   }
 
-  async getUserNickname(userId: number): Promise<UserNicknameResponseDto> {
-    const user = await this.isUserExisted(userId);
+  async getUserNickname(userId: string): Promise<UserNicknameResponseDto> {
+    const user = await this.isUserExisted(Number(userId));
     return this.userMapper.nicknameDtoFromEntity(user);
   }
 

@@ -23,8 +23,8 @@ export class CustomBoardRepository {
       query: {
         limit: 10,
         order: 'DESC',
-        afterCursor: pagingParams.afterCursor,
-        beforeCursor: pagingParams.beforeCursor,
+        afterCursor: pagingParams?.afterCursor,
+        beforeCursor: pagingParams?.beforeCursor,
       },
     });
 

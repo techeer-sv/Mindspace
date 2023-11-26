@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
-import { Comment } from '../comment/entities/comment.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardMapper } from './dto/board.mapper.dto';
 import { UserService } from '../user/user.service';
@@ -25,16 +24,14 @@ import { NodeAlreadyWrittenException } from './exception/NodeAlreadyWrittenExcep
 import { UtilsService } from '../utils/utils.service';
 import { AwsService } from '../aws/aws.service';
 import { CustomBoardRepository } from './repository/board.repository';
-import { PagingParams } from '../global/common/type';
-import { Node } from '../node/entities/node.entity';
 import { UserNotFoundException } from '../user/exception/UserNotFoundException';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
+
 @Injectable()
 export class BoardService {
   constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
-    @InjectRepository(Comment)
-    private readonly commentRepository: Repository<Comment>,
     private readonly customBoardRepository: CustomBoardRepository,
     private readonly boardMapper: BoardMapper,
     private readonly userService: UserService,
@@ -44,7 +41,10 @@ export class BoardService {
   ) {}
 
   /** 게시글 목록 조회 + 페이지네이션 */
-  async getAllBoardsByNodeId(nodeId: number, pagingParams: PagingParams) {
+  async getAllBoardsByNodeId(
+    nodeId: number,
+    pagingParams: CursorPaginationDto,
+  ) {
     const paginationResult = await this.customBoardRepository.paginate(
       nodeId,
       pagingParams,
@@ -71,14 +71,14 @@ export class BoardService {
     const convertedUserId = Number(userId);
 
     // 입력된 nodeId로 노드 조회
-    const existingNode = await this.nodeService.findById(nodeId);
+    const existingNode = await this.nodeService.findById(Number(nodeId));
     if (!existingNode) {
       throw new NodeNotFoundException(); // 노드가 없으면 예외 발생
     }
 
     // Check if a board already exists for this node
     const existingBoard = await this.boardRepository.findOne({
-      where: { node: { id: nodeId }, user: { id: Number(userId) } },
+      where: { node: { id: Number(nodeId) }, user: { id: Number(userId) } },
     });
 
     if (existingBoard) {
@@ -97,7 +97,6 @@ export class BoardService {
 
     // 사용자 정보 조회
     const user = await this.userService.findUserById(convertedUserId);
-    console.log(`Creating board for node ID ${nodeId} and user ID ${userId}`);
 
     if (!user) {
       throw new UserNotFoundException();
@@ -125,7 +124,7 @@ export class BoardService {
     updateBoardDto: UpdateBoardDto,
   ): Promise<BoardResponseDto> {
     // 노드의 유효성 확인
-    const node = await this.nodeService.findById(nodeId);
+    const node = await this.nodeService.findById(Number(nodeId));
     if (!node) {
       throw new NodeNotFoundException();
     }
@@ -134,7 +133,7 @@ export class BoardService {
 
     // 해당 노드와 사용자 ID로 게시글을 조회
     const board = await this.boardRepository.findOne({
-      where: { node: { id: nodeId }, user: { id: convertedUserId } },
+      where: { node: { id: Number(nodeId) }, user: { id: convertedUserId } },
     });
 
     // 게시글이 없는 경우
@@ -169,7 +168,7 @@ export class BoardService {
 
     // 해당 노드와 사용자 ID로 게시글 조회
     const board = await this.boardRepository.findOne({
-      where: { node: { id: nodeId }, user: { id: convertedUserId } },
+      where: { node: { id: Number(nodeId) }, user: { id: convertedUserId } },
       relations: ['user'], // 'user' 관계를 로드하도록 명시
     });
 
@@ -190,14 +189,20 @@ export class BoardService {
 
   async getBoardByNodeIdAndUserId(
     nodeId: number,
-    userId: number,
+    userId: string,
   ): Promise<SpecificBoardNodeDto> {
     const board = await this.boardRepository.findOne({
       where: {
-        node: { id: nodeId },
-        user: { id: userId },
+        node: { id: Number(nodeId) },
+        user: { id: Number(userId) },
       },
     });
+
+    const user = await this.userService.findUserById(Number(userId));
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
 
     if (!board) {
       throw new NotFoundException(`게시물을 찾을 수 없습니다.`);

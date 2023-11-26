@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Post,
@@ -14,6 +14,7 @@ import { UserSignupRequestDto } from './dto/user-signup-request.dto';
 import { UserLoginRequestDto } from './dto/user-login-request.dto';
 import { UserNicknameResponseDto } from './dto/user-nickname-response.dto';
 import { UserService } from './user.service';
+import { UserHeader } from '../common/customDecorator/user-header.decorator';
 
 @ApiTags('User')
 @Controller('api/v1/users')
@@ -55,9 +56,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '닉네임 반환' })
+  @ApiHeader({ name: 'user_id', description: '사용자 ID', required: true })
   @Get('/nickname')
   async getUserNickname(
-    @Headers('user_id') userId: number,
+    @UserHeader('user_id') userId: string,
   ): Promise<UserNicknameResponseDto> {
     return this.userService.getUserNickname(userId);
   }

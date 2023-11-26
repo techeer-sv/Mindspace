@@ -114,6 +114,7 @@ export class BoardService {
 
     // 게시글 저장 후 반환
     const savedBoard = await this.boardRepository.save(board);
+    console.log(`Board created with ID: ${savedBoard.id}`);
     return BoardMapper.boardToResponseDto(savedBoard);
   }
 

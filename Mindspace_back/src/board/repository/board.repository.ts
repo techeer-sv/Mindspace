@@ -30,7 +30,6 @@ export class CustomBoardRepository {
     });
 
     const paginationResult = await paginator.paginate(queryBuilder);
-    console.log('paginationResult--', paginationResult);
     return {
       data: paginationResult.data,
       cursor: {

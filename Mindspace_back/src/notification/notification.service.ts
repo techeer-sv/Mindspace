@@ -88,6 +88,12 @@ export class NotificationService {
       throw new NotFoundException(`User with ID ${data.userId} not found`);
     }
 
+    // 게시글 작성자인지 확인
+    if (data.userId !== data.board.user.id) {
+      console.log(`User ${data.userId} is not the author of the post.`);
+      return; // 게시글 작성자가 아니면 알림을 생성하지 않습니다.
+    }
+
     // Notification 객체를 생성합니다.
     const newNotification = new Notification();
     newNotification.message = data.message;

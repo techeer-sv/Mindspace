@@ -29,7 +29,7 @@
 
 <br>
 
-<img src="https://github.com/techeer-sv/Mindspace/assets/78795820/6dfe0d91-bd85-47e7-bef1-d92b72af44d0" width="100%">
+![image](https://miro.medium.com/v2/resize:fit:1280/format:webp/1*SB-RvEAITb073PhF3Jz07g.gif)
 
 <br>
 
@@ -37,25 +37,10 @@
 
 <br>
 
-<img src="https://github.com/techeer-sv/Mindspace/assets/78795820/6d171bcb-c68f-4b5b-9875-774b224a1633" width="100%">
+![image](https://miro.medium.com/v2/resize:fit:1280/format:webp/1*tYf-zq2u8fXyKddv_x7-OQ.gif)
 
 <br>
 
-### 글 삭제
-
-<br>
-
-<img src="https://github.com/techeer-sv/Mindspace/assets/78795820/9c4b1813-d084-4d36-87de-08b5a275d00a" width="100%">
-
-<br>
-
-### 글 리스트 조회
-
-<br>
-
-<img src="https://github.com/techeer-sv/Mindspace/assets/78795820/2ea0b2c2-b07d-4ffe-8fe9-f468d2cf4272" width="100%">
-
-<br>
 
 ### 댓글 작성
 
